@@ -16,9 +16,9 @@ public class CommentsDAO2 {
 	// 댓글 작성
 	private final String sql_INSERT = "INSERT INTO COMMENTS (COMMENTSNUM, COMMENTS, BOARDNUM, MEMBERID, COMMENTSDATE) VALUES ((SELECT NVL(MAX(COMMENTSNUM),19999)+1 FROM COMMENTS), ?, ?, ?, SYSTIMESTAMP)";
 	// 선택한 게시물의 댓글 전체 출력
-	private final String sql_SELECTALL = "SELECT C.COMMENTSNUM, C.COMMENTS, C.BOARDNUM, C.MEMBERID, C.PROHIBITCNT, TO_CHAR(C.COMMENTSDATE, 'YYYY-MM-DD') AS COMMENTSDATE, M.NICKNAME, FROM COMMENTS C LEFT JOIN MEMBER M ON C.MEMBERID=M.MEMBERID WHERE C.BOARDNUM=? ORDER BY C.COMMENTSNUM DESC";
+	private final String sql_SELECTALL = "SELECT C.COMMENTSNUM, C.COMMENTS, C.BOARDNUM, C.MEMBERID, C.PROHIBITCNT, TO_CHAR(C.COMMENTSDATE, 'YYYY-MM-DD') AS COMMENTSDATE, M.NICKNAME FROM COMMENTS C LEFT JOIN MEMBER M ON C.MEMBERID=M.MEMBERID WHERE C.BOARDNUM=? ORDER BY C.COMMENTSNUM DESC";
 	// 댓글 선택(?)
-	private final String sql_SELECTONE = "SELECT C.COMMENTSNUM, C.COMMENTS, C.BOARDNUM, C.MEMBERID, C.PROHIBITCNT, TO_CHAR(C.COMMENTSDATE, 'YYYY-MM-DD') AS COMMENTSDATE, M.NICKNAME, FROM COMMENTS C LEFT JOIN MEMBER M ON C.MEMBERID=M.MEMBERID WHERE C.COMMENTSNUM=?";
+	private final String sql_SELECTONE = "SELECT C.COMMENTSNUM, C.COMMENTS, C.BOARDNUM, C.MEMBERID, C.PROHIBITCNT, TO_CHAR(C.COMMENTSDATE, 'YYYY-MM-DD') AS COMMENTSDATE, M.NICKNAME FROM COMMENTS C LEFT JOIN MEMBER M ON C.MEMBERID=M.MEMBERID WHERE C.COMMENTSNUM=?";
 	// 댓글 수정
 	private final String sql_UPDATE_COMMENTS = "UPDATE COMMENTS SET COMMENTS=? WHERE COMMENTSNUM=?";
 	// 댓글의 신고수 갱신
@@ -72,8 +72,11 @@ public class CommentsDAO2 {
 		
 		System.out.println("CommentDAO2 로그 update 메서드");
 		int rs=0;
+		if(cVO.getSearchCondition()==null) {
+			System.out.println("commentsDAO2 update 서치컨디션 null");
+		}
 		// 댓글 수정
-		if(cVO.getSearchCondition().equals("updateComments")) {
+		else if(cVO.getSearchCondition().equals("updateComments")) {
 			rs=jdbcTemplate.update(sql_UPDATE_COMMENTS, cVO.getComments(), cVO.getCommentsNum());
 
 		}
@@ -81,10 +84,10 @@ public class CommentsDAO2 {
 		else if(cVO.getSearchCondition().equals("prohibit")) {
 			rs=jdbcTemplate.update(sql_UPDATE_PROHIBIT, cVO.getCommentsNum(), cVO.getCommentsNum());
 		}
-		if (rs <= 0) {
-			return false;
+		if (rs > 0) {
+			return true;
 		}
-		return true;
+		return false;
 	}
 
 /////////////////// delete ///////////////////////////////////////////////

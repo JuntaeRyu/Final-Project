@@ -15,8 +15,9 @@ public class BoardVO {
     private int viewCnt;			// 게시글 조회수
     
     // 서치 컨디션 (검색 조건)
-    private String searchCondition;
+    private String searchCondition;	// 서치컨디션
     private String nickName; 		// 작성자 닉네임
+    private int boardCommentsCnt;	// 해당 게시글의 댓글수
     
     // 게시글 번호를 반환하는 메서드
     public int getBoardNum() {
@@ -137,5 +138,15 @@ public class BoardVO {
 	public void setViewCnt(int viewCnt) {
 		this.viewCnt = viewCnt;
 	}
-    
+
+	// 해당 게시글의 댓글수를 반환하는 메서드
+	public int getBoardCommentsCnt() {
+		return boardCommentsCnt;
+	}
+
+	// 해당 게시글의 댓글수를 설정하는 메서드
+	public void setBoardCommentsCnt(int boardCommentsCnt) {
+		this.boardCommentsCnt = boardCommentsCnt;
+	}
+	   
 }

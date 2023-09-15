@@ -16,11 +16,13 @@ public class MemberProfileDAO2 {
 	// 회원 프로필 작성
 	private final String sql_INSERT = "INSERT INTO MEMBERPROFILE (PROFILENUM, MEMBERID, PROFILEIMG, SHORTINTRO, INTRO) VALUES ((SELECT NVL(MAX(PROFILENUM),0)+1 FROM MEMBERPROFILE), ?, ?, ?, ?)";
 	// 회원 프로필 상세페이지
-	private final String sql_SELECTONE = "SELECT MP.PROFILENUM, M.MEMBERID, MP.PROFILEIMG, MP.SHORTINTRO, MP.INTRO, MP.PROHIBITCNT, M.NICKNAME, (SELECT COUNT(CASE WHEN COMMONNUM = MP.PROFILENUM THEN 1 END) FROM RECOMMEND) AS RECOMMENDCNT FROM MEMBERPROFILE MP JOIN MEMBER M ON MP.MEMBERID=M.MEMBERID WHERE PROFILENUM=?";
+	private final String sql_SELECTONE_MEMBERPROFILE = "SELECT MP.PROFILENUM, M.MEMBERID, MP.PROFILEIMG, MP.SHORTINTRO, MP.INTRO, MP.PROHIBITCNT, M.NICKNAME, (SELECT COUNT(CASE WHEN COMMONNUM = MP.PROFILENUM THEN 1 END) FROM RECOMMEND) AS RECOMMENDCNT FROM MEMBERPROFILE MP JOIN MEMBER M ON MP.MEMBERID=M.MEMBERID WHERE PROFILENUM=?";
+	// 회원 프로필 아이디로 프로필 출력
+	private final String sql_SELECTONE_MYPROFILE = "SELECT MP.PROFILENUM, M.MEMBERID, MP.PROFILEIMG, MP.SHORTINTRO, MP.INTRO, MP.PROHIBITCNT, M.NICKNAME, (SELECT COUNT(CASE WHEN COMMONNUM = MP.PROFILENUM THEN 1 END) FROM RECOMMEND) AS RECOMMENDCNT FROM MEMBERPROFILE MP JOIN MEMBER M ON MP.MEMBERID=M.MEMBERID WHERE MEMBERID=?";
 	// 회원 프로필 전체 출력
-	private final String sql_SELECTALL = "SELECT MP.PROFILENUM, M.MEMBERID, MP.PROFILEIMG, MP.SHORTINTRO, MP.INTRO, MP.PROHIBITCNT, M.NICKNAME, (SELECT COUNT(CASE WHEN COMMONNUM = MP.PROFILENUM THEN 1 END) FROM RECOMMEND) AS RECOMMENDCNT FROM MEMBERPROFILE MP JOIN MEMBER M ON MP.MEMBERID=M.MEMBERID";
+	private final String sql_SELECTALL_HELCELL = "SELECT MP.PROFILENUM, M.MEMBERID, MP.PROFILEIMG, MP.SHORTINTRO, MP.INTRO, MP.PROHIBITCNT, M.NICKNAME, (SELECT COUNT(CASE WHEN COMMONNUM = MP.PROFILENUM THEN 1 END) FROM RECOMMEND) AS RECOMMENDCNT FROM MEMBERPROFILE MP JOIN MEMBER M ON MP.MEMBERID=M.MEMBERID WHERE M.ROLE = 3";
 	// 회원 신고 3개이산인 프로필 출력
-	private final String sql_SELECTALL_PROHIBITCNT = "SELECT MP.PROFILENUM, M.MEMBERID, MP.PROFILEIMG, MP.SHORTINTRO, MP.INTRO, MP.PROHIBITCNT, M.NICKNAME, (SELECT COUNT(CASE WHEN COMMONNUM = MP.PROFILENUM THEN 1 END) FROM RECOMMEND) AS RECOMMENDCNT FROM MEMBERPROFILE MP JOIN MEMBER M ON MP.MEMBERID=M.MEMBERID WHERE MP.PROHIBITCNT >= 3";
+	private final String sql_SELECTALL_PROHIBITCNT = "SELECT MP.PROFILENUM, M.MEMBERID, MP.PROFILEIMG, MP.SHORTINTRO, MP.INTRO, MP.PROHIBITCNT, M.NICKNAME, (SELECT COUNT(CASE WHEN COMMONNUM = MP.PROFILENUM THEN 1 END) FROM RECOMMEND) AS RECOMMENDCNT FROM MEMBERPROFILE MP JOIN MEMBER M ON MP.MEMBERID=M.MEMBERID WHERE MP.PROHIBITCNT >= 3 AND M.ROLE = 3";
 	// 회원프로필 신고수 갱신
 	private final String sql_UPDATE_PROHIBIT = "UPDATE MEMBERPROFILE SET PROHIBIT=(SELECT COUNT(CASE WHEN COMMONNUM=? THEN 1 END) FROM PROHIBIT) WHERE PROFILENUM=?";
 	// 회원프로필 짧은 소개글 변경
@@ -38,7 +40,7 @@ public class MemberProfileDAO2 {
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 
-/////////////////// insert ///////////////////////////////////////////////
+	/////////////////// insert ///////////////////////////////////////////////
 	public boolean insert(MemberProfileVO mpVO) { // DB에 객체정보 저장
 
 		// 쿼리문 수정 및 실행 후 결과를 저장
@@ -51,11 +53,14 @@ public class MemberProfileDAO2 {
 		return true;
 	} // insert
 
-/////////////////// selectAll ///////////////////////////////////////////////
+	/////////////////// selectAll ///////////////////////////////////////////////
 	public List<MemberProfileVO> selectAll(MemberProfileVO mpVO) {
 		// 회원 프로필 전체출력
-		if(mpVO.getSearchCondition() == null) {
-			return jdbcTemplate.query(sql_SELECTALL, new MemberProfileRowMapper());
+		if(mpVO.getSearchCondition()==null) {
+			System.out.println("memberProfileDAO2 selectAll 서치컨디션 null");
+		}
+		else if(mpVO.getSearchCondition().equals("totalMemberProfile")) {
+			return jdbcTemplate.query(sql_SELECTALL_HELCELL, new MemberProfileRowMapper());
 		}
 		// 신고수 3개이상인 회원 출력
 		else if(mpVO.getSearchCondition().equals("prohibitProfile")) {
@@ -64,21 +69,30 @@ public class MemberProfileDAO2 {
 		return null;
 	}
 
-/////////////////// selectOne ///////////////////////////////////////////////
+	/////////////////// selectOne ///////////////////////////////////////////////
 	public MemberProfileVO selectOne(MemberProfileVO mpVO) {
 
-		// 쿼리문 수정 및 실행 후 결과를 저장
-		Object[] args = { mpVO.getMemberID() };
-		return jdbcTemplate.queryForObject(sql_SELECTONE, args, new MemberProfileRowMapper());
+		if(mpVO.getSearchCondition()==null) {
+			System.out.println("memberProfileDAO2 selectOne 서치컨디션 null");
+		}
+		else if(mpVO.getSearchCondition().equals("memberProfile")) {
+			Object[] args = { mpVO.getProfileNum() };
+			return jdbcTemplate.queryForObject(sql_SELECTONE_MEMBERPROFILE, args, new MemberProfileRowMapper());
+		}
+		else if(mpVO.getSearchCondition().equals("myProfile")) {
+			Object[] args = { mpVO.getMemberID() };
+			return jdbcTemplate.queryForObject(sql_SELECTONE_MYPROFILE, args, new MemberProfileRowMapper());
+		}
 		// 검색 실패라면
+		return null;
 	}
 
-/////////////////// update ///////////////////////////////////////////////
+	/////////////////// update ///////////////////////////////////////////////
 	public boolean update(MemberProfileVO mpVO) {
 		// 쿼리문 수정 및 실행 후 결과를 저장
 		int result=0;
 		if(mpVO.getSearchCondition() == null) {
-			return false;
+			System.out.println("memberProfileDAO2 update 서치컨디션 null");
 		}
 		// 프로필 신고수 갱신
 		else if(mpVO.getSearchCondition().equals("updateProhibit")) {
@@ -101,24 +115,24 @@ public class MemberProfileDAO2 {
 			result = jdbcTemplate.update(sql_UPDATE_PROFILERESET, mpVO.getProfileNum());
 		}
 		// 성공 리턴
-		if (result <=0) {
-			return false;
+		if (result > 0) {
+			return true;
 		}
-		return true;
+		return false;
 	}
 
-/////////////////// delete ///////////////////////////////////////////////
-		public boolean delete(MemberProfileVO mpVO) {
-	//
-	//		// 쿼리문 수정 및 실행 후 결과를 저장
-	//		int result = jdbcTemplate.update(sql_DELETE, mpVO.getMemberID());
-	//
-	//		// 성공 리턴
-	//		if (result <=0) {
-	//		}
-	//		return true;
-			return false;
-		}
+	/////////////////// delete ///////////////////////////////////////////////
+	public boolean delete(MemberProfileVO mpVO) {
+		//
+		//		// 쿼리문 수정 및 실행 후 결과를 저장
+		//		int result = jdbcTemplate.update(sql_DELETE, mpVO.getMemberID());
+		//
+		//		// 성공 리턴
+		//		if (result <=0) {
+		//		}
+		//		return true;
+		return false;
+	}
 }
 
 /////////////////// rowMapper ///////////////////////////////////////////////

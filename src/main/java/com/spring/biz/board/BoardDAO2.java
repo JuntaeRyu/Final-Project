@@ -13,35 +13,54 @@ import org.springframework.stereotype.Repository;
 @Repository("boardDAO")
 public class BoardDAO2 {
 	// 게시글 작성
-	private final String sql_INSERT = "INSERT INTO BOARD (BOARDNUM, TITLE, CONTENT, MEMBERID, CATEGORY, BOARDDATE, BOARDIMG) VALUES((SELECT NVL(MAX(BOARDNUM),9999)+1 FROM BOARD), ?, ?, ?, ?, SYSTIMESTAMP, ?)";
+	private final String sql_INSERT = "INSERT INTO BOARD "
+			+ "(BOARDNUM, TITLE, CONTENT, MEMBERID, CATEGORY, BOARDIMG, BOARDDATE) "
+			+ "VALUES((SELECT NVL(MAX(BOARDNUM),9999)+1 FROM BOARD), ?, ?, ?, ?, ?, SYSTIMESTAMP)";
 	// 전체 커뮤니티 게시물 목록
-	private final String sql_SELECTALL_COMMUNITY = "SELECT B.BOARDNUM, B.TITLE, B.CONTENT, B.MEMBERID, B.PROHIBITCNT, B.CATEGORY, "
-			+ "TO_CHAR(B.BOARDDATE, 'YYYY-MM-DD') AS BOARDDATE, B.VIEWCNT, M.NICKNAME, B.BOARDIMG, B.RECOMMENDCNT "
-			+ "FROM BOARD B JOIN MEMBER M ON B.MEMBERID = M.MEMBERID WHERE B.CATEGORY IN (1,2) ORDER BY BOARDNUM DESC";
+	private final String sql_SELECTALL_COMMUNITY = "SELECT B.BOARDNUM, B.TITLE, B.RECOMMENDCNT, B.CATEGORY, B.VIEWCNT, M.NICKNAME, "
+			+ "TO_CHAR(B.BOARDDATE, 'YYYY-MM-DD') AS BOARDDATE, "
+			+ "(SELECT COUNT(CASE WHEN BOARDNUM = B.BOARDNUM THEN 1 END ) FROM COMMENTS) AS COMMENTSCNT "
+			+ "FROM BOARD B JOIN MEMBER M ON B.MEMBERID = M.MEMBERID "
+			+ "WHERE B.CATEGORY IN (1,2) ORDER BY BOARDNUM DESC";
 	// 카테고리별 커뮤니티 게시물 목록
-	private final String sql_SELECTALL_CATEGORY = "SELECT B.BOARDNUM, B.TITLE, B.CONTENT, B.MEMBERID, B.PROHIBITCNT, B.RECOMMENDCNT,  B.CATEGORY, TO_CHAR(B.BOARDDATE, 'YYYY-MM-DD') AS BOARDDATE, B.BOARDIMG, B.VIEWCNT, M.NICKNAME FROM BOARD B JOIN MEMBER M ON B.MEMBERID=M.MEMBERID WHERE B.CATEGORY=? ORDER BY BOARDNUM DESC";
-	// 신고 3개이상인 게시물 목록
-	private final String sql_SELECTALL_PROHIBITCNT = "SELECT B.BOARDNUM, B.TITLE, B.CONTENT, B.MEMBERID, B.PROHIBITCNT, B.RECOMMENDCNT,  B.CATEGORY, TO_CHAR(B.BOARDDATE, 'YYYY-MM-DD') AS BOARDDATE, B.BOARDIMG, B.VIEWCNT, M.NICKNAME FROM BOARD B JOIN MEMBER M ON B.MEMBERID=M.MEMBERID WHERE B.PROHIBITCNT >= 3 ORDER BY BOARDNUM DESC";
+	private final String sql_SELECTALL_CATEGORY = "SELECT B.BOARDNUM, B.TITLE, B.RECOMMENDCNT, B.CATEGORY, B.VIEWCNT, M.NICKNAME, "
+			+ "B.CATEGORY, TO_CHAR(B.BOARDDATE, 'YYYY-MM-DD') AS BOARDDATE, "
+			+ "(SELECT COUNT(CASE WHEN BOARDNUM = B.BOARDNUM THEN 1 END ) FROM COMMENTS) AS COMMENTSCNT "
+			+ "FROM BOARD B JOIN MEMBER M ON B.MEMBERID=M.MEMBERID "
+			+ "WHERE B.CATEGORY=? ORDER BY BOARDNUM DESC";
 	// 내가 작성한 게시물 목록
-	private final String sql_SELECTALL_MYBOARD = "SELECT B.BOARDNUM, B.TITLE, B.CONTENT, B.MEMBERID, B.PROHIBITCNT, B.RECOMMENDCNT,  B.CATEGORY, TO_CHAR(B.BOARDDATE, 'YYYY-MM-DD') AS BOARDDATE, B.BOARDIMG, B.VIEWCNT, M.NICKNAME FROM BOARD B JOIN MEMBER M ON B.MEMBERID=M.MEMBERID WHERE B.MEMBERID=? ORDER BY BOARDNUM DESC";
+	private final String sql_SELECTALL_MYBOARD = "SELECT B.BOARDNUM, B.TITLE, B.RECOMMENDCNT, B.CATEGORY, B.VIEWCNT, M.NICKNAME, "
+			+ "TO_CHAR(B.BOARDDATE, 'YYYY-MM-DD') AS BOARDDATE, "
+			+ "(SELECT COUNT(CASE WHEN BOARDNUM = B.BOARDNUM THEN 1 END ) FROM COMMENTS) AS COMMENTSCNT "
+			+ "FROM BOARD B JOIN MEMBER M ON B.MEMBERID=M.MEMBERID "
+			+ "WHERE B.MEMBERID=? ORDER BY BOARDNUM DESC";
+	// 신고 3개이상인 게시물 목록
+	private final String sql_SELECTALL_PROHIBITCNT = "SELECT B.BOARDNUM, B.TITLE, B.MEMBERID, B.PROHIBITCNT, B.RECOMMENDCNT, B.CATEGORY, B.VIEWCNT, M.NICKNAME, "
+			+ "TO_CHAR(B.BOARDDATE, 'YYYY-MM-DD') AS BOARDDATE "
+			+ "FROM BOARD B JOIN MEMBER M ON B.MEMBERID=M.MEMBERID "
+			+ "WHERE B.PROHIBITCNT >= 3 ORDER BY BOARDNUM DESC";
 	// 추천수 top5 게시물 리스트
-	private final String sql_SELECTALL_RANK = "SELECT BOARDNUM, TITLE, CONTENT, MEMBERID, PROHIBITCNT, RECOMMENDCNT, CATEGORY, BOARDDATE, BOARDIMG, VIEWCNT, NICKNAME"
-			+ " FROM ("
-			+ "	SELECT B.BOARDNUM, B.TITLE, B.CONTENT, B.MEMBERID, B.PROHIBITCNT, B.RECOMMENDCNT,  B.CATEGORY, TO_CHAR(B.BOARDDATE, 'YYYY-MM-DD') AS BOARDDATE, B.BOARDIMG, B.VIEWCNT, M.NICKNAME"
-			+ " FROM BOARD B "
-			+ "	JOIN MEMBER M ON B.MEMBERID=M.MEMBERID"
-			+ " ORDER BY RECOMMENDCNT DESC, VIEWCNT DESC)"
-			+ " WHERE ROWNUM <= 5";
+	private final String sql_SELECTALL_RANK = "SELECT BOARDNUM, TITLE, CONTENT, PROHIBITCNT, RECOMMENDCNT, CATEGORY, BOARDIMG, VIEWCNT, NICKNAME, BOARDDATE, COMMENTSCNT "
+			+ "FROM (SELECT B.BOARDNUM, B.TITLE, B.CONTENT, B.PROHIBITCNT, B.RECOMMENDCNT,  B.CATEGORY, B.BOARDIMG, B.VIEWCNT, M.NICKNAME, "
+			+ "TO_CHAR(B.BOARDDATE, 'YYYY-MM-DD') AS BOARDDATE, "
+			+ "(SELECT COUNT(CASE WHEN BOARDNUM = B.BOARDNUM THEN 1 END ) FROM COMMENTS) AS COMMENTSCNT "
+			+ "FROM BOARD B JOIN MEMBER M ON B.MEMBERID=M.MEMBERID "
+			+ "WHERE B.CATEGORY IN (1,2) ORDER BY RECOMMENDCNT DESC, VIEWCNT DESC) WHERE ROWNUM <= 5";
 	// 게시물 상세페이지
-	private final String sql_SELECTONE = "SELECT B.BOARDNUM, B.TITLE, B.CONTENT, B.MEMBERID, B.PROHIBITCNT, B.RECOMMENDCNT, B.CATEGORY, TO_CHAR(B.BOARDDATE, 'YYYY-MM-DD') AS BOARDDATE, B.BOARDIMG, B.VIEWCNT, M.NICKNAME FROM BOARD B JOIN MEMBER M ON B.MEMBERID=M.MEMBERID WHERE B.BOARDNUM=?";
+	private final String sql_SELECTONE = "SELECT B.BOARDNUM, B.TITLE, B.CONTENT, B.MEMBERID, B.PROHIBITCNT, B.RECOMMENDCNT, B.CATEGORY, B.BOARDIMG, B.VIEWCNT, M.NICKNAME, "
+			+ "TO_CHAR(B.BOARDDATE, 'YYYY-MM-DD') AS BOARDDATE "
+			+ "FROM BOARD B JOIN MEMBER M ON B.MEMBERID=M.MEMBERID WHERE B.BOARDNUM=?";
 	// 게시물 수정
 	private final String sql_UPDATE_BOARD = "UPDATE BOARD SET TITLE=?, CONTENT=?, BOARDIMG=? WHERE BOARDNUM=?";
 	// 게시물 신고수 갱신
-	private final String sql_UPDATE_PROHIBIT = "UPDATE BOARD SET PROHIBITCNT=(SELECT COUNT(CASE WHEN COMMONNUM=? THEN 1 END ) FROM PROHIBIT) WHERE BOARDNUM=?";
+	private final String sql_UPDATE_PROHIBIT = "UPDATE BOARD SET "
+			+ "PROHIBITCNT=(SELECT COUNT(CASE WHEN COMMONNUM=? THEN 1 END ) FROM PROHIBIT) WHERE BOARDNUM=?";
 	// 게시물 조회수+1
-	private final String sql_UPDATE_RECOMMEND = "UPDATE BOARD SET RECOMMENDCNT=(SELECT COUNT(CASE WHEN COMMONNUM=? THEN 1 END ) FROM RECOMMEND) WHERE BOARDNUM=?";
+	private final String sql_UPDATE_RECOMMEND = "UPDATE BOARD SET "
+			+ "RECOMMENDCNT=(SELECT COUNT(CASE WHEN COMMONNUM=? THEN 1 END ) FROM RECOMMEND) WHERE BOARDNUM=?";
 	// 게시물 조회수 갱신
-	private final String sql_UPDATE_VIEWCNT = "UPDATE BOARD SET VIEWCNT=(SELECT VIEWCNT FROM BOARD WHERE BOARDNUM=?)+1 WHERE BOARDNUM=?";
+	private final String sql_UPDATE_VIEWCNT = "UPDATE BOARD SET "
+			+ "VIEWCNT=(SELECT VIEWCNT FROM BOARD WHERE BOARDNUM=?)+1 WHERE BOARDNUM=?";
 	// 게시물 삭제
 	private final String sql_DELETE = "DELETE FROM BOARD WHERE BOARDNUM=?";
 	// 회원 정지로 인한 게시물 삭제
@@ -66,22 +85,25 @@ public class BoardDAO2 {
 		if (bVO.getSearchCondition() != null) {
 			if (bVO.getSearchCondition().equals("totalCommunity")) {
 
-				return jdbcTemplate.query(sql_SELECTALL_COMMUNITY,new BoardRowMapper());
+				return jdbcTemplate.query(sql_SELECTALL_COMMUNITY, new BoardListRowMapper());
 			}
 			else if (bVO.getSearchCondition().equals("community")) {
 				Object[] args= {bVO.getCategory()};
-				return jdbcTemplate.query(sql_SELECTALL_CATEGORY, args,new BoardRowMapper());
+				return jdbcTemplate.query(sql_SELECTALL_CATEGORY, args, new BoardListRowMapper());
 			}
 			else if (bVO.getSearchCondition().equals("prohibitBoard")) {
-				return jdbcTemplate.query(sql_SELECTALL_PROHIBITCNT,new BoardRowMapper());
+				return jdbcTemplate.query(sql_SELECTALL_PROHIBITCNT, new BoardProhibitRowMapper());
 			}
 			else if (bVO.getSearchCondition().equals("ownBoard")) {
 				Object[] args= {bVO.getMemberID()};
-				return jdbcTemplate.query(sql_SELECTALL_MYBOARD, args,new BoardRowMapper());
+				return jdbcTemplate.query(sql_SELECTALL_MYBOARD, args, new BoardListRowMapper());
 			}
 			else if (bVO.getSearchCondition().equals("recommendRank")) {
-				return jdbcTemplate.query(sql_SELECTALL_RANK, new BoardRowMapper());
+				return jdbcTemplate.query(sql_SELECTALL_RANK, new BoardRankRowMapper());
 			}
+		}
+		else if (bVO.getSearchCondition() == null) {
+			System.out.println("boardDAO2 selectAll 서치컨디션 null");
 		}
 		return null;
 	}
@@ -91,10 +113,10 @@ public class BoardDAO2 {
 		System.out.println("BoardDAO2 로그 selectOne 메서드");
 		try {
 			Object[] args= {bVO.getBoardNum()};
-			return jdbcTemplate.queryForObject(sql_SELECTONE,args,new BoardRowMapper());
+			return jdbcTemplate.queryForObject(sql_SELECTONE, args, new BoardRowMapper());
 		}
 		catch(EmptyResultDataAccessException e) {
-			System.out.println("해결~");
+			System.out.println("boardDAO2 selectOne 데이터 비어있음");
 			return null;
 		}
 	}
@@ -103,8 +125,11 @@ public class BoardDAO2 {
 	public boolean update(BoardVO bVO) {
 		System.out.println("BoardDAO2 로그 update 메서드");
 		int result=0;
-		if (bVO.getSearchCondition().equals("updateBoard")) {
-			result=jdbcTemplate.update(sql_UPDATE_BOARD,bVO.getTitle(),bVO.getContent(),bVO.getBoardNum(),bVO.getBoardNum());
+		if (bVO.getSearchCondition()==null) {
+			System.out.println("boardDAO2 selectOne 서치컨디션 null");
+		}
+		else if (bVO.getSearchCondition().equals("updateBoard")) {
+			result=jdbcTemplate.update(sql_UPDATE_BOARD,bVO.getTitle(),bVO.getContent(),bVO.getBoardImg(),bVO.getBoardNum());
 		}
 		else if (bVO.getSearchCondition().equals("prohibit")) {
 			result=jdbcTemplate.update(sql_UPDATE_PROHIBIT,bVO.getBoardNum(),bVO.getBoardNum());
@@ -116,10 +141,10 @@ public class BoardDAO2 {
 			result=jdbcTemplate.update(sql_UPDATE_VIEWCNT,bVO.getBoardNum(),bVO.getBoardNum());
 		}
 
-		if (result <= 0) {
-			return false;
+		if (result > 0) {
+			return true;
 		}
-		return true;
+		return false;
 	}
 
 /////////////////// delete ///////////////////////////////////////////////
@@ -127,7 +152,10 @@ public class BoardDAO2 {
 		System.out.println("BoardDAO2 로그 delete 메서드");
 		int result=0;
 
-		if (bVO.getSearchCondition().equals("boardNum")) {
+		if (bVO.getSearchCondition()==null) {
+			System.out.println("boardDAO2 selectOne 서치컨디션 null");
+		}
+		else if (bVO.getSearchCondition().equals("boardNum")) {
 			result=jdbcTemplate.update(sql_DELETE,bVO.getBoardNum());
 		}
 		else if (bVO.getSearchCondition().equals("memberID")) {
@@ -147,6 +175,7 @@ class BoardRowMapper implements RowMapper<BoardVO>{
 	@Override
 	public BoardVO mapRow(ResultSet rs, int rowNum) throws SQLException {
 		BoardVO bdata= new BoardVO();
+		
 		bdata.setBoardNum(rs.getInt("BOARDNUM"));
 		bdata.setTitle(rs.getString("TITLE"));
 		bdata.setContent(rs.getString("CONTENT"));
@@ -158,9 +187,68 @@ class BoardRowMapper implements RowMapper<BoardVO>{
 		bdata.setBoardImg(rs.getString("BOARDIMG"));
 		bdata.setViewCnt(rs.getInt("VIEWCNT"));
 		bdata.setNickName(rs.getString("NICKNAME"));
+		
 		return bdata;
 	}
-
-
 }
 
+class BoardListRowMapper implements RowMapper<BoardVO>{
+	
+	@Override
+	public BoardVO mapRow(ResultSet rs, int rowNum) throws SQLException {
+		BoardVO bdata= new BoardVO();
+		
+		bdata.setBoardNum(rs.getInt("BOARDNUM"));
+		bdata.setTitle(rs.getString("TITLE"));
+		bdata.setRecommendCnt(rs.getInt("RECOMMENDCNT"));
+		bdata.setCategory(rs.getInt("CATEGORY"));
+		bdata.setBoardDate(rs.getString("BOARDDATE"));
+		bdata.setViewCnt(rs.getInt("VIEWCNT"));
+		bdata.setNickName(rs.getString("NICKNAME"));
+		bdata.setBoardCommentsCnt(rs.getInt("COMMENTSCNT"));
+		
+		return bdata;
+	}
+}
+
+class BoardProhibitRowMapper implements RowMapper<BoardVO>{
+	
+	@Override
+	public BoardVO mapRow(ResultSet rs, int rowNum) throws SQLException {
+		BoardVO bdata= new BoardVO();
+		
+		bdata.setBoardNum(rs.getInt("BOARDNUM"));
+		bdata.setTitle(rs.getString("TITLE"));
+		bdata.setMemberID(rs.getString("MEMBERID"));
+		bdata.setProhibitCnt(rs.getInt("PROHIBITCNT"));
+		bdata.setRecommendCnt(rs.getInt("RECOMMENDCNT"));
+		bdata.setCategory(rs.getInt("CATEGORY"));
+		bdata.setBoardDate(rs.getString("BOARDDATE"));
+		bdata.setViewCnt(rs.getInt("VIEWCNT"));
+		bdata.setNickName(rs.getString("NICKNAME"));
+		
+		return bdata;
+	}
+}
+
+class BoardRankRowMapper implements RowMapper<BoardVO>{
+	
+	@Override
+	public BoardVO mapRow(ResultSet rs, int rowNum) throws SQLException {
+		BoardVO bdata= new BoardVO();
+		
+		bdata.setBoardNum(rs.getInt("BOARDNUM"));
+		bdata.setTitle(rs.getString("TITLE"));
+		bdata.setContent(rs.getString("CONTENT"));
+		bdata.setProhibitCnt(rs.getInt("PROHIBITCNT"));
+		bdata.setRecommendCnt(rs.getInt("RECOMMENDCNT"));
+		bdata.setCategory(rs.getInt("CATEGORY"));
+		bdata.setBoardDate(rs.getString("BOARDDATE"));
+		bdata.setBoardImg(rs.getString("BOARDIMG"));
+		bdata.setViewCnt(rs.getInt("VIEWCNT"));
+		bdata.setNickName(rs.getString("NICKNAME"));
+		bdata.setBoardCommentsCnt(rs.getInt("COMMENTSCNT"));
+		
+		return bdata;
+	}
+}

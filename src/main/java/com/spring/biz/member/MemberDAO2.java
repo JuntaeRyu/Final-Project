@@ -58,6 +58,7 @@ public class MemberDAO2 {
 		return true;
 	}
 
+///////////////////// selectAll ///////////////////////////////////////////////////
 	public List<MemberVO> selectAll(MemberVO mVO) {
 		Object[] args = { mVO.getRole() };
 		return jdbcTemplate.query(sql_SELECTALL_MEMBERLIST, args, new MemberListRowMapper());
@@ -93,7 +94,7 @@ public class MemberDAO2 {
 			}
 		}
 		catch(EmptyResultDataAccessException e) {
-			System.out.println("데이터가 비어있음");
+			System.out.println("memberDAO2 selectOne 데이터가 비어있음");
 			return null;
 		}
 
