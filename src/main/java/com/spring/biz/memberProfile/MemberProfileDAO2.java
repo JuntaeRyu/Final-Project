@@ -1,0 +1,143 @@
+package com.spring.biz.memberProfile;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Repository;
+
+
+@Repository("memberProfileDAO")
+public class MemberProfileDAO2 {
+
+	// 회원 프로필 작성
+	private final String sql_INSERT = "INSERT INTO MEMBERPROFILE (PROFILENUM, MEMBERID, PROFILEIMG, SHORTINTRO, INTRO) VALUES ((SELECT NVL(MAX(PROFILENUM),0)+1 FROM MEMBERPROFILE), ?, ?, ?, ?)";
+	// 회원 프로필 상세페이지
+	private final String sql_SELECTONE = "SELECT MP.PROFILENUM, M.MEMBERID, MP.PROFILEIMG, MP.SHORTINTRO, MP.INTRO, MP.PROHIBITCNT, M.NICKNAME, (SELECT COUNT(CASE WHEN COMMONNUM = MP.PROFILENUM THEN 1 END) FROM RECOMMEND) AS RECOMMENDCNT FROM MEMBERPROFILE MP JOIN MEMBER M ON MP.MEMBERID=M.MEMBERID WHERE PROFILENUM=?";
+	// 회원 프로필 전체 출력
+	private final String sql_SELECTALL = "SELECT MP.PROFILENUM, M.MEMBERID, MP.PROFILEIMG, MP.SHORTINTRO, MP.INTRO, MP.PROHIBITCNT, M.NICKNAME, (SELECT COUNT(CASE WHEN COMMONNUM = MP.PROFILENUM THEN 1 END) FROM RECOMMEND) AS RECOMMENDCNT FROM MEMBERPROFILE MP JOIN MEMBER M ON MP.MEMBERID=M.MEMBERID";
+	// 회원 신고 3개이산인 프로필 출력
+	private final String sql_SELECTALL_PROHIBITCNT = "SELECT MP.PROFILENUM, M.MEMBERID, MP.PROFILEIMG, MP.SHORTINTRO, MP.INTRO, MP.PROHIBITCNT, M.NICKNAME, (SELECT COUNT(CASE WHEN COMMONNUM = MP.PROFILENUM THEN 1 END) FROM RECOMMEND) AS RECOMMENDCNT FROM MEMBERPROFILE MP JOIN MEMBER M ON MP.MEMBERID=M.MEMBERID WHERE MP.PROHIBITCNT >= 3";
+	// 회원프로필 신고수 갱신
+	private final String sql_UPDATE_PROHIBIT = "UPDATE MEMBERPROFILE SET PROHIBIT=(SELECT COUNT(CASE WHEN COMMONNUM=? THEN 1 END) FROM PROHIBIT) WHERE PROFILENUM=?";
+	// 회원프로필 짧은 소개글 변경
+	private final String sql_UPDATE_PROFILESHORTINTRO = "UPDATE MEMBERPROFILE SET SHORTINTRO=? WHERE PROFILENUM=?";
+	// 회원프로필 정식 소개글 변경
+	private final String sql_UPDATE_PROFILEINTRO = "UPDATE MEMBERPROFILE SET INTRO=? WHERE PROFILENUM=?";
+	// 회원프로필 이미지 변경
+	private final String sql_UPDATE_PROFILEIMG = "UPDATE MEMBERPROFILE SET PROFILEIMG=? WHERE PROFILENUM=?";
+	// 회원프로필 초기화
+	private final String sql_UPDATE_PROFILERESET = "UPDATE MEMBERPROFILE SET PROFILEIMG=?,SHORTIMG=?,INTRO=?,PROFILEIMG=?,PROHIBITCNT=0 WHERE PROFILENUM=?";
+	//	private final String sql_DELETE = "DELETE FROM MEMBER WHERE MEMBERID=?";
+	// JDBC(자바 데이터베이스 커넥트) 도구
+	// 중복검사에 쿼리문 굳이 다필요한지 확인
+
+	@Autowired
+	private JdbcTemplate jdbcTemplate;
+
+/////////////////// insert ///////////////////////////////////////////////
+	public boolean insert(MemberProfileVO mpVO) { // DB에 객체정보 저장
+
+		// 쿼리문 수정 및 실행 후 결과를 저장
+		int result = jdbcTemplate.update(sql_INSERT, mpVO.getMemberID(),mpVO.getProfileImg(), mpVO.getShortIntro(), mpVO.getIntro());
+
+		// 검색 결과 리턴
+		if (result<=0) {
+			return false; // 저장 실패
+		}
+		return true;
+	} // insert
+
+/////////////////// selectAll ///////////////////////////////////////////////
+	public List<MemberProfileVO> selectAll(MemberProfileVO mpVO) {
+		// 회원 프로필 전체출력
+		if(mpVO.getSearchCondition() == null) {
+			return jdbcTemplate.query(sql_SELECTALL, new MemberProfileRowMapper());
+		}
+		// 신고수 3개이상인 회원 출력
+		else if(mpVO.getSearchCondition().equals("prohibitProfile")) {
+			return jdbcTemplate.query(sql_SELECTALL_PROHIBITCNT, new MemberProfileRowMapper());
+		}
+		return null;
+	}
+
+/////////////////// selectOne ///////////////////////////////////////////////
+	public MemberProfileVO selectOne(MemberProfileVO mpVO) {
+
+		// 쿼리문 수정 및 실행 후 결과를 저장
+		Object[] args = { mpVO.getMemberID() };
+		return jdbcTemplate.queryForObject(sql_SELECTONE, args, new MemberProfileRowMapper());
+		// 검색 실패라면
+	}
+
+/////////////////// update ///////////////////////////////////////////////
+	public boolean update(MemberProfileVO mpVO) {
+		// 쿼리문 수정 및 실행 후 결과를 저장
+		int result=0;
+		if(mpVO.getSearchCondition() == null) {
+			return false;
+		}
+		// 프로필 신고수 갱신
+		else if(mpVO.getSearchCondition().equals("updateProhibit")) {
+			result = jdbcTemplate.update(sql_UPDATE_PROHIBIT, mpVO.getShortIntro(), mpVO.getProfileNum());
+		}
+		// 프로필 짧은 소개글 변경
+		else if(mpVO.getSearchCondition().equals("updateShortIntro")) {
+			result = jdbcTemplate.update(sql_UPDATE_PROFILESHORTINTRO, mpVO.getShortIntro(), mpVO.getProfileNum());
+		}
+		// 프로필 정식 소개글 변경
+		else if(mpVO.getSearchCondition().equals("updateIntro")) {
+			result = jdbcTemplate.update(sql_UPDATE_PROFILEINTRO, mpVO.getIntro(), mpVO.getProfileNum());
+		}
+		// 프로필 이미지 변경
+		else if(mpVO.getSearchCondition().equals("updateProfileImg")) {
+			result = jdbcTemplate.update(sql_UPDATE_PROFILEIMG, mpVO.getProfileImg(), mpVO.getProfileNum());
+		}
+		// 회원 프로필 초기화
+		else if(mpVO.getSearchCondition().equals("profileReset")) {
+			result = jdbcTemplate.update(sql_UPDATE_PROFILERESET, mpVO.getProfileNum());
+		}
+		// 성공 리턴
+		if (result <=0) {
+			return false;
+		}
+		return true;
+	}
+
+/////////////////// delete ///////////////////////////////////////////////
+		public boolean delete(MemberProfileVO mpVO) {
+	//
+	//		// 쿼리문 수정 및 실행 후 결과를 저장
+	//		int result = jdbcTemplate.update(sql_DELETE, mpVO.getMemberID());
+	//
+	//		// 성공 리턴
+	//		if (result <=0) {
+	//		}
+	//		return true;
+			return false;
+		}
+}
+
+/////////////////// rowMapper ///////////////////////////////////////////////
+class MemberProfileRowMapper implements RowMapper<MemberProfileVO> {
+
+	@Override
+	public MemberProfileVO mapRow(ResultSet rs, int rowNum) throws SQLException {
+		MemberProfileVO mpdata = new MemberProfileVO();
+
+		mpdata.setProfileNum(rs.getInt("PROFILENUM"));
+		mpdata.setMemberID(rs.getString("MEMBERID"));
+		mpdata.setProfileImg(rs.getString("PROFILEIMG"));
+		mpdata.setShortIntro(rs.getString("SHORTINTRO"));
+		mpdata.setIntro(rs.getString("INTRO"));
+		mpdata.setProhibitCnt(rs.getInt("PROHIBITCNT"));
+		mpdata.setRecommendCnt(rs.getInt("RECOMMENDCNT"));
+		mpdata.setNickName(rs.getString("NICKNAME"));
+
+		return mpdata;
+	}
+
+}

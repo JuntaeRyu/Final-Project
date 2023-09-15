@@ -1,0 +1,49 @@
+package com.spring.biz.warn;
+
+public class WarnVO {
+
+	private int warnNum;		// 경고 번호
+	private String menberID;	// 경고받은 회원 아이디
+	private int warnType;		// 경고 타입(이유)
+	private String warnDate;	// 경고 날짜
+	
+	// 경고 번호를 반환하는 메서드
+	public int getWarnNum() {
+		return warnNum;
+	}
+	
+	// 경고 번호를 설정하는 메서드
+	public void setWarnNum(int warnNum) {
+		this.warnNum = warnNum;
+	}
+	
+	// 경고받은 회원 아이디를 반환하는 메서드
+	public String getMenberID() {
+		return menberID;
+	}
+	
+	// 경고받은 회원 아이디를 설정하는 메서드
+	public void setMenberID(String menberID) {
+		this.menberID = menberID;
+	}
+	
+	// 경고 타입(이유)를 반환하는 메서드
+	public int getWarnType() {
+		return warnType;
+	}
+	
+	// 경고 타입(이유)를 설정하는 메서드
+	public void setWarnType(int warnType) {
+		this.warnType = warnType;
+	}
+	
+	// 경고 날짜를 반환하는 메서드
+	public String getWarnDate() {
+		return warnDate;
+	}
+	
+	// 경고 날짜를 설정하는 메서드
+	public void setWarnDate(String warnDate) {
+		this.warnDate = warnDate;
+	}
+}

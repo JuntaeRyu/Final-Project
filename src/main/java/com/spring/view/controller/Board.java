@@ -1,0 +1,351 @@
+package com.spring.view.controller;
+
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.spring.biz.board.BoardService;
+import com.spring.biz.board.BoardVO;
+import com.spring.biz.comments.CommentsService;
+import com.spring.biz.comments.CommentsVO;
+import com.spring.biz.page.PageVO;
+import com.spring.biz.prohibit.ProhibitService;
+import com.spring.biz.prohibit.ProhibitVO;
+import com.spring.biz.recommend.RecommendService;
+import com.spring.biz.recommend.RecommendVO;
+import com.spring.biz.reply.ReplyService;
+import com.spring.biz.reply.ReplyVO;
+
+@Controller
+public class Board {
+
+	@Autowired
+	private BoardService boardService;
+
+	@Autowired
+	private CommentsService commentsService;
+
+	@Autowired
+	private ReplyService replyService;
+
+	@Autowired
+	private RecommendService recommendService;
+
+	@Autowired
+	private ProhibitService prohibitService;
+
+
+	@RequestMapping(value = "/boardListPage.do")
+	public String boardListPage(BoardVO bVO, PageVO pageVO, Model model) {
+		System.out.println("로그: Board: boardListPage() ");
+
+		if (pageVO.getCurrentPage()> 0) {
+			pageVO.setCurrentPage(pageVO.getCurrentPage());
+		} else {
+			pageVO.setCurrentPage(1);
+		}
+
+		// "전체커뮤니티"에 해당하는 모든 게시글 리스트를 가져옵니다.
+		bVO.setSearchCondition("totalCommunity");
+
+		List<BoardVO> bdatas = boardService.selectAll(bVO);
+
+		pageVO.setTotalPosts(bdatas.size());
+
+
+		// 현재 페이지에 보여줄 게시글 범위를 계산합니다.
+		int startIdx = (pageVO.getCurrentPage() - 1) * pageVO.getPostPerPage();
+		int endIdx = Math.min(pageVO.getCurrentPage() * pageVO.getPostPerPage(), pageVO.getTotalPosts());
+
+		// 현재 페이지에 해당하는 게시글 리스트를 추출합니다.
+		for (int i = startIdx; i < endIdx; i++) {
+			//			currentPageBoards.add(bdatas.get(i));
+			pageVO.getCurrentPageBoards().add(bdatas.get(i));
+		}
+		pageVO.setCurrentPageBoards(pageVO.getCurrentPageBoards());
+		
+		model.addAttribute("pagedata", pageVO);
+
+		return "boardListPage.jsp";
+	}
+
+	@RequestMapping(value = "/infoListPage.do")
+	public String infoListPage(BoardVO bVO,PageVO pageVO, Model model) {
+		System.out.println("로그: Board: infoListPage() ");
+
+		if (pageVO.getCurrentPage()> 0) {
+			pageVO.setCurrentPage(pageVO.getCurrentPage());
+		} else {
+			pageVO.setCurrentPage(1);
+		}
+
+		// "커뮤니티"에 해당하는 카테고리 1에 속하는 게시글 리스트를 가져옵니다.
+		bVO.setSearchCondition("community");
+		bVO.setCategory(1);
+
+		List<BoardVO> bdatas = boardService.selectAll(bVO);
+
+		pageVO.setTotalPosts(bdatas.size());
+
+		int startIdx = (pageVO.getCurrentPage() - 1) * pageVO.getPostPerPage();
+		int endIdx = Math.min(pageVO.getCurrentPage() * pageVO.getPostPerPage(), pageVO.getTotalPosts());
+
+		for (int i = startIdx; i < endIdx; i++) {
+			pageVO.getCurrentPageBoards().add(bdatas.get(i));
+		}
+		pageVO.setCurrentPageBoards(pageVO.getCurrentPageBoards());
+
+		model.addAttribute("pagedata", pageVO);
+
+		return "infoListPage.jsp";
+	}
+
+	@RequestMapping(value = "/chatListPage.do")
+	public String chatListPage(BoardVO bVO,PageVO pageVO, Model model) {
+		System.out.println("로그: Board: chatListPage() ");
+
+		if (pageVO.getCurrentPage()> 0) {
+			pageVO.setCurrentPage(pageVO.getCurrentPage());
+		} else {
+			pageVO.setCurrentPage(1);
+		}
+
+		// "커뮤니티"에 해당하는 카테고리 1에 속하는 게시글 리스트를 가져옵니다.
+		bVO.setSearchCondition("community");
+		bVO.setCategory(2);
+
+		List<BoardVO> bdatas = boardService.selectAll(bVO);
+
+		pageVO.setTotalPosts(bdatas.size());
+
+		int startIdx = (pageVO.getCurrentPage() - 1) * pageVO.getPostPerPage();
+		int endIdx = Math.min(pageVO.getCurrentPage() * pageVO.getPostPerPage(), pageVO.getTotalPosts());
+
+		for (int i = startIdx; i < endIdx; i++) {
+			pageVO.getCurrentPageBoards().add(bdatas.get(i));
+		}
+		pageVO.setCurrentPageBoards(pageVO.getCurrentPageBoards());
+
+		model.addAttribute("pagedata", pageVO);
+
+		return "chatListPage.jsp";
+	}
+
+	@RequestMapping(value = "/boardDetailPage.do")
+	public String boardDetailPage(BoardVO bVO, RecommendVO rcVO, ProhibitVO pVO, 
+			CommentsVO cVO,ReplyVO rVO, HttpSession session, HttpServletRequest request) {
+		System.out.println("로그: Board: boardDetailPage() ");
+
+		rcVO.setMemberID((String)session.getAttribute("memberID"));
+		rcVO.setCommonNum(Integer.parseInt(request.getParameter("boardNum")));
+
+		pVO.setMemberID((String)session.getAttribute("memberID"));
+		pVO.setCommonNum(Integer.parseInt(request.getParameter("boardNum")));
+
+		// RecommendDAO를 통해 해당 게시글에 대한 사용자의 추천 여부를 확인합니다.
+		rcVO = recommendService.selectOne(rcVO);
+
+		// ProhibitDAO를 통해 해당 게시글에 대한 사용자의 신고 여부를 확인합니다.
+		pVO = prohibitService.selectOne(pVO);
+
+		// BoardDAO를 통해 해당 게시글의 상세 정보를 가져옵니다.
+		bVO = boardService.selectOne(bVO);
+
+		System.out.println(bVO.getTitle());
+		System.out.println(bVO.getNickName());
+		System.out.println(bVO.getContent());
+		System.out.println(bVO.getBoardDate());
+
+		// 추천 여부에 따라 request에 "recommend" 속성을 설정합니다.
+		if (rcVO != null) {
+			request.setAttribute("recommend", 1);
+		} else {
+			request.setAttribute("recommend", 0);
+		}
+
+		// 신고 여부에 따라 request에 "prohibit" 속성을 설정합니다.
+		if (pVO != null) {
+			request.setAttribute("prohibit", 1);
+		} else {
+			request.setAttribute("prohibit", 0);
+		}
+
+		rVO.setSearchCondition("totalReply");
+
+		List<CommentsVO> cdatas = commentsService.selectAll(null);
+
+		List<CommentsVO> comments = new ArrayList<CommentsVO>();
+
+		List<ReplyVO> rdatas = replyService.selectAll(rVO);
+
+		List<ReplyVO> replies = new ArrayList<ReplyVO>();
+
+		for(int i = 0; i < cdatas.size(); i++) {
+			if(bVO.getBoardNum() == cdatas.get(i).getBoardNum()) {
+				comments.add(cdatas.get(i));
+
+				for(int j = 0; j < rdatas.size(); j++) {
+					if(cdatas.get(i).getCommentsNum() == rdatas.get(j).getCommentsNum()) {
+						replies.add(rdatas.get(j));
+					}
+				}
+			}
+		}
+
+		// 해당 게시글의 상세 정보를 request에 저장하고, boardPage.jsp로 이동합니다.
+		if (bVO != null) {
+			request.setAttribute("bdata", bVO);
+			request.setAttribute("cdatas", comments);
+			request.setAttribute("rdatas", replies);
+
+			return "boardDetailPage.jsp";
+		}
+		// 해당 게시글이 없는 경우에는 메시지와 함께 경고 페이지를 보여줍니다.
+		else {
+			request.setAttribute("title", "잘못된 접근입니다.");
+			request.setAttribute("text", "다시 한번 확인해주세요.");
+			request.setAttribute("icon", "warning");
+
+			return "goback.jsp";
+		}
+
+
+	}
+
+	@RequestMapping(value = "/insertBoardPage.do")
+	public String insertBoardPage() {
+		System.out.println("로그: Board: insertBoardPage() ");
+
+		return "insertBoardPage.jsp";
+	}
+
+	@RequestMapping(value = "/insertBaord.do")
+	public String insertBoard(BoardVO bVO, HttpSession session, Model model) {
+		System.out.println("로그: Board: insertBoard() ");
+
+		boolean flag = boardService.insert(bVO);
+
+		if(flag) {
+			return "boardListPage.do";
+		}
+		else {
+			// 게시글 등록이 실패했을 경우, 경고 메시지를 설정하고 이전 페이지로 돌아갑니다.
+			model.addAttribute("title", "게시글작성실패.." );
+			model.addAttribute("text", "다시한번 확인해주세요.." );
+			model.addAttribute("icon", "warning" );
+
+			return "goback.jsp";
+		}
+
+	}
+
+	@RequestMapping(value = "/updateBoardPage.do")
+	public String updateBoardPage(BoardVO bVO, Model model) {
+		System.out.println("로그: Board: updateBoardPage() ");
+
+		bVO = boardService.selectOne(bVO);
+
+		if (bVO != null) {
+			model.addAttribute("bdata", bVO);
+
+			return "updateBoardPage.jsp";
+		}
+		else {
+			model.addAttribute("title", "잘못된 접근입니다." );
+			model.addAttribute("text", "다시한번 확인해주세요.." );
+			model.addAttribute("icon", "warning" );
+
+			return "goback.jsp";
+		}
+	}
+
+	@RequestMapping(value = "/updateBoard.do")
+	public String updateBoard(BoardVO bVO, Model model) {
+		System.out.println("로그: Board: updateBoard() ");
+
+		bVO.setSearchCondition("updateBoard");
+
+		boolean flag = boardService.update(bVO);
+
+		if(flag) {
+			model.addAttribute("boardNum", bVO.getBoardNum());
+
+			return "boardDetailPage.do";
+		}
+		else {
+			model.addAttribute("title", "게시글 수정 실패..");
+			model.addAttribute("text", "다시 한 번 확인해주세요..");
+			model.addAttribute("icon", "warning");
+
+			return "goback.jsp";
+		}
+	}
+
+	@RequestMapping(value = "/deleteBoard.do")
+	public String deleteBoard(BoardVO bVO, Model model) {
+		System.out.println("로그: Board: deleteBoard() ");
+
+		boolean flag = boardService.delete(bVO);
+
+		if (flag) {
+			return "boardListPage.do";
+		}
+		else {
+			model.addAttribute("title", "게시글삭제실패..");
+			model.addAttribute("text", "다시 한번 확인해주세요");
+			model.addAttribute("icon", "warning");
+
+			return "goback.jsp";
+		}
+
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}
