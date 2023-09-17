@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib tagdir="/WEB-INF/tags" prefix="NPNC"%>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -41,49 +42,13 @@ input {
 				<div>
 					<h1 id="logo">공지사항 수정
 					</h1>
-					<p></p>
 				</div>
 			</div>
 		</header>
 
 		<!-- Nav -->
-      <nav id="nav">
-        <ul>
-          <nav id="nav1">
-            <li class="current"><a href="main.do" class="icon solid fa-home"> 메인</a></li>
-            <li>
-              <a href="#" class="icon solid fa-comment"> 소식</a>
-              <ul>
-                <li><a href="noticeListPage.do">공지사항</a></li>
-              </ul>
-            </li>
-            <li>
-              <a href="#" class="icon solid fa-comments"> 커뮤니티</a>
-              <ul>
-                <li><a href="boardListPage.do">전체</a></li>
-                <li><a href="infoListPage.do">정보</a></li>
-                <li><a href="chatListPage.do">잡담</a></li>
-              </ul>
-            </li>
-            <li>
-              <a href="#" class="icon solid fa-users"> 매칭</a>
-              <ul>
-                <li><a href="memberList.do">전체회원</a></li>
-              </ul>
-            </li>
-          </nav>
-          <c:choose>
-            <c:when test="${empty mid}">
-              <a href="loginPage.do" class="icon solid fa-lock login" value="로그인" title="로그인" > 로그인</a>
-              <a href="signupPage.do" class="icon solid fa-user-plus signup" value="회원가입" title="회원가입" > 회원가입</a>
-            </c:when>
-            <c:otherwise>
-              <a href="logout.do" class="icon solid fa-lock-open logout" value="로그아웃" title="로그아웃" > 로그아웃</a>
-              <a href="mypage.do" class="icon solid fa-user mypage" value="마이페이지" title="마이페이지" > 마이페이지</a>
-            </c:otherwise>
-          </c:choose>
-        </ul>
-      </nav>
+		<NPNC:healthDuo_nav />
+		
 		<!-- Main -->
 		<section id="main">
 			<div class="container">
@@ -182,13 +147,19 @@ input {
 	<script src="assets/js/browser.min.js"></script>
 	<script src="assets/js/breakpoints.min.js"></script>
 	<script src="assets/js/util.js"></script>
+	<script src="assets/js/nav.util.js"></script>
 	<c:choose>
-    <c:when test="${empty mid}">
-      <script src="assets/js/main.js"></script>
-    </c:when>
-    <c:otherwise>
-      <script src="assets/js/main2.js"></script>
-    </c:otherwise>
-    </c:choose>
+		<c:when test="${empty memberID}">
+			<script src="assets/js/main.js"></script>
+		</c:when>
+		<c:otherwise>
+			<c:if test="${role eq 3}">
+				<script src="assets/js/main2.js"></script>
+			</c:if>
+			<c:if test="${role eq 2}">
+				<script src="assets/js/main3.js"></script>
+			</c:if>
+		</c:otherwise>
+	</c:choose>
 </body>
 </html>

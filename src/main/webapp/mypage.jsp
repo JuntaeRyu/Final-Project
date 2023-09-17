@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+<%@ taglib tagdir="/WEB-INF/tags" prefix="NPNC"%>
 
 <!DOCTYPE HTML>
 <!--
@@ -43,6 +44,7 @@ button {
 	-webkit-appearance: button;
 	overflow: visible;
 	box-sizing: border-box !important;
+	width: 100%;
 }
 
 .modal {
@@ -132,10 +134,12 @@ textarea.fixed-width {
 	<!-- 회원탈퇴 모달 -->
 	<div id="deleteMemberModal" class="modal">
 		<div class="modal-content">
-			<span class="close">&times;</span> <label style="font-size: 25px;"
-				for="password">비밀번호 확인</label> <input type="password"
-				id="passwordMember" placeholder="비밀번호를 입력하세요">
-			<button id="submitBtnMember" onclick="clickbtn()">확인</button>
+			<form>
+				<span class="close">&times;</span> <label style="font-size: 25px;"
+					for="password">비밀번호 확인</label> <input style="width: 100%"
+					type="password" id="passwordMember" placeholder="비밀번호를 입력하세요">
+				<button id="submitBtnMember" onclick="clickbtn()">확인</button>
+			</form>
 		</div>
 	</div>
 
@@ -154,51 +158,13 @@ textarea.fixed-width {
 		<header id="header">
 			<div class="logo container">
 				<div>
-					<h1 id="logo">
-						마이페이지
-					</h1>
-					<p></p>
+					<h1 id="logo">마이페이지</h1>
 				</div>
 			</div>
 		</header>
 
 		<!-- Nav -->
-		<nav id="nav">
-			<ul>
-				<nav id="nav1">
-					<li class="current"><a href="main.do"
-						class="icon solid fa-home"> 메인</a></li>
-					<li><a href="#" class="icon solid fa-comment"> 소식</a>
-						<ul>
-							<li><a href="noticeListPage.do">공지사항</a></li>
-						</ul></li>
-					<li><a href="#" class="icon solid fa-comments"> 커뮤니티</a>
-						<ul>
-							<li><a href="boardListPage.do">전체</a></li>
-							<li><a href="infoListPage.do">정보</a></li>
-							<li><a href="chatListPage.do">잡담</a></li>
-						</ul></li>
-					<li><a href="#" class="icon solid fa-users"> 매칭</a>
-						<ul>
-							<li><a href="memberList.do">전체회원</a></li>
-						</ul></li>
-				</nav>
-				<c:choose>
-					<c:when test="${empty mid}">
-						<a href="loginPage.do" class="icon solid fa-lock login"
-							value="로그인" title="로그인"> 로그인</a>
-						<a href="signupPage.do" class="icon solid fa-user-plus signup"
-							value="회원가입" title="회원가입"> 회원가입</a>
-					</c:when>
-					<c:otherwise>
-						<a href="logout.do" class="icon solid fa-lock-open logout"
-							value="로그아웃" title="로그아웃"> 로그아웃</a>
-						<a href="mypage.do" class="icon solid fa-user mypage"
-							value="마이페이지" title="마이페이지"> 마이페이지</a>
-					</c:otherwise>
-				</c:choose>
-			</ul>
-		</nav>
+		<NPNC:healthDuo_nav />
 
 		<!-- Main -->
 		<section id="main">
@@ -222,6 +188,15 @@ textarea.fixed-width {
 											</h3>
 										</article>
 									</li>
+
+									<li>
+										<article class="box post-summary">
+											<h3>
+												<a href="ownMatchPage.do">나의 매칭</a>
+											</h3>
+										</article>
+									</li>
+
 									<li>
 										<article class="box post-summary">
 											<h3>
@@ -256,31 +231,41 @@ textarea.fixed-width {
 							<article class="box page-content">
 								<section id="mypageinfo">
 									<h2>기본정보</h2>
+									<h3>아이디</h3>
 									<section class="info">
-										<h3>아이디</h3>
-										<h1>${mdata.mid}</h1>
+										<h1>${mdata.memberID}</h1>
 									</section>
+									<h3>닉네임</h3>
 									<section class="info">
-										<h3>닉네임</h3>
 										<h1>${mdata.nickName}</h1>
 									</section>
+									<h3>이메일</h3>
 									<section class="info">
-										<h3>이메일</h3>
 										<h1>${mdata.email}</h1>
 									</section>
 								</section>
 
 								<section id="mypageprofile">
-									<h2>프로필</h2>
-									<span class="image featured"><img
-										src="assets/css/images/log.png.jpg" alt="" /></span>
+								<h3>프로필</h3>
+									<c:if test="${mpdata.profileImg ne null}">
+										<span class="image featured"><img
+											src="assets/css/images/profileImg/${mpdata.profileImg}"
+											alt="assets/css/images/profileImg/${mpdata.profileImg}" /></span>
+									</c:if>
+									<c:if test="${mpdata.profileImg eq null}">
+										<span class="image featured"><img
+											src="assets/css/images/profileImg/default.png"
+											alt="assets/css/images/profileImg/default.png" /></span>
+									</c:if>
 								</section>
-
+								<section id="mypageShortIntroduction">
+								<h3>한줄 소개글</h3>
+									<textarea class="fixed-width">${mpdata.shortIntro}</textarea>
+								</section>
 								<section id="mypageintroduction">
-									<h2>소개글</h2>
-									<textarea class="fixed-width">준태 바보 멍청이 해삼 말미잘</textarea>
+								<h3>소개글</h3>
+									<textarea class="fixed-width">${mpdata.intro}</textarea>
 								</section>
-
 							</article>
 
 						</div>
@@ -351,8 +336,6 @@ textarea.fixed-width {
 	</div>
 
 	<!-- Scripts -->
-
-	<!-- Scripts -->
 	<script>
 	const openModalBtnMember = document.getElementById("openModalBtnMember");
 	
@@ -389,25 +372,11 @@ textarea.fixed-width {
     cancleBtn.addEventListener("click", () => {
     	checkModal.style.display = "none";
     });
-
-    //
-   /* submitBtnMember.click(function(){
-    	const enteredPassword = passwordInputMember.value;
-    	if (enteredPassword === '${mdata.mpw}') { // ${mdata.mpw}
-			// 비밀번호가 일치하면 최종확인
-			passwordModalMember.style.display = "none";
-			checkModal.style.display = "block";
-		} else {
-			alert("비밀번호가 일치하지 않습니다");
-			passwordModalMember.style.display = "none";
-		}
-    	
-    }); */
     
     function clickbtn(){
     	const enteredPassword = passwordInputMember.value;
         
-        if (enteredPassword === '${mdata.mpw}') { // ${mdata.mpw}
+        if (enteredPassword === '${mdata.memberPW}') {
   			// 비밀번호가 일치하면 최종확인
   			passwordModalMember.style.display = "none";
   			passwordInput.value = ""; // 입력된 값을 비움
@@ -419,25 +388,6 @@ textarea.fixed-width {
   		}
     };
     
-    
-    
-    
-    
-    
-     /* submitBtnMember.addEventListener("click", () => {
-      const enteredPassword = passwordInputMember.value;
-      
-      if (enteredPassword === '${mdata.mpw}') { // ${mdata.mpw}
-			// 비밀번호가 일치하면 최종확인
-			passwordModalMember.style.display = "none";
-			checkModal.style.display = "block";
-		} else {
-			alert("비밀번호가 일치하지 않습니다");
-			passwordModalMember.style.display = "none";
-		}
-      
-    }); */
-    
 	</script>
 	<script src="assets/js/jquery.min.js"></script>
 	<script src="assets/js/jquery.dropotron.min.js"></script>
@@ -445,12 +395,18 @@ textarea.fixed-width {
 	<script src="assets/js/browser.min.js"></script>
 	<script src="assets/js/breakpoints.min.js"></script>
 	<script src="assets/js/util.js"></script>
+	<script src="assets/js/nav.util.js"></script>
 	<c:choose>
-		<c:when test="${empty mid}">
+		<c:when test="${empty memberID}">
 			<script src="assets/js/main.js"></script>
 		</c:when>
 		<c:otherwise>
-			<script src="assets/js/main2.js"></script>
+			<c:if test="${role eq 3}">
+				<script src="assets/js/main2.js"></script>
+			</c:if>
+			<c:if test="${role eq 2}">
+				<script src="assets/js/main3.js"></script>
+			</c:if>
 		</c:otherwise>
 	</c:choose>
 </body>

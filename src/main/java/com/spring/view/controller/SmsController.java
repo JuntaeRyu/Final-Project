@@ -21,61 +21,61 @@ public class SmsController {
 	public String findIDPhoneCheck(HttpServletRequest request)  {
 		System.out.println("로그: EmailController: findIDPhoneCheck() ");
 
-		DefaultMessageService messageService = NurigoApp.INSTANCE.initialize("NCSBHHHR0PCUSYEY", "3RQY1UBQ6AM1UM6OGWCFR13OVKAYRUOT", "https://api.coolsms.co.kr");
+		DefaultMessageService messageService = NurigoApp.INSTANCE.initialize("NCSZAA99EIK3IN1M", "ENJ3MA2EJXEZLGYZHDZQNGRFHCVJ60HK", "https://api.coolsms.co.kr");
 
 		Message message = new Message();
 		// 발신번호 및 수신번호는 반드시 01012345678 형태로 입력되어야 합니다.
 
 		int randomNumber = (int)((Math.random() * (999999 - 100000 + 1)) + 100000);
 
-		message.setFrom("01047672570");
+		message.setFrom("01041896849");
 		message.setTo((String)request.getParameter("phoneNum"));
-		message.setText("[TEST] 인증번호는" + "["+randomNumber+"]" + "입니다.");
+		message.setText("[TEST] 인증번호는" + "[" + randomNumber + "]" + "입니다.");
 
 		SingleMessageSentResponse response = messageService.sendOne(new SingleMessageSendingRequest(message));
 
 		return Integer.toString(randomNumber);
 	}
-	
+
 	@RequestMapping(value = "/findPWPhoneCheck.do", method = RequestMethod.POST)
 	@ResponseBody
 	public String findPWPhoneCheck(HttpServletRequest request)  {
 		System.out.println("로그: EmailController: findPWPhoneCheck() ");
-		
-		DefaultMessageService messageService = NurigoApp.INSTANCE.initialize("NCSBHHHR0PCUSYEY", "3RQY1UBQ6AM1UM6OGWCFR13OVKAYRUOT", "https://api.coolsms.co.kr");
-		
+
+		DefaultMessageService messageService = NurigoApp.INSTANCE.initialize("NCSZAA99EIK3IN1M", "ENJ3MA2EJXEZLGYZHDZQNGRFHCVJ60HK", "https://api.coolsms.co.kr");
+
 		Message message = new Message();
 		// 발신번호 및 수신번호는 반드시 01012345678 형태로 입력되어야 합니다.
-		
+
 		int randomNumber = (int)((Math.random() * (999999 - 100000 + 1)) + 100000);
-		
-		message.setFrom("01047672570");
+
+		message.setFrom("01041896849");
 		message.setTo((String)request.getParameter("phoneNum"));
-		message.setText("[TEST] 인증번호는" + "["+randomNumber+"]" + "입니다.");
-		
+		message.setText("[TEST] 인증번호는" + "[" + randomNumber + "]" + "입니다.");
+
 		SingleMessageSentResponse response = messageService.sendOne(new SingleMessageSendingRequest(message));
-		
+
 		return Integer.toString(randomNumber);
 	}
-	
+
 	@RequestMapping(value = "/signupPhoneCheck.do", method = RequestMethod.POST)
 	@ResponseBody
 	public String signupPhoneCheck(HttpServletRequest request)  {
 		System.out.println("로그: EmailController: signupPhoneCheck() ");
-		
-		DefaultMessageService messageService = NurigoApp.INSTANCE.initialize("NCSBHHHR0PCUSYEY", "3RQY1UBQ6AM1UM6OGWCFR13OVKAYRUOT", "https://api.coolsms.co.kr");
-		
+
+		DefaultMessageService messageService = NurigoApp.INSTANCE.initialize("NCSZAA99EIK3IN1M", "ENJ3MA2EJXEZLGYZHDZQNGRFHCVJ60HK", "https://api.coolsms.co.kr");
+
 		Message message = new Message();
 		// 발신번호 및 수신번호는 반드시 01012345678 형태로 입력되어야 합니다.
-		
+
 		int randomNumber = (int)((Math.random() * (999999 - 100000 + 1)) + 100000);
-		
-		message.setFrom("01047672570");
+
+		message.setFrom("01041896849");
 		message.setTo((String)request.getParameter("phoneNum"));
-		message.setText("[TEST] 인증번호는" + "["+randomNumber+"]" + "입니다.");
-		
+		message.setText("[TEST] 인증번호는" + "[" + randomNumber + "]" + "입니다.");
+
 		SingleMessageSentResponse response = messageService.sendOne(new SingleMessageSendingRequest(message));
-		
+
 		return Integer.toString(randomNumber);
 	}
 }

@@ -22,7 +22,7 @@ import com.spring.biz.reply.ReplyService;
 import com.spring.biz.reply.ReplyVO;
 
 @Controller
-public class Notice {
+public class NoticeController {
 
 	@Autowired
 	private BoardService boardService;
@@ -93,7 +93,7 @@ public class Notice {
 
 		rVO.setSearchCondition("totalReply");
 
-		List<CommentsVO> cdatas = commentsService.selectAll(null);
+		List<CommentsVO> cdatas = commentsService.selectAll(cVO);
 
 		List<CommentsVO> comments = new ArrayList<CommentsVO>();
 
@@ -112,7 +112,7 @@ public class Notice {
 				}
 			}
 		}
-
+		
 		bVO = boardService.selectOne(bVO);
 
 		// 게시글 데이터가 조회되었을 경우, 게시글 정보를 JSP 페이지에서 사용할 수 있도록 request에 저장합니다.

@@ -1756,12 +1756,17 @@ ul.meta li:before {
 }
 
 #boardListBox table.meta .title {
-	width: 500px;
+	width: 450px;
 	text-align: center;
 }
 
 #boardListBox table.meta .icon {
 	width: 150px;
+	text-align: center;
+}
+
+#boardListBox table.meta .nickName {
+	width: 200px !important;
 	text-align: center;
 }
 
@@ -1779,6 +1784,115 @@ ul.meta li:before {
 }
 
 #boardListBox table.meta th:before {
+	opacity: 0.5;
+	cursor: default;
+	margin-right: 0.5em;
+}
+#ownBoardListBox {
+	background-color: #f2fde9;
+	border: 1px solid #e6f3e4;
+	padding: 10px 15px 10px 15px;
+	text-align: right;
+	border-radius: 10px;
+}
+
+#ownBoardListBox table.meta {
+	font-size: 1em;
+	padding-left: 0;
+	text-align: center;
+	width: 100%;
+	display: inline-block;
+	position: relative;
+	background-color: #ffff;
+}
+
+#ownBoardListBox table.meta .tab {
+	background-color: rgb(233, 245, 232);
+	font-weight: bold;
+}
+
+#ownBoardListBox table.meta .title {
+	width: 400px;
+	text-align: center;
+}
+
+#ownBoardListBox table.meta .icon {
+	width: 150px;
+	text-align: center;
+}
+
+#ownBoardListBox table.meta .boardDate {
+	width: 200px !important;
+	text-align: center;
+}
+
+#ownBoardListBox table.meta td {
+	border-bottom: 1px solid #b0b8af;
+}
+
+#ownBoardListBox table.meta th a {
+	color: inherit;
+	outline: 0;
+}
+
+#ownBoardListBox table.meta th:first-child {
+	margin-left: 0;
+}
+
+#ownBoardListBox table.meta th:before {
+	opacity: 0.5;
+	cursor: default;
+	margin-right: 0.5em;
+}
+
+#memberListBox {
+	background-color: #f2fde9;
+	border: 1px solid #e6f3e4;
+	padding: 10px 15px 10px 15px;
+	text-align: right;
+	border-radius: 10px;
+}
+
+#memberListBox table.meta {
+	font-size: 1em;
+	padding-left: 0;
+	text-align: center;
+	width: 100%;
+	display: inline-block;
+	position: relative;
+	background-color: #ffff;
+}
+
+#memberListBox table.meta .tab {
+	background-color: rgb(233, 245, 232);
+	font-weight: bold;
+}
+
+#memberListBox table.meta .title {
+	width: 500px;
+	text-align: center;
+}
+
+#memberListBox table.meta .icon {
+	width: 150px;
+
+	text-align: center;
+}
+
+#memberListBox table.meta td {
+	border-bottom: 1px solid #b0b8af;
+}
+
+#memberListBox table.meta th a {
+	color: inherit;
+	outline: 0;
+}
+
+#memberListBox table.meta th:first-child {
+	margin-left: 0;
+}
+
+#memberListBox table.meta th:before {
 	opacity: 0.5;
 	cursor: default;
 	margin-right: 0.5em;
@@ -1959,6 +2073,79 @@ ul.meta li:before {
 #mypageintroduction h2 {
 	font-size: 2em;
 	margin-bottom: 10px;
+}
+
+#mypageShortIntroduction {
+	background-color: #f2fde9;
+	padding: 10px 20px 20px 20px;
+	border-radius: 10px;
+	margin-bottom: 10px;
+}
+
+#mypageShortIntroduction textarea {
+	width: 100%;
+	padding: 10px 10px 10px 10px;
+	border: 1px solid #e6f3e4;
+	background-color: #ffff;
+	border-radius: 10px;
+	font-size: 1em;
+}
+
+#mypageShortIntroduction h2 {
+	font-size: 2em;
+	margin-bottom: 10px;
+}
+
+#adminInfo {
+	background-color: #f2fde9;
+	padding: 10px 20px 20px 20px;
+	border-radius: 10px;
+	margin-bottom: 10px;
+	height: 85px;
+}
+
+#adminInfo select {
+	display: flex;
+	width: 90%;
+	text-align: center;
+	color: #000;
+}
+
+#adminInfo select:hover {
+	cursor: pointer;
+}
+
+#adminInfo select.option {
+	text-align: center;
+}
+
+#adminInfo .adminTd1 {
+	width: 200px;
+	text-align: center;
+}
+#adminInfo .adminTd2 {
+	width: 600px;
+	text-align: center;
+}
+#adminInfo .adminTd3 {
+	width: 200px;
+	text-align: center;
+}
+
+#adminInfo h2 {
+	font-size: 2em;
+	margin-bottom: 10px;
+}
+#adminInfo input {
+	display: flex;
+	width: 95%;
+	color: #000;
+}
+#adminInfo button {
+	display: flex;
+    width: 100%;
+    justify-content: center; 
+    align-items: center;
 }
 
 #datailBoardBox {
@@ -2342,7 +2529,7 @@ body {
 	color: #fff;
 }
 
-.mypage, .logout, .signup, .login {
+.mypage, .logout, .signup, .login, .adminPage {
 	color: #050505;
 	float: right;
 	margin-right: 30px;

@@ -16,16 +16,22 @@ public class MemberProfileDAO2 {
 	// 회원 프로필 작성
 	private final String sql_INSERT = "INSERT INTO MEMBERPROFILE (PROFILENUM, MEMBERID, PROFILEIMG, SHORTINTRO, INTRO) VALUES ((SELECT NVL(MAX(PROFILENUM),0)+1 FROM MEMBERPROFILE), ?, ?, ?, ?)";
 	// 회원 프로필 상세페이지
-	private final String sql_SELECTONE_MEMBERPROFILE = "SELECT MP.PROFILENUM, M.MEMBERID, MP.PROFILEIMG, MP.SHORTINTRO, MP.INTRO, MP.PROHIBITCNT, M.NICKNAME, (SELECT COUNT(CASE WHEN COMMONNUM = MP.PROFILENUM THEN 1 END) FROM RECOMMEND) AS RECOMMENDCNT FROM MEMBERPROFILE MP JOIN MEMBER M ON MP.MEMBERID=M.MEMBERID WHERE PROFILENUM=?";
+	private final String sql_SELECTONE_MEMBERPROFILE = "SELECT MP.PROFILENUM, MP.MEMBERID, MP.PROFILEIMG, MP.SHORTINTRO, MP.INTRO, MP.PROHIBITCNT, M.NICKNAME, M.ADDRESS, (SELECT COUNT(CASE WHEN COMMONNUM = MP.PROFILENUM THEN 1 END) FROM RECOMMEND) AS RECOMMENDCNT FROM MEMBERPROFILE MP JOIN MEMBER M ON MP.MEMBERID=M.MEMBERID WHERE PROFILENUM=?";
 	// 회원 프로필 아이디로 프로필 출력
-	private final String sql_SELECTONE_MYPROFILE = "SELECT MP.PROFILENUM, M.MEMBERID, MP.PROFILEIMG, MP.SHORTINTRO, MP.INTRO, MP.PROHIBITCNT, M.NICKNAME, (SELECT COUNT(CASE WHEN COMMONNUM = MP.PROFILENUM THEN 1 END) FROM RECOMMEND) AS RECOMMENDCNT FROM MEMBERPROFILE MP JOIN MEMBER M ON MP.MEMBERID=M.MEMBERID WHERE MEMBERID=?";
+	private final String sql_SELECTONE_MYPROFILE = "SELECT MP.PROFILENUM, MP.MEMBERID, MP.PROFILEIMG, MP.SHORTINTRO, MP.INTRO, MP.PROHIBITCNT, M.NICKNAME, (SELECT COUNT(CASE WHEN COMMONNUM = MP.PROFILENUM THEN 1 END) FROM RECOMMEND) AS RECOMMENDCNT FROM MEMBERPROFILE MP JOIN MEMBER M ON MP.MEMBERID=M.MEMBERID WHERE MP.MEMBERID=?";
 	// 회원 프로필 전체 출력
-	private final String sql_SELECTALL_HELCELL = "SELECT MP.PROFILENUM, M.MEMBERID, MP.PROFILEIMG, MP.SHORTINTRO, MP.INTRO, MP.PROHIBITCNT, M.NICKNAME, (SELECT COUNT(CASE WHEN COMMONNUM = MP.PROFILENUM THEN 1 END) FROM RECOMMEND) AS RECOMMENDCNT FROM MEMBERPROFILE MP JOIN MEMBER M ON MP.MEMBERID=M.MEMBERID WHERE M.ROLE = 3";
+	private final String sql_SELECTALL_HELCELL = "SELECT MP.PROFILENUM, MP.MEMBERID, MP.PROFILEIMG, MP.SHORTINTRO, MP.INTRO, MP.PROHIBITCNT, M.NICKNAME, (SELECT COUNT(CASE WHEN COMMONNUM = MP.PROFILENUM THEN 1 END) FROM RECOMMEND) AS RECOMMENDCNT FROM MEMBERPROFILE MP JOIN MEMBER M ON MP.MEMBERID=M.MEMBERID WHERE M.ROLE = 3";
 	// 회원 신고 3개이산인 프로필 출력
-	private final String sql_SELECTALL_PROHIBITCNT = "SELECT MP.PROFILENUM, M.MEMBERID, MP.PROFILEIMG, MP.SHORTINTRO, MP.INTRO, MP.PROHIBITCNT, M.NICKNAME, (SELECT COUNT(CASE WHEN COMMONNUM = MP.PROFILENUM THEN 1 END) FROM RECOMMEND) AS RECOMMENDCNT FROM MEMBERPROFILE MP JOIN MEMBER M ON MP.MEMBERID=M.MEMBERID WHERE MP.PROHIBITCNT >= 3 AND M.ROLE = 3";
+	private final String sql_SELECTALL_PROHIBITCNT = "SELECT MP.PROFILENUM, MP.MEMBERID, MP.PROFILEIMG, MP.SHORTINTRO, MP.INTRO, MP.PROHIBITCNT, M.NICKNAME, (SELECT COUNT(CASE WHEN COMMONNUM = MP.PROFILENUM THEN 1 END) FROM RECOMMEND) AS RECOMMENDCNT FROM MEMBERPROFILE MP JOIN MEMBER M ON MP.MEMBERID=M.MEMBERID WHERE MP.PROHIBITCNT >= 3 AND M.ROLE = 3";
 	// 회원프로필 신고수 갱신
 	private final String sql_UPDATE_PROHIBIT = "UPDATE MEMBERPROFILE SET PROHIBIT=(SELECT COUNT(CASE WHEN COMMONNUM=? THEN 1 END) FROM PROHIBIT) WHERE PROFILENUM=?";
 	// 회원프로필 짧은 소개글 변경
+	// 게시물 조회수+1
+	private final String sql_UPDATE_PROFILEPROHIBIT = "UPDATE MEMBERPROFILE SET "
+			+ "PROHIBITCNT=(SELECT COUNT(CASE WHEN COMMONNUM=? THEN 1 END ) FROM PROHIBIT) WHERE PROFILENUM=?";
+	// 게시물 조회수+1
+	private final String sql_UPDATE_PROFILERECOMMEND = "UPDATE MEMBERPROFILE SET "
+			+ "RECOMMENDCNT=(SELECT COUNT(CASE WHEN COMMONNUM=? THEN 1 END ) FROM RECOMMEND) WHERE PROFILENUM=?";
 	private final String sql_UPDATE_PROFILESHORTINTRO = "UPDATE MEMBERPROFILE SET SHORTINTRO=? WHERE PROFILENUM=?";
 	// 회원프로필 정식 소개글 변경
 	private final String sql_UPDATE_PROFILEINTRO = "UPDATE MEMBERPROFILE SET INTRO=? WHERE PROFILENUM=?";
@@ -36,7 +42,8 @@ public class MemberProfileDAO2 {
 	//	private final String sql_DELETE = "DELETE FROM MEMBER WHERE MEMBERID=?";
 	// JDBC(자바 데이터베이스 커넥트) 도구
 	// 중복검사에 쿼리문 굳이 다필요한지 확인
-
+	
+	
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 
@@ -77,7 +84,7 @@ public class MemberProfileDAO2 {
 		}
 		else if(mpVO.getSearchCondition().equals("memberProfile")) {
 			Object[] args = { mpVO.getProfileNum() };
-			return jdbcTemplate.queryForObject(sql_SELECTONE_MEMBERPROFILE, args, new MemberProfileRowMapper());
+			return jdbcTemplate.queryForObject(sql_SELECTONE_MEMBERPROFILE, args, new MemberProfileRowMapper2());
 		}
 		else if(mpVO.getSearchCondition().equals("myProfile")) {
 			Object[] args = { mpVO.getMemberID() };
@@ -113,6 +120,12 @@ public class MemberProfileDAO2 {
 		// 회원 프로필 초기화
 		else if(mpVO.getSearchCondition().equals("profileReset")) {
 			result = jdbcTemplate.update(sql_UPDATE_PROFILERESET, mpVO.getProfileNum());
+		}
+		else if(mpVO.getSearchCondition().equals("prohibit")) {
+			result = jdbcTemplate.update(sql_UPDATE_PROFILEPROHIBIT, mpVO.getProfileNum(), mpVO.getProfileNum());
+		}
+		else if(mpVO.getSearchCondition().equals("recommend")) {
+			result = jdbcTemplate.update(sql_UPDATE_PROFILERECOMMEND, mpVO.getProfileNum(), mpVO.getProfileNum());
 		}
 		// 성공 리턴
 		if (result > 0) {
@@ -154,4 +167,25 @@ class MemberProfileRowMapper implements RowMapper<MemberProfileVO> {
 		return mpdata;
 	}
 
+}
+
+class MemberProfileRowMapper2 implements RowMapper<MemberProfileVO> {
+	
+	@Override
+	public MemberProfileVO mapRow(ResultSet rs, int rowNum) throws SQLException {
+		MemberProfileVO mpdata = new MemberProfileVO();
+		
+		mpdata.setProfileNum(rs.getInt("PROFILENUM"));
+		mpdata.setMemberID(rs.getString("MEMBERID"));
+		mpdata.setProfileImg(rs.getString("PROFILEIMG"));
+		mpdata.setShortIntro(rs.getString("SHORTINTRO"));
+		mpdata.setIntro(rs.getString("INTRO"));
+		mpdata.setProhibitCnt(rs.getInt("PROHIBITCNT"));
+		mpdata.setRecommendCnt(rs.getInt("RECOMMENDCNT"));
+		mpdata.setNickName(rs.getString("NICKNAME"));
+		mpdata.setAddress(rs.getString("ADDRESS"));
+		
+		return mpdata;
+	}
+	
 }

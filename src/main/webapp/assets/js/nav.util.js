@@ -13,7 +13,15 @@
     });
     
     // 페이지 경로에 따른 조건 확인 및 클래스 추가
-    if (window.location.pathname === '/app/main.jsp') {
+    if (window.location.pathname === '/app/main.do') {
+        elements[0].classList.add('current');
+    } else if (window.location.pathname === '/app/login.do') {
+        elements[0].classList.add('current');
+    } else if (window.location.pathname === '/app/logout.do') {
+        elements[0].classList.add('current');
+    } else if (window.location.pathname === '/app/mypage.do') {
+        elements[0].classList.add('current');
+    } else if (window.location.pathname === '/app/adminPage.do') {
         elements[0].classList.add('current');
     } else if (window.location.pathname === '/app/noticeListPage.do') {
         elements[1].classList.add('current');
@@ -23,6 +31,10 @@
         elements[2].classList.add('current');
     } else if (window.location.pathname === '/app/chatListPage.do') {
         elements[2].classList.add('current');
+    } else if (window.location.pathname === '/app/prohibitListpage.do') {
+        elements[2].classList.add('current');
+    } else if (window.location.pathname === '/app/matchingPage.do') {
+        elements[3].classList.add('current');
     } else if (window.location.pathname === '/app/memberListPage.do') {
         elements[3].classList.add('current');
     } else {

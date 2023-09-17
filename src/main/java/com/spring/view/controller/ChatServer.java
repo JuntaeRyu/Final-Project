@@ -67,7 +67,8 @@ public class ChatServer {
 				}
 
 			} 
-		} else if (no.equals("3")) {
+		} 
+		else if (no.equals("3")) {
 			// 누군가 접속 > 3#아무개
 			for (Session s : list) {
 

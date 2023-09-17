@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib tagdir="/WEB-INF/tags" prefix="NPNC"%>
 
 <!DOCTYPE HTML>
 <!--
@@ -62,37 +63,7 @@ ul.pagination li a {
 		</header>
 
 		<!-- Nav -->
-		<nav id="nav">
-			<ul>
-				<nav id="nav1">
-					<li id="option1"><a href="main.do" class="icon solid fa-home"> 메인</a></li>
-					<li id="option2"><a href="#" class="icon solid fa-comment"> 소식</a>
-						<ul>
-							<li><a href="noticeListPage.do">공지사항</a></li>
-						</ul></li>
-					<li id="option3"><a href="#" class="icon solid fa-comments"> 커뮤니티</a>
-						<ul>
-							<li><a href="boardListPage.do">전체</a></li>
-							<li><a href="infoListPage.do">정보</a></li>
-							<li><a href="chatListPage.do">잡담</a></li>
-						</ul></li>
-					<li id="option4"><a href="#" class="icon solid fa-users"> 매칭</a>
-						<ul>
-							<li><a href="memberList.do">전체회원</a></li>
-						</ul></li>
-				</nav>
-				<c:choose>
-					<c:when test="${empty mid}">
-						<a href="loginPage.do" class="icon solid fa-lock login" value="로그인" title="로그인"> 로그인</a>
-						<a href="signupPage.do" class="icon solid fa-user-plus signup" value="회원가입" title="회원가입"> 회원가입</a>
-					</c:when>
-					<c:otherwise>
-						<a href="logout.do" class="icon solid fa-lock-open logout" value="로그아웃" title="로그아웃"> 로그아웃</a>
-						<a href="mypage.do" class="icon solid fa-user mypage" value="마이페이지" title="마이페이지"> 마이페이지</a>
-					</c:otherwise>
-				</c:choose>
-			</ul>
-		</nav>
+		<NPNC:healthDuo_nav />
 
 		<!-- Main -->
 		<section id="main">
@@ -104,10 +75,13 @@ ul.pagination li a {
 							<!-- Content -->
 
 							<article class="box page-content">
-								<c:if test="${not empty mid}">
+								<c:if test="${role eq 3}">
 									<h3 style="text-align: right; margin-right: 10px;">
 										<a href="insertBoardPage.do">글 작성하기</a>
 									</h3>
+								</c:if>
+								<c:if test="${role eq 2}">
+									<h3 style="text-align: right; margin-right: 10px;">&nbsp;</h3>
 								</c:if>
 								<section id="boardListBox">
 									<!-- <ul class="meta" >
@@ -119,10 +93,10 @@ ul.pagination li a {
 													<li class="icon fa-heart">34</li>
 												</ul>
 												<hr> -->
-									<c:if test="${empty bdatasC1}">
+									<c:if test="${empty pagedata.currentPageBoards}">
 										<h2 style="text-align: center; margin: 0.2em 0 0.2em 0;">현재 게시글이 없습니다</h2>
 									</c:if>
-									<c:if test="${not empty bdatasC1}">
+									<c:if test="${not empty pagedata.currentPageBoards}">
 										<table class="meta">
 											<thead>
 												<tr class="tab">
@@ -150,11 +124,26 @@ ul.pagination li a {
 														<td class="title"><h1 id="title-cell">
 																<a href="boardDetailPage.do?boardNum=${v.boardNum}">${v.title}</a>
 															</h1></td>
-														<td class="icon solid fa-user">${v.nickName}</td>
-														<td class="icon fa-clock">${v.create_time }</td>
-														<td class="icon fa-comments">34</td>
-														<td class="icon solid fa-eye">조회수</td>
-														<td class="icon solid fa-heart">${v.recommendCnt }</td>
+														<td class="icon solid fa-user"> ${v.nickName}</td>
+														<td class="icon fa-clock"> ${v.boardDate}</td>
+														<c:if test="${v.boardCommentsCnt == 0}">
+															<td class="icon fa-comments"> ${v.boardCommentsCnt}</td>
+														</c:if>
+														<c:if test="${v.boardCommentsCnt !=0}">
+															<td class="icon solid fa-comments"> ${v.boardCommentsCnt}</td>
+														</c:if>
+														<c:if test="${v.viewCnt == 0}">
+															<td class="icon fa-eye"> ${v.viewCnt}</td>
+														</c:if>
+														<c:if test="${v.viewCnt !=0}">
+															<td class="icon solid fa-eye"> ${v.viewCnt}</td>
+														</c:if>
+														<c:if test="${v.recommendCnt == 0}">
+															<td class="icon fa-heart"> ${v.recommendCnt}</td>
+														</c:if>
+														<c:if test="${v.recommendCnt != 0}">
+															<td class="icon solid fa-heart"> ${v.recommendCnt}</td>
+														</c:if>
 													</tr>
 													<!-- <tr>
 															<td class="icon"> 정보</td>
@@ -253,11 +242,16 @@ ul.pagination li a {
 	<script src="assets/js/util.js"></script>
 	<script src="assets/js/nav.util.js"></script>
 	<c:choose>
-		<c:when test="${empty mid}">
+		<c:when test="${empty memberID}">
 			<script src="assets/js/main.js"></script>
 		</c:when>
 		<c:otherwise>
-			<script src="assets/js/main2.js"></script>
+			<c:if test="${role eq 3}">
+				<script src="assets/js/main2.js"></script>
+			</c:if>
+			<c:if test="${role eq 2}">
+				<script src="assets/js/main3.js"></script>
+			</c:if>
 		</c:otherwise>
 	</c:choose>
 </body>

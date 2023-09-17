@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -15,8 +16,8 @@ public class RecommendDAO2 {
 	private final String sql_INSERT = "INSERT INTO RECOMMEND (RECOMMENDNUM, MEMBERID,COMMONNUM) VALUES ((SELECT NVL(MAX(RECOMMENDNUM),0)+1 FROM RECOMMEND), ? , ? )";
 //	private final String sql_SELECTALL = "SELECT RECOMMENDNUM,MEMBERID,COMMONNUM FROM RECOMMEND WHERE COMMONNUM=?";
 //	// 추천 정보 출력
-//	private final String sql_SELECTONE = "SELECT RECOMMENDNUM,MEMBERID,COMMONNUM FROM RECOMMEND WHERE MEMBERID=? AND COMMONNUM=?";
-	// 추천 취소(삭제)
+	private final String sql_SELECTONE = "SELECT RECOMMENDNUM,MEMBERID,COMMONNUM FROM RECOMMEND WHERE MEMBERID=? AND COMMONNUM=?";
+//	 추천 취소(삭제)
 	private final String sql_DELETE = "DELETE FROM RECOMMEND WHERE RECOMMENDNUM=?";
 
 	// JDBC(자바 데이터베이스 커넥트) 도구
@@ -50,19 +51,19 @@ public class RecommendDAO2 {
 
 ////////////////////// selectOne ////////////////////////////////////////////////////
 	public RecommendVO selectOne(RecommendVO rcVO) { // 하나의 객체 정보 검색
-//
-//		try { // 의도하지 않은 프로그램종료 예방
-//			// 쿼리문 수정할 정보 저장
-//
-//			Object[] args = { rcVO.getMemberID(), rcVO.getCommonNum() };
-//
-//			// 쿼리문 수정 및 실행 후 결과 리턴
-//			return jdbcTemplate.queryForObject(sql_SELECTONE, args, new RecommendRowMapper());
-//		}
-//		catch(EmptyResultDataAccessException e) {
-//			System.out.println("해결~");
+
+		try { // 의도하지 않은 프로그램종료 예방
+			// 쿼리문 수정할 정보 저장
+
+			Object[] args = { rcVO.getMemberID(), rcVO.getCommonNum() };
+
+			// 쿼리문 수정 및 실행 후 결과 리턴
+			return jdbcTemplate.queryForObject(sql_SELECTONE, args, new RecommendRowMapper());
+		}
+		catch(EmptyResultDataAccessException e) {
+			System.out.println("해결~");
 			return null;
-//		}
+		}
 		
 	}
 

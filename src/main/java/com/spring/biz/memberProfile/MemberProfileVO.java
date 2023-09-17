@@ -13,7 +13,16 @@ public class MemberProfileVO {
 	
 	private String searchCondition;	// 서치컨디션
 	private String nickName;	// 닉네임
+	private String address;		// 주소
 	
+	
+	public String getAddress() {
+		return address;
+	}
+	
+	public void setAddress(String address) {
+		this.address = address;
+	}
 	
 	// 회원프로필 PK를 반환하는 메서드
 	public int getProfileNum() {

@@ -6,15 +6,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.spring.biz.member.MemberService;
 import com.spring.biz.member.MemberVO;
+import com.spring.biz.memberProfile.MemberProfileService;
+import com.spring.biz.memberProfile.MemberProfileVO;
 
 @Controller
 public class LogController {
 
 	@Autowired
 	private MemberService memberService;
+	
+	@Autowired
+	private MemberProfileService memberProfileService;
 
 	@RequestMapping(value = "/loginPage.do")
 	public String loginPage() {
@@ -34,6 +40,7 @@ public class LogController {
 		if(mVO != null) {
 			session.setAttribute("memberID", mVO.getMemberID());
 			session.setAttribute("nickName", mVO.getNickName());
+			session.setAttribute("role", mVO.getRole());
 			
 			return "main.do";
 		}
@@ -50,8 +57,8 @@ public class LogController {
 		return "redirect:signupPage.jsp";
 	}
 
-	@RequestMapping(value = "/signup.do")
-	public String signup(MemberVO mVO, HttpSession session, Model model) {
+	@RequestMapping(value = "/signup.do", method = RequestMethod.POST)
+	public String signup(MemberVO mVO, MemberProfileVO mpVO, HttpSession session, Model model) {
 		System.out.println("로그: LogController: signup() ");
 
 		mVO.setSearchCondition("duplicateID");
@@ -97,6 +104,14 @@ public class LogController {
 			model.addAttribute("name", mVO.getName());
 			model.addAttribute("email", mVO.getEmail());
 
+			mpVO.setMemberID(mVO.getMemberID());
+			mpVO.setProfileImg(null);
+			mpVO.setShortIntro(null);
+			mpVO.setIntro(null);
+			mpVO.setProhibitCnt(0);
+			
+			memberProfileService.insert(mpVO);
+			
 			return "signupSuccess.do";
 		}
 		else {

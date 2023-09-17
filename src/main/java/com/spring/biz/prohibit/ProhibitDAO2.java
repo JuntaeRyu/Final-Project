@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -17,7 +18,7 @@ public class ProhibitDAO2 {
 //	// 신고 전체출력
 //	private final String sql_SELECTALL = "SELECT PROHIBITNUM,MEMBERID,COMMONNUM FROM PROHIBIT WHERE COMMONNUM=?";
 //	// 신고 정보 출력
-//	private final String sql_SELECTONE = "SELECT PROHIBITNUM,MEMBERID,COMMONNUM FROM PROHIBIT WHERE MEMBERID=? AND COMMONNUM=?";
+	private final String sql_SELECTONE = "SELECT PROHIBITNUM,MEMBERID,COMMONNUM FROM PROHIBIT WHERE MEMBERID=? AND COMMONNUM=?";
 	// 신고 취소(삭제)
 	private final String sql_DELETE = "DELETE FROM PROHIBIT WHERE PROHIBITNUM=?";
 
@@ -51,16 +52,16 @@ public class ProhibitDAO2 {
 
 ////////////////////// selectOne ////////////////////////////////////////////////////
 	public ProhibitVO selectOne(ProhibitVO pVO) { // 하나의 객체 정보 검색
-//		try { // 의도하지 않은 프로그램종료 예방
-//			// 쿼리문 수정할 정보 저장
-//			Object[] args = { pVO.getMemberID(), pVO.getCommonNum() };
-//
-//			// 쿼리문 수정 및 실행 후 결과 리턴
-//			return jdbcTemplate.queryForObject(sql_SELECTONE, args, new ProhibitRowMapper());
-//		}
-//		catch(EmptyResultDataAccessException e) {
+		try { // 의도하지 않은 프로그램종료 예방
+			// 쿼리문 수정할 정보 저장
+			Object[] args = { pVO.getMemberID(), pVO.getCommonNum() };
+
+			// 쿼리문 수정 및 실행 후 결과 리턴
+			return jdbcTemplate.queryForObject(sql_SELECTONE, args, new ProhibitRowMapper());
+		}
+		catch(EmptyResultDataAccessException e) {
 			return null;
-//		}
+		}
 	}
 
 ////////////////////// update ////////////////////////////////////////////////////

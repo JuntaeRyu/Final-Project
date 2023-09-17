@@ -1,6 +1,8 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+<%@ taglib tagdir="/WEB-INF/tags" prefix="NPNC"%>
 
 <!DOCTYPE HTML>
 <!--
@@ -12,8 +14,10 @@
 <head>
 <title>HealthDuo</title>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-<link rel="icon" href="assets/css/images/favicon.ico" type="image/x-icon" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, user-scalable=no" />
+<link rel="icon" href="assets/css/images/favicon.ico"
+	type="image/x-icon" />
 <link rel="stylesheet" href="assets/css/main.css" />
 
 <style type="text/css">
@@ -297,6 +301,10 @@ label {
 .file-input {
 	display: none;
 }
+textarea.fixed-width {
+	resize: vertical;
+	width: 850px;
+}
 </style>
 
 </head>
@@ -304,7 +312,9 @@ label {
 	<!-- 회원탈퇴 모달 -->
 	<div id="deleteMemberModal" class="modal">
 		<div class="modal-content">
-			<span class="close">&times;</span> <label style="font-size: 25px;" for="password">비밀번호 확인</label> <input type="password" id="passwordMember" placeholder="비밀번호를 입력하세요">
+			<span class="close">&times;</span> <label style="font-size: 25px;"
+				for="password">비밀번호 확인</label> <input type="password"
+				id="passwordMember" placeholder="비밀번호를 입력하세요">
 			<button id="submitBtnMember" onclick="clickbtn()">확인</button>
 		</div>
 	</div>
@@ -324,44 +334,13 @@ label {
 		<header id="header">
 			<div class="logo container">
 				<div>
-					<h1 id="logo">프로필 변경
-					</h1>
+					<h1 id="logo">프로필 변경</h1>
 				</div>
 			</div>
 		</header>
 
 		<!-- Nav -->
-		<nav id="nav">
-			<ul>
-				<nav id="nav1">
-					<li class="current"><a href="main.do" class="icon solid fa-home"> 메인</a></li>
-					<li><a href="#" class="icon solid fa-comment"> 소식</a>
-						<ul>
-							<li><a href="noticeListPage.do">공지사항</a></li>
-						</ul></li>
-					<li><a href="#" class="icon solid fa-comments"> 커뮤니티</a>
-						<ul>
-							<li><a href="boardListPage.do">전체</a></li>
-							<li><a href="infoListPage.do">정보</a></li>
-							<li><a href="chatListPage.do">잡담</a></li>
-						</ul></li>
-					<li><a href="#" class="icon solid fa-users"> 매칭</a>
-						<ul>
-							<li><a href="memberList.do">전체회원</a></li>
-						</ul></li>
-				</nav>
-				<c:choose>
-					<c:when test="${empty mid}">
-						<a href="loginPage.do" class="icon solid fa-lock login" value="로그인" title="로그인"> 로그인</a>
-						<a href="signupPage.do" class="icon solid fa-user-plus signup" value="회원가입" title="회원가입"> 회원가입</a>
-					</c:when>
-					<c:otherwise>
-						<a href="logout.do" class="icon solid fa-lock-open logout" value="로그아웃" title="로그아웃"> 로그아웃</a>
-						<a href="mypage.do" class="icon solid fa-user mypage" value="마이페이지" title="마이페이지"> 마이페이지</a>
-					</c:otherwise>
-				</c:choose>
-			</ul>
-		</nav>
+		<NPNC:healthDuo_nav />
 
 		<!-- Main -->
 		<section id="main">
@@ -385,6 +364,15 @@ label {
 											</h3>
 										</article>
 									</li>
+
+									<li>
+										<article class="box post-summary">
+											<h3>
+												<a href="ownMatchPage.do">나의 매칭</a>
+											</h3>
+										</article>
+									</li>
+
 									<li>
 										<article class="box post-summary">
 											<h3>
@@ -420,35 +408,77 @@ label {
 								<section id="mypageprofile">
 									<h2 style="color: #bead7c;">프로필</h2>
 									<div class="imageContainer">
-										<img class="centered-image" src="assets/css/images/log.png.jpg" alt="" /> <i style="font-size: 50px;" id="iconModalBtn" class="icon solid fa-cog" onclick=""></i>
+										<c:if test="${mpdata.profileImg eq null}">
+											<img class="centered-image" src="assets/css/images/default.png" alt="" /> 
+										</c:if>
+										<c:if test="${mpdata.profileImg ne null}">
+											<img class="centered-image" src="assets/css/images/${mpdata.profileImg}" alt="" /> 
+										</c:if>
+										<i style="font-size: 50px;" id="iconModalBtn" class="icon solid fa-cog" onclick=""></i>
 									</div>
-									<p class="useId">준게이</p>
-									<p class="useEmail" style="margin-bottom: 50px;">jungay@gaygay.gay</p>
+									<p class="useId"> ${mpdata.nickName}</p>
 
 									<div id="updateProfileModal" class="modal">
 										<div class="update-profile-content">
 											<span class="close">&times;</span> <label style="font-size: 25px;"> 프로필 변경</label>
-											<form action=".do" method="post" enctype="multipart/form-data">
+											<form action="updateProfileImg.do" method="post"enctype="multipart/form-data">
 												<div id="selectedImageContainer">
-													<img id="selectedImage" src="images/default.png" alt="프로필이미지">
+													<img id="selectedImage" src="images/default.png"alt="프로필이미지">
 												</div>
-												<label for="profileUpdate" class="file-label"> <span class="file-icon">📁</span> 파일 선택 <input name="file" id="profileUpdate" type="file" class="file-input">
+												<label for="profileUpdate" class="file-label"> <span
+													class="file-icon">📁</span> 파일 선택 <input name="file" id="profileUpdate" type="file" class="file-input">
 												</label>
 												<button type="submit">수정</button>
 											</form>
 										</div>
 									</div>
-
 								</section>
+								<section id="mypageintroduction">
+									<h2 style="position: absolute; color: #bead7c;">한줄 소개글</h2>
+
+									<div id="updateShortIntroModal" class="modal">
+										<div class="modal-content">
+											<form action="updateShortIntro.do" method="post">
+												<span class="close">&times;</span> <label
+													style="font-size: 25px;">한줄 소개글 변경</label>
+												<textarea style="margin-top: 10px; resize: vertical; width: 458px;" name="shortIntro">${mpdata.shortIntro}</textarea>
+												<button style="width:100%" type="submit">확인</button>
+											</form>
+										</div>
+									</div>
+
+									<input id="updateShortIntroBtn"
+										style="display: fix; margin-left: 82.5%;" type="submit"
+										value="수정">
+									<textarea class="fixed-width" style="margin-top: 10px;">${mpdata.shortIntro}</textarea>
+								</section>
+								<section id="mypageintroduction">
+									<h2 style="position: absolute; color: #bead7c;">소개글</h2>
+
+									<div id="updateIntroModal" class="modal">
+										<div class="modal-content">
+											<form action="updateIntro.do" method="post">
+												<span class="close">&times;</span> <label
+													style="font-size: 25px;">소개글 변경</label>
+												<textarea style="margin-top: 10px; resize: vertical; width: 458px;" name="Intro">${mpdata.intro}</textarea>
+												<button style="width:100%" type="submit">확인</button>
+											</form>
+										</div>
+									</div>
+
+									<input id="updateIntroBtn"
+										style="display: fix; margin-left: 82.5%;" type="submit"
+										value="수정">
+									<textarea class="fixed-width" style="margin-top: 10px;">${mpdata.intro}</textarea>
+								</section>
+							</article>
+						</div>
+					</div>
+				</div>
+			</div>
 		</section>
-		</article>
 
 	</div>
-	</div>
-	</div>
-	</div>
-	</section>
-
 
 	<!-- Footer -->
 	<footer id="footer">
@@ -462,7 +492,13 @@ label {
 							<span>What's this about?</span>
 						</h2>
 						<p>
-							This is <strong>TXT</strong>, yet another free responsive site template designed by <a href="http://twitter.com/ajlkn">AJ</a> for <a href="http://html5up.net">HTML5 UP</a>. It's released under the <a href="http://html5up.net/license/">Creative Commons Attribution</a> license so feel free to use it for whatever you're working on (personal or commercial), just be sure to give us credit for the design. That's basically it :)
+							This is <strong>TXT</strong>, yet another free responsive site
+							template designed by <a href="http://twitter.com/ajlkn">AJ</a>
+							for <a href="http://html5up.net">HTML5 UP</a>. It's released
+							under the <a href="http://html5up.net/license/">Creative
+								Commons Attribution</a> license so feel free to use it for whatever
+							you're working on (personal or commercial), just be sure to give
+							us credit for the design. That's basically it :)
 						</p>
 					</section>
 
@@ -475,11 +511,16 @@ label {
 							<span>Get in touch</span>
 						</h2>
 						<ul class="contact">
-							<li><a class="icon brands fa-facebook-f" href="#"><span class="label">Facebook</span></a></li>
-							<li><a class="icon brands fa-twitter" href="#"><span class="label">Twitter</span></a></li>
-							<li><a class="icon brands fa-instagram" href="#"><span class="label">Instagram</span></a></li>
-							<li><a class="icon brands fa-dribbble" href="#"><span class="label">Dribbble</span></a></li>
-							<li><a class="icon brands fa-linkedin-in" href="#"><span class="label">LinkedIn</span></a></li>
+							<li><a class="icon brands fa-facebook-f" href="#"><span
+									class="label">Facebook</span></a></li>
+							<li><a class="icon brands fa-twitter" href="#"><span
+									class="label">Twitter</span></a></li>
+							<li><a class="icon brands fa-instagram" href="#"><span
+									class="label">Instagram</span></a></li>
+							<li><a class="icon brands fa-dribbble" href="#"><span
+									class="label">Dribbble</span></a></li>
+							<li><a class="icon brands fa-linkedin-in" href="#"><span
+									class="label">LinkedIn</span></a></li>
 						</ul>
 					</section>
 
@@ -497,14 +538,14 @@ label {
 		</div>
 	</footer>
 
-	</div>
-
 	<!-- Scripts -->
 
 	<script>
 	const openModalBtnMember = document.getElementById("openModalBtnMember");
 	const iconModalBtn	= document.getElementById("iconModalBtn");
 	const updateProfileModal = document.getElementById("updateProfileModal");
+	const updateShortIntroModal = document.getElementById("updateShortIntroModal");
+	const updateIntroModal = document.getElementById("updateIntroModal");
 	
     const passwordModalMember = document.getElementById("deleteMemberModal");
     const checkModal = document.getElementById("checkModal");
@@ -515,8 +556,13 @@ label {
     const submitBtnMember = document.getElementById("submitBtnMember");
     const checkBtn = document.getElementById("checkBtn");
     const cancleBtn = document.getElementById("cancleBtn");
+    const updateShortIntroBtn = document.getElementById("updateShortIntroBtn");
+    const updateIntroBtn = document.getElementById("updateIntroBtn");
     
     const passwordInputMember = document.getElementById("passwordMember");
+    const closeShortIntroBtnUpdate = updateShortIntroModal.querySelector(".close");
+    const closeIntroBtnUpdate = updateIntroModal.querySelector(".close");
+    const textInputUdate = document.getElementById("textUdate");
 
     // icon 클릭시 모달창 생성
     iconModalBtn.addEventListener("click", () => {
@@ -530,6 +576,23 @@ label {
     // 회원탈퇴 버튼을 눌렀다면 모달창 생성
     openModalBtnMember.addEventListener("click", () => {
     	passwordModalMember.style.display = "block";
+    });
+    
+    // 한줄 소개글 모달 열었다 닫기
+    updateShortIntroBtn.addEventListener("click", () => {
+    	updateShortIntroModal.style.display = "block";
+    });
+    
+    closeShortIntroBtnUpdate.addEventListener("click", () => {
+    	updateShortIntroModal.style.display = "none";
+    });
+    // 소개글 모달 열었다 닫기
+    updateIntroBtn.addEventListener("click", () => {
+    	updateIntroModal.style.display = "block";
+    });
+    
+    closeIntroBtnUpdate.addEventListener("click", () => {
+    	updateIntroModal.style.display = "none";
     });
 
     // 모달창의 x버튼을 눌렀다면 모달창 끄기
@@ -547,25 +610,10 @@ label {
     cancleBtn.addEventListener("click", () => {
     	checkModal.style.display = "none";
     });
-
-    //
-   /* submitBtnMember.click(function(){
-    	const enteredPassword = passwordInputMember.value;
-    	if (enteredPassword === '${mdata.mpw}') { // ${mdata.mpw}
-			// 비밀번호가 일치하면 최종확인
-			passwordModalMember.style.display = "none";
-			checkModal.style.display = "block";
-		} else {
-			alert("비밀번호가 일치하지 않습니다");
-			passwordModalMember.style.display = "none";
-		}
-    	
-    }); */
-    
     function clickbtn(){
     	const enteredPassword = passwordInputMember.value;
         
-        if (enteredPassword === '${mdata.mpw}') { // ${mdata.mpw}
+        if (enteredPassword === '${mdata.memberPW}') { 
   			// 비밀번호가 일치하면 최종확인
   			passwordModalMember.style.display = "none";
   			checkModal.style.display = "block";
@@ -574,7 +622,6 @@ label {
   			passwordModalMember.style.display = "none";
   		}
     };
-    
     
 	/* 첨부된 사진 예시로 볼수있는 코드 */    
     const profileUpdateInput = document.getElementById("profileUpdate");
@@ -589,23 +636,9 @@ label {
             };
             reader.readAsDataURL(file);
         } else {
-            selectedImage.src = "images/default.png";
+            selectedImage.src = "images/${mpdata.profileImg}";
         }
     });
-    
-     /* submitBtnMember.addEventListener("click", () => {
-      const enteredPassword = passwordInputMember.value;
-      
-      if (enteredPassword === '${mdata.mpw}') { // ${mdata.mpw}
-			// 비밀번호가 일치하면 최종확인
-			passwordModalMember.style.display = "none";
-			checkModal.style.display = "block";
-		} else {
-			alert("비밀번호가 일치하지 않습니다");
-			passwordModalMember.style.display = "none";
-		}
-      
-    }); */
     
 	</script>
 	<script src="assets/js/jquery.min.js"></script>
@@ -614,12 +647,18 @@ label {
 	<script src="assets/js/browser.min.js"></script>
 	<script src="assets/js/breakpoints.min.js"></script>
 	<script src="assets/js/util.js"></script>
+	<script src="assets/js/nav.util.js"></script>
 	<c:choose>
-		<c:when test="${empty mid}">
+		<c:when test="${empty memberID}">
 			<script src="assets/js/main.js"></script>
 		</c:when>
 		<c:otherwise>
-			<script src="assets/js/main2.js"></script>
+			<c:if test="${role eq 3}">
+				<script src="assets/js/main2.js"></script>
+			</c:if>
+			<c:if test="${role eq 2}">
+				<script src="assets/js/main3.js"></script>
+			</c:if>
 		</c:otherwise>
 	</c:choose>
 </body>

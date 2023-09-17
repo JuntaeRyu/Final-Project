@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib tagdir="/WEB-INF/tags" prefix="NPNC"%>
 
 <!DOCTYPE HTML>
 <!--
@@ -22,6 +23,30 @@
 	text-overflow: ellipsis;
 	margin: 0.5em 0 0.5em 0;
 }
+ul.pagination {
+	list-style: none;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	bottom: 150px;
+}
+
+ul.pagination li {
+	margin: 5px;
+	padding: 8px 12px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+}
+
+ul.pagination li.active {
+	background-color: #007bff;
+	color: #fff;
+}
+
+ul.pagination li a {
+	text-decoration: none;
+	color: #007bff;
+}
 </style>
 </head>
 <body class="is-preload">
@@ -37,37 +62,7 @@
 		</header>
 
 		<!-- Nav -->
-		<nav id="nav">
-			<ul>
-				<nav id="nav1">
-					<li id="option1"><a href="main.do" class="icon solid fa-home"> 메인</a></li>
-					<li id="option2"><a href="#" class="icon solid fa-comment"> 소식</a>
-						<ul>
-							<li><a href="noticeListPage.do">공지사항</a></li>
-						</ul></li>
-					<li id="option3"><a href="#" class="icon solid fa-comments"> 커뮤니티</a>
-						<ul>
-							<li><a href="boardListPage.do">전체</a></li>
-							<li><a href="infoListPage.do">정보</a></li>
-							<li><a href="chatListPage.do">잡담</a></li>
-						</ul></li>
-					<li id="option4"><a href="#" class="icon solid fa-users"> 매칭</a>
-						<ul>
-							<li><a href="memberList.do">전체회원</a></li>
-						</ul></li>
-				</nav>
-				<c:choose>
-					<c:when test="${empty mid}">
-						<a href="loginPage.do" class="icon solid fa-lock login" value="로그인" title="로그인"> 로그인</a>
-						<a href="signupPage.do" class="icon solid fa-user-plus signup" value="회원가입" title="회원가입"> 회원가입</a>
-					</c:when>
-					<c:otherwise>
-						<a href="logout.do" class="icon solid fa-lock-open logout" value="로그아웃" title="로그아웃"> 로그아웃</a>
-						<a href="mypage.do" class="icon solid fa-user mypage" value="마이페이지" title="마이페이지"> 마이페이지</a>
-					</c:otherwise>
-				</c:choose>
-			</ul>
-		</nav>
+		<NPNC:healthDuo_nav />
 
 		<!-- Main -->
 		<section id="main">
@@ -80,10 +75,13 @@
 
 							<article class="box page-content">
 
-								<c:if test="${not empty mid}">
+								<c:if test="${role eq 2}">
 									<h3 style="text-align: right; margin-right: 10px;">
 										<a href="insertNoticePage.do">글 작성하기</a>
 									</h3>
+								</c:if>
+								<c:if test="${role eq 3}">
+									<h3 style="text-align: right; margin-right: 10px;">&nbsp;</h3>
 								</c:if>
 								<section id="boardListBox">
 
@@ -96,10 +94,10 @@
 													<li class="icon fa-heart">34</li>
 												</ul>
 												<hr> -->
-									<c:if test="${empty bdatasnt}">
-										<h2 style="text-align: center; margin: 0.2em 0 0.2em 0;">현재 작성된 공지사항이 없습니다</h2>
+									<c:if test="${empty pagedata.currentPageBoards}">
+										<h2 style="text-align: center; margin: 0.2em 0 0.2em 0;">현재 공지사항이 없습니다</h2>
 									</c:if>
-									<c:if test="${not empty bdatasnt}">
+									<c:if test="${not empty pagedata.currentPageBoards}">
 										<table class="meta">
 											<thead>
 												<tr class="tab">
@@ -113,7 +111,7 @@
 												</tr>
 											</thead>
 											<tbody>
-												<c:forEach var="v" items="${bdatasnt}">
+												<c:forEach var="v" items="${pagedata.currentPageBoards}">
 													<tr>
 														<c:if test="${v.category eq 0 }">
 															<td class="icon">공지사항</td>
@@ -121,11 +119,26 @@
 														<td class="title"><h1 id="title-cell">
 																<a href="noticeDetailPage.do?boardNum=${v.boardNum}">${v.title}</a>
 															</h1></td>
-														<td class="icon solid fa-user">${v.nickName}</td>
-														<td class="icon fa-clock">${v.create_time }</td>
-														<td class="icon fa-comments">34</td>
-														<td class="icon solid fa-eye">조회수</td>
-														<td class="icon solid fa-heart">${v.recommendCnt }</td>
+														<td class="icon solid fa-user nickName"> ${v.nickName}</td>
+														<td class="icon fa-clock"> ${v.boardDate}</td>
+														<c:if test="${v.boardCommentsCnt == 0}">
+															<td class="icon fa-comments"> ${v.boardCommentsCnt}</td>
+														</c:if>
+														<c:if test="${v.boardCommentsCnt !=0}">
+															<td class="icon solid fa-comments"> ${v.boardCommentsCnt}</td>
+														</c:if>
+														<c:if test="${v.viewCnt == 0}">
+															<td class="icon fa-eye"> ${v.viewCnt}</td>
+														</c:if>
+														<c:if test="${v.viewCnt !=0}">
+															<td class="icon solid fa-eye"> ${v.viewCnt}</td>
+														</c:if>
+														<c:if test="${v.recommendCnt == 0}">
+															<td class="icon fa-heart"> ${v.recommendCnt}</td>
+														</c:if>
+														<c:if test="${v.recommendCnt != 0}">
+															<td class="icon solid fa-heart"> ${v.recommendCnt}</td>
+														</c:if>
 													</tr>
 													<!-- <tr>
 															<td class="icon"> 정보</td>
@@ -139,6 +152,18 @@
 												</c:forEach>
 											</tbody>
 										</table>
+										<ul class="pagination">
+											<!-- 페이지네이션 내용 추가 -->
+											<c:set var="totalPages" value="${(pagedata.totalPosts + pagedata.postPerPage -1) / pagedata.postPerPage}" />
+											<c:forEach var="page" begin="1" end="${totalPages}">
+												<c:if test="${page eq pagedata.currentPage}">
+													<li class="active">${page}</li>
+												</c:if>
+												<c:if test="${page ne pagedata.currentPage}">
+													<li><a href="javascript:void(0)" onclick="changePage(${page})">${page}</a></li>
+												</c:if>
+											</c:forEach>
+										</ul>
 									</c:if>
 								</section>
 
@@ -211,12 +236,18 @@
 	<script src="assets/js/breakpoints.min.js"></script>
 	<script src="assets/js/util.js"></script>
 	<script src="assets/js/nav.util.js"></script>
+	<script src="assets/js/nav.util.js"></script>
 	<c:choose>
-		<c:when test="${empty mid}">
+		<c:when test="${empty memberID}">
 			<script src="assets/js/main.js"></script>
 		</c:when>
 		<c:otherwise>
-			<script src="assets/js/main2.js"></script>
+			<c:if test="${role eq 3}">
+				<script src="assets/js/main2.js"></script>
+			</c:if>
+			<c:if test="${role eq 2}">
+				<script src="assets/js/main3.js"></script>
+			</c:if>
 		</c:otherwise>
 	</c:choose>
 </body>

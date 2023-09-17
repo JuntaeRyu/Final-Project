@@ -25,7 +25,7 @@ import com.spring.biz.reply.ReplyService;
 import com.spring.biz.reply.ReplyVO;
 
 @Controller
-public class Board {
+public class BoardController {
 
 	@Autowired
 	private BoardService boardService;
@@ -44,10 +44,10 @@ public class Board {
 
 
 	@RequestMapping(value = "/boardListPage.do")
-	public String boardListPage(BoardVO bVO, PageVO pageVO, Model model) {
+	public String boardListPage(BoardVO bVO, CommentsVO cVO, PageVO pageVO, Model model) {
 		System.out.println("로그: Board: boardListPage() ");
 
-		if (pageVO.getCurrentPage()> 0) {
+		if (pageVO.getCurrentPage() > 0) {
 			pageVO.setCurrentPage(pageVO.getCurrentPage());
 		} else {
 			pageVO.setCurrentPage(1);
@@ -58,8 +58,15 @@ public class Board {
 
 		List<BoardVO> bdatas = boardService.selectAll(bVO);
 
-		pageVO.setTotalPosts(bdatas.size());
+		if(!(bdatas == null || bdatas.isEmpty())) {
+			for(int i = 0; i < bdatas.size(); i++) {
+				cVO.setBoardNum(bdatas.get(i).getBoardNum());
 
+				bdatas.get(i).setBoardCommentsCnt(commentsService.selectAll(cVO).size());
+			}
+		}
+
+		pageVO.setTotalPosts(bdatas.size());
 
 		// 현재 페이지에 보여줄 게시글 범위를 계산합니다.
 		int startIdx = (pageVO.getCurrentPage() - 1) * pageVO.getPostPerPage();
@@ -71,14 +78,14 @@ public class Board {
 			pageVO.getCurrentPageBoards().add(bdatas.get(i));
 		}
 		pageVO.setCurrentPageBoards(pageVO.getCurrentPageBoards());
-		
+
 		model.addAttribute("pagedata", pageVO);
 
 		return "boardListPage.jsp";
 	}
 
 	@RequestMapping(value = "/infoListPage.do")
-	public String infoListPage(BoardVO bVO,PageVO pageVO, Model model) {
+	public String infoListPage(BoardVO bVO, CommentsVO cVO, PageVO pageVO, Model model) {
 		System.out.println("로그: Board: infoListPage() ");
 
 		if (pageVO.getCurrentPage()> 0) {
@@ -92,6 +99,14 @@ public class Board {
 		bVO.setCategory(1);
 
 		List<BoardVO> bdatas = boardService.selectAll(bVO);
+
+		if(!(bdatas == null || bdatas.isEmpty())) {
+			for(int i = 0; i < bdatas.size(); i++) {
+				cVO.setBoardNum(bdatas.get(i).getBoardNum());
+
+				bdatas.get(i).setBoardCommentsCnt(commentsService.selectAll(cVO).size());
+			}
+		}
 
 		pageVO.setTotalPosts(bdatas.size());
 
@@ -109,7 +124,7 @@ public class Board {
 	}
 
 	@RequestMapping(value = "/chatListPage.do")
-	public String chatListPage(BoardVO bVO,PageVO pageVO, Model model) {
+	public String chatListPage(BoardVO bVO, CommentsVO cVO, PageVO pageVO, Model model) {
 		System.out.println("로그: Board: chatListPage() ");
 
 		if (pageVO.getCurrentPage()> 0) {
@@ -123,6 +138,14 @@ public class Board {
 		bVO.setCategory(2);
 
 		List<BoardVO> bdatas = boardService.selectAll(bVO);
+
+		if(!(bdatas == null || bdatas.isEmpty())) {
+			for(int i = 0; i < bdatas.size(); i++) {
+				cVO.setBoardNum(bdatas.get(i).getBoardNum());
+
+				bdatas.get(i).setBoardCommentsCnt(commentsService.selectAll(cVO).size());
+			}
+		}
 
 		pageVO.setTotalPosts(bdatas.size());
 
@@ -141,7 +164,7 @@ public class Board {
 
 	@RequestMapping(value = "/boardDetailPage.do")
 	public String boardDetailPage(BoardVO bVO, RecommendVO rcVO, ProhibitVO pVO, 
-			CommentsVO cVO,ReplyVO rVO, HttpSession session, HttpServletRequest request) {
+			CommentsVO cVO, ReplyVO rVO, HttpSession session, HttpServletRequest request) {
 		System.out.println("로그: Board: boardDetailPage() ");
 
 		rcVO.setMemberID((String)session.getAttribute("memberID"));
@@ -159,11 +182,6 @@ public class Board {
 		// BoardDAO를 통해 해당 게시글의 상세 정보를 가져옵니다.
 		bVO = boardService.selectOne(bVO);
 
-		System.out.println(bVO.getTitle());
-		System.out.println(bVO.getNickName());
-		System.out.println(bVO.getContent());
-		System.out.println(bVO.getBoardDate());
-
 		// 추천 여부에 따라 request에 "recommend" 속성을 설정합니다.
 		if (rcVO != null) {
 			request.setAttribute("recommend", 1);
@@ -180,7 +198,7 @@ public class Board {
 
 		rVO.setSearchCondition("totalReply");
 
-		List<CommentsVO> cdatas = commentsService.selectAll(null);
+		List<CommentsVO> cdatas = commentsService.selectAll(cVO);
 
 		List<CommentsVO> comments = new ArrayList<CommentsVO>();
 
@@ -206,6 +224,10 @@ public class Board {
 			request.setAttribute("cdatas", comments);
 			request.setAttribute("rdatas", replies);
 
+			bVO.setSearchCondition("viewCnt");
+
+			boardService.update(bVO);
+
 			return "boardDetailPage.jsp";
 		}
 		// 해당 게시글이 없는 경우에는 메시지와 함께 경고 페이지를 보여줍니다.
@@ -216,8 +238,6 @@ public class Board {
 
 			return "goback.jsp";
 		}
-
-
 	}
 
 	@RequestMapping(value = "/insertBoardPage.do")
@@ -293,13 +313,15 @@ public class Board {
 	public String deleteBoard(BoardVO bVO, Model model) {
 		System.out.println("로그: Board: deleteBoard() ");
 
+		bVO.setSearchCondition("boardNum");
+		
 		boolean flag = boardService.delete(bVO);
 
 		if (flag) {
 			return "boardListPage.do";
 		}
 		else {
-			model.addAttribute("title", "게시글삭제실패..");
+			model.addAttribute("title", "게시글 삭제 실패..");
 			model.addAttribute("text", "다시 한번 확인해주세요");
 			model.addAttribute("icon", "warning");
 
