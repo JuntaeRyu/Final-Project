@@ -1,6 +1,5 @@
 package com.spring.view.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -32,36 +31,13 @@ public class MainController {
 	public String main(MemberProfileVO mpVO, BoardVO bVO,CommentsVO cVO, Random random, Model model) {
 		System.out.println("로그: MainController: main() ");
 		
-		mpVO.setSearchCondition("totalMemberProfile");
+		mpVO.setSearchCondition("mainProfile");
 		
 		List<MemberProfileVO> mpdatas = memberProfileService.selectAll(mpVO);
 		System.out.println("mpdatas:" + mpdatas);
-		
-		List<MemberProfileVO> randomMpdatas = new ArrayList<MemberProfileVO>();
 
-		if(!(mpdatas.isEmpty()) || !(mpdatas.size()==0)) {
-			System.out.println("로그: mpdatas가 비어있지않음");
-			if(mpdatas.size() > 4) {
-//				while(randomMpdatas.size() >= 4) {
-//					int randomIndex = random.nextInt(mpdatas.size());
-//
-//					MemberProfileVO randomMpdata = mpdatas.get(randomIndex);
-//
-//					randomMpdatas.add(randomMpdata);
-//				}
-				System.out.println("mpdatas가 5개 이상임");
-				
-				for(int i = 0; i < 4; i++) {
-					int randomIndex = random.nextInt(mpdatas.size() - 1);
-					
-					MemberProfileVO randomMpdata = mpdatas.get(randomIndex);
-					
-					randomMpdatas.add(randomMpdata);
-				}
-			}
-			else{
-				randomMpdatas = mpdatas;
-			}
+		if(mpdatas.isEmpty() || mpdatas.size()==0) {
+			System.out.println("멤버 프로필 data가 비어있음");
 		}
 
 		bVO.setSearchCondition("recommendRank"); 
@@ -76,13 +52,11 @@ public class MainController {
 			}
 
 			bVO = bdatas.get(0);
-
 			bdatas.remove(0);
 
 
 		}
-		System.out.println("randomMpdatas:"+randomMpdatas);
-		model.addAttribute("mempdatas", randomMpdatas);
+		model.addAttribute("mempdatas", mpdatas);
 		model.addAttribute("firstBdata", bVO);
 		model.addAttribute("bdatas", bdatas);
 		

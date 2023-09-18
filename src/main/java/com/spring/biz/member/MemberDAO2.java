@@ -114,15 +114,15 @@ public class MemberDAO2 {
 		}
 		// 주소 변경
 		else if(mVO.getSearchCondition().equals("updateAddress")) {
-			result = jdbcTemplate.update(sql_UPDATE_ADDRESS, mVO.getMemberPW(), mVO.getMemberID());
+			result = jdbcTemplate.update(sql_UPDATE_ADDRESS, mVO.getAddress(), mVO.getMemberID());
 		}
 		// 이메일 변경
 		else if(mVO.getSearchCondition().equals("updateEmail")) {
-			result = jdbcTemplate.update(sql_UPDATE_EMAIL, mVO.getMemberPW(), mVO.getMemberID());
+			result = jdbcTemplate.update(sql_UPDATE_EMAIL, mVO.getEmail(), mVO.getMemberID());
 		}
 		// 닉네임 변경
 		else if(mVO.getSearchCondition().equals("updateNickName")) {
-			result = jdbcTemplate.update(sql_UPDATE_NICKNAME, mVO.getMemberPW(), mVO.getMemberID());
+			result = jdbcTemplate.update(sql_UPDATE_NICKNAME, mVO.getNickName(), mVO.getMemberID());
 		}
 		// 비밀번호 변경
 		else if(mVO.getSearchCondition().equals("updateMemberPW")) {

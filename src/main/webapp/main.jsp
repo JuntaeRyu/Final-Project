@@ -106,7 +106,7 @@
 											<section class="box feature">
 												<c:if test="${empty mpdata.profileImg}">
 													<a href="profileDetailPage.do?profileNum=${mpdata.profileNum}"
-														class="image featured"> <img src="images/profileImg/default.png"
+														class="image featured"> <img src="images/default.png"
 														alt="images/default.png" /></a>
 												</c:if>
 												<c:if test="${not empty mpdata.profileImg}">

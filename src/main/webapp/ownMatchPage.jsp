@@ -299,16 +299,16 @@ ul.pagination li a {
 									<table class="meta">
 										<thead>
 											<tr class="tab">
-												<th><span>보낸 사람</span></th>
-												<th><span>보낸 날짜</span></th>
-												<th><span>수락</span></th>
+												<th><span>보낸날짜</span></th>
+												<th><span>닉네임</span></th>
+												<th><span>추천수</span></th>
 											</tr>
 										</thead>
 										<tbody>
 											<tr>
-												<td class="icon solid fa-eye"><span></span></td>
-												<td class="icon solid fa-eye"><span></span></td>
-												<td class="icon solid fa-eye"><span></span></td>
+												<td class="icon solid fa-eye">조회수</td>
+												<td class="icon solid fa-eye">조회수</td>
+												<td class="icon solid fa-eye">조회수</td>
 											</tr>
 										</tbody>
 									</table>

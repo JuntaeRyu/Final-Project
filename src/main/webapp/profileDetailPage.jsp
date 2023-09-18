@@ -421,14 +421,8 @@ label {
 
 									<h2 style="color: #bead7c;">회원 프로필</h2>
 									<div class="imageContainer">
-									<c:if test="${empty mpdata.profileImg }">
-										<img class="centered-image" src="images/profileImg/default.png"
+										<img class="centered-image" src="images/default.png"
 											alt="프로필이미지">
-											</c:if>
-									<c:if test="${not empty mpdata.profileImg }">
-										<img class="centered-image" src="images/proflieImg/${mpdata.profileImg }"
-											alt="프로필이미지">
-											</c:if>
 									</div>
 									<p class="useId">${mpdata.nickName}</p>
 									<p class="useEmail" style="margin-bottom: 50px;">

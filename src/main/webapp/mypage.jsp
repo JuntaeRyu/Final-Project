@@ -249,13 +249,13 @@ textarea.fixed-width {
 								<h3>프로필</h3>
 									<c:if test="${mpdata.profileImg ne null}">
 										<span class="image featured"><img
-											src="assets/css/images/profileImg/${mpdata.profileImg}"
-											alt="assets/css/images/profileImg/${mpdata.profileImg}" /></span>
+											src="assets/css/images/${mpdata.profileImg}"
+											alt="assets/css/images/default.png" /></span>
 									</c:if>
 									<c:if test="${mpdata.profileImg eq null}">
 										<span class="image featured"><img
-											src="assets/css/images/profileImg/default.png"
-											alt="assets/css/images/profileImg/default.png" /></span>
+											src="assets/css/images/default.png"
+											alt="assets/css/images/default.png" /></span>
 									</c:if>
 								</section>
 								<section id="mypageShortIntroduction">

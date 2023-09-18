@@ -39,19 +39,7 @@ public class MatchingController {
 
 		List<MemberProfileVO> mpdatas = memberProfileService.selectAll(mpVO);
 
-		List<MemberProfileVO> randomMpdatas = new ArrayList<MemberProfileVO>();
-
-		if(!mpdatas.isEmpty()) {
-			while(randomMpdatas.size() < mpdatas.size()) {
-				int randomIndex = random.nextInt(mpdatas.size());
-
-				MemberProfileVO randomMpdata = mpdatas.get(randomIndex);
-
-				randomMpdatas.add(randomMpdata);
-			}
-		}
-
-		model.addAttribute("mpdatas", randomMpdatas);
+		model.addAttribute("mpdatas", mpdatas);
 
 		return "matchingPage.jsp";
 	}

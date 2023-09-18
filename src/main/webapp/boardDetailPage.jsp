@@ -155,7 +155,7 @@ i {
 											<c:if test="${not empty memberID}">
 												<li><i id="rc" class="icon fa-heart"
 													style="color: #f22202;" title="추천"></i>
-													${bdata.recommendCnt}</li>
+													<p class="cnt" style="display : inline-block;">${bdata.recommendCnt}</p></li>
 												<li><i id="ph" class="icon solid fa-ban" title="신고"></i></li>
 											</c:if>
 										</ul>
@@ -348,9 +348,15 @@ i {
                if (rcresult == 1) {
                   $("#rc").removeClass("fa-heart").addClass("solid fa-heart");
                   recommend = 1;
+                  var cnt = parseInt($('.cnt').text()) + 1;
+                  console.log(cnt);
+                  $('.cnt').text(cnt);
                } else if (rcresult == 0) {
                   $("#rc").removeClass("solid fa-heart").addClass("fa-heart");
                   recommend = 0;
+                  var cnt = parseInt($('.cnt').text()) - 1;
+                  console.log(cnt);
+                  $('.cnt').text(cnt);
                }
             },
             error: function(error){

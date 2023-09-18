@@ -41,7 +41,7 @@ public class MypageController {
 		mVO.setSearchCondition("duplicateID");
 		
 		mpVO.setMemberID((String)session.getAttribute("memberID"));
-		mpVO.setSearchCondition("memberProfile");
+		mpVO.setSearchCondition("myProfile");
 		
 		mVO = memberService.selectOne(mVO);
 		
@@ -103,6 +103,26 @@ public class MypageController {
 			model.addAttribute("mdata", mVO);
 		}
 		return "updateProfilePage.jsp";
+	}
+	
+	@RequestMapping(value = "updateProfileImg.do")
+	public String updateProfileImg(MemberVO mVO, MemberProfileVO mpVO, HttpSession session, Model model) {
+		System.out.println("로그: Mypage: updateProfileImg() ");
+		
+		mpVO.setSearchCondition("updateProfileImg");
+		
+		boolean flag = memberProfileService.update(mpVO);
+		
+		if(flag) {
+			return "updateProfilePage.do";
+		}
+		else {
+			model.addAttribute("title", "프로필 이미지 변경 실패..");
+			model.addAttribute("text", "다시한번 확인해주세요.." );
+			model.addAttribute("icon", "warning" );
+			
+			return "goback.jsp";
+		}
 	}
 	
 	@RequestMapping(value = "/updateShortIntro.do")
