@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="NPNC"%>
 
@@ -14,8 +13,7 @@
 <title>HealthDuo</title>
 <meta charset="utf-8" />
 <!-- <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" /> -->
-<link rel="icon" href="assets/css/images/favicon.ico"
-	type="image/x-icon" />
+<link rel="icon" href="assets/css/images/favicon.ico" type="image/x-icon" />
 <link rel="stylesheet" href="assets/css/main.css" />
 <style>
 #title-cell {
@@ -32,6 +30,7 @@
 	font-size: medium;
 	padding: 0.5em;
 }
+
 ul.pagination {
 	list-style: none;
 	display: flex;
@@ -56,6 +55,7 @@ ul.pagination li a {
 	text-decoration: none;
 	color: #007bff;
 }
+
 .modal {
 	box-sizing: border-box !important;
 	transition: ease all 0.5s;
@@ -159,9 +159,7 @@ label {
 	<div id="deleteMemberModal" class="modal">
 		<div class="modal-content">
 			<form>
-				<span class="close">&times;</span> <label style="font-size: 25px;"
-					for="password">비밀번호 확인</label> <input style="width: 100%"
-					type="password" id="passwordMember" placeholder="비밀번호를 입력하세요">
+				<span class="close">&times;</span> <label style="font-size: 25px;" for="password">비밀번호 확인</label> <input style="width: 100%" type="password" id="passwordMember" placeholder="비밀번호를 입력하세요">
 				<button id="submitBtnMember" onclick="clickbtn()">확인</button>
 			</form>
 		</div>
@@ -175,7 +173,7 @@ label {
 			<button id="cancleBtn">취소</button>
 		</div>
 	</div>
-	
+
 	<div id="page-wrapper">
 
 		<!-- Header -->
@@ -270,11 +268,10 @@ label {
 												</ul>
 												<hr> -->
 									<c:if test="${empty bdatas}">
-										<h2 style="text-align: center; margin: 0.2em 0 0.2em 0;">현재
-											게시글이 없습니다</h2>
+										<h2 style="text-align: center; margin: 0.2em 0 0.2em 0;">현재 게시글이 없습니다</h2>
 									</c:if>
 									<c:if test="${not empty bdatas}">
-										<form action="" method="post">
+										<form action="deleteOwnBoardList.do" method="POST">
 											<table class="meta" style="margin-bottom: 0;">
 												<thead>
 													<tr class="tab">
@@ -291,7 +288,7 @@ label {
 												<tbody>
 													<c:forEach var="v" items="${bdatas}">
 														<tr>
-															<td style="width: 35px;"><input type="checkbox" name="selected_items" value="${v.boardNum}"></td>
+															<td style="width: 35px;"><input type="checkbox" name="number" value="${v.boardNum}"></td>
 															<c:if test="${v.category eq 1 }">
 																<td class="icon">정보</td>
 															</c:if>
@@ -304,25 +301,25 @@ label {
 															<td class="title"><h1 id="title-cell">
 																	<a href="boardDetailPage.do?boardNum=${v.boardNum}">${v.title}</a>
 																</h1></td>
-															<td class="icon solid fa-user"> ${v.nickName}</td>
-															<td class="icon fa-clock boardDate"> ${v.boardDate}</td>
+															<td class="icon solid fa-user">${v.nickName}</td>
+															<td class="icon fa-clock boardDate">${v.boardDate}</td>
 															<c:if test="${v.boardCommentsCnt == 0}">
-																<td class="icon fa-comments"> ${v.boardCommentsCnt}</td>
+																<td class="icon fa-comments">${v.boardCommentsCnt}</td>
 															</c:if>
 															<c:if test="${v.boardCommentsCnt !=0}">
-																<td class="icon solid fa-comments">	${v.boardCommentsCnt}</td>
+																<td class="icon solid fa-comments">${v.boardCommentsCnt}</td>
 															</c:if>
 															<c:if test="${v.viewCnt == 0}">
-																<td class="icon fa-eye"> ${v.viewCnt}</td>
+																<td class="icon fa-eye">${v.viewCnt}</td>
 															</c:if>
 															<c:if test="${v.viewCnt !=0}">
-																<td class="icon solid fa-eye"> ${v.viewCnt}</td>
+																<td class="icon solid fa-eye">${v.viewCnt}</td>
 															</c:if>
 															<c:if test="${v.recommendCnt == 0}">
-																<td class="icon fa-heart"> ${v.recommendCnt}</td>
+																<td class="icon fa-heart">${v.recommendCnt}</td>
 															</c:if>
 															<c:if test="${v.recommendCnt != 0}">
-																<td class="icon solid fa-heart"> ${v.recommendCnt}</td>
+																<td class="icon solid fa-heart">${v.recommendCnt}</td>
 															</c:if>
 														</tr>
 														<!-- <tr>
@@ -363,13 +360,7 @@ label {
 								<span>What's this about?</span>
 							</h2>
 							<p>
-								This is <strong>TXT</strong>, yet another free responsive site
-								template designed by <a href="http://twitter.com/ajlkn">AJ</a>
-								for <a href="http://html5up.net">HTML5 UP</a>. It's released
-								under the <a href="http://html5up.net/license/">Creative
-									Commons Attribution</a> license so feel free to use it for whatever
-								you're working on (personal or commercial), just be sure to give
-								us credit for the design. That's basically it :)
+								This is <strong>TXT</strong>, yet another free responsive site template designed by <a href="http://twitter.com/ajlkn">AJ</a> for <a href="http://html5up.net">HTML5 UP</a>. It's released under the <a href="http://html5up.net/license/">Creative Commons Attribution</a> license so feel free to use it for whatever you're working on (personal or commercial), just be sure to give us credit for the design. That's basically it :)
 							</p>
 						</section>
 
@@ -382,16 +373,11 @@ label {
 								<span>Get in touch</span>
 							</h2>
 							<ul class="contact">
-								<li><a class="icon brands fa-facebook-f" href="#"><span
-										class="label">Facebook</span></a></li>
-								<li><a class="icon brands fa-twitter" href="#"><span
-										class="label">Twitter</span></a></li>
-								<li><a class="icon brands fa-instagram" href="#"><span
-										class="label">Instagram</span></a></li>
-								<li><a class="icon brands fa-dribbble" href="#"><span
-										class="label">Dribbble</span></a></li>
-								<li><a class="icon brands fa-linkedin-in" href="#"><span
-										class="label">LinkedIn</span></a></li>
+								<li><a class="icon brands fa-facebook-f" href="#"><span class="label">Facebook</span></a></li>
+								<li><a class="icon brands fa-twitter" href="#"><span class="label">Twitter</span></a></li>
+								<li><a class="icon brands fa-instagram" href="#"><span class="label">Instagram</span></a></li>
+								<li><a class="icon brands fa-dribbble" href="#"><span class="label">Dribbble</span></a></li>
+								<li><a class="icon brands fa-linkedin-in" href="#"><span class="label">LinkedIn</span></a></li>
 							</ul>
 						</section>
 

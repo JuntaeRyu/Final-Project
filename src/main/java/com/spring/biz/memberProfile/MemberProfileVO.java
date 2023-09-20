@@ -1,5 +1,7 @@
 package com.spring.biz.memberProfile;
 
+import org.springframework.web.multipart.MultipartFile;
+
 public class MemberProfileVO {
 	
 	private int profileNum;		// 프로필 PK
@@ -10,11 +12,11 @@ public class MemberProfileVO {
 	private int prohibitCnt;		// 신고당한 횟수
 	private int recommendCnt;		// 신고당한 횟수
 	
-	
 	private String searchCondition;	// 서치컨디션
 	private String nickName;	// 닉네임
 	private String address;		// 주소
 	
+	private MultipartFile profileImgUpload;
 	
 	public String getAddress() {
 		return address;
@@ -103,6 +105,14 @@ public class MemberProfileVO {
 	// 추천횟수를 설정하는 메서드
 	public void setRecommendCnt(int recommendCnt) {
 		this.recommendCnt = recommendCnt;
+	}
+
+	public MultipartFile getProfileImgUpload() {
+		return profileImgUpload;
+	}
+
+	public void setProfileImgUpload(MultipartFile profileImgUpload) {
+		this.profileImgUpload = profileImgUpload;
 	}
 	
 	

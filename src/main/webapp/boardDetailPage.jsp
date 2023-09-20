@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="NPNC"%>
 <!DOCTYPE HTML>
@@ -27,14 +26,11 @@ i {
 <title>HealthDuo</title>
 <meta charset="utf-8" />
 <!-- <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" /> -->
-<link rel="icon" href="assets/css/images/favicon.ico"
-	type="image/x-icon" />
+<link rel="icon" href="assets/css/images/favicon.ico" type="image/x-icon" />
 <link rel="stylesheet" href="assets/css/main.css" />
 </head>
 <body class="is-preload">
-	<script src="https://code.jquery.com/jquery-3.7.0.min.js"
-		integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g="
-		crossorigin="anonymous"></script>
+	<script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
 	<div id="page-wrapper">
 
 		<!-- Header -->
@@ -106,12 +102,8 @@ i {
 								<h2 class="major">
 									<span>Ipsum Dolore</span>
 								</h2>
-								<a href="#" class="image featured"><img
-									src="images/pic03.jpg" alt="" /></a>
-								<p>Donec sagittis massa et leo semper scele risque metus
-									faucibus. Morbi congue mattis mi. Phasellus sed nisl vitae
-									risus tristique volutpat. Cras rutrum sed commodo luctus
-									blandit.</p>
+								<a href="#" class="image featured"><img src="images/pic03.jpg" alt="" /></a>
+								<p>Donec sagittis massa et leo semper scele risque metus faucibus. Morbi congue mattis mi. Phasellus sed nisl vitae risus tristique volutpat. Cras rutrum sed commodo luctus blandit.</p>
 								<a href="#" class="button alt">Learn more</a>
 							</section>
 
@@ -120,11 +112,7 @@ i {
 								<h2 class="major">
 									<span>Magna Feugiat</span>
 								</h2>
-								<p>Rhoncus dui quis euismod. Maecenas lorem tellus, congue
-									et condimentum ac, ullamcorper non sapien. Donec sagittis massa
-									et leo semper scele risque metus faucibus. Morbi congue mattis
-									mi. Phasellus sed nisl vitae risus tristique volutpat. Cras
-									rutrum sed commodo luctus blandit.</p>
+								<p>Rhoncus dui quis euismod. Maecenas lorem tellus, congue et condimentum ac, ullamcorper non sapien. Donec sagittis massa et leo semper scele risque metus faucibus. Morbi congue mattis mi. Phasellus sed nisl vitae risus tristique volutpat. Cras rutrum sed commodo luctus blandit.</p>
 								<a href="#" class="button alt">Learn more</a>
 							</section>
 
@@ -140,12 +128,8 @@ i {
 										<i id="boardButton" class="icon solid fa-bars"></i>
 									</c:if>
 									<ul id="menuList">
-										<li><b><a
-												href="updateBoardPage.do?boardNum=${bdata.boardNum}"
-												style="text-decoration: none; color: #6b7770;">수정</a></b></li>
-										<li><b><a
-												href="deleteBoard.do?boardNum=${bdata.boardNum}"
-												style="text-decoration: none; color: #6b7770;">삭제</a></b></li>
+										<li><b><a href="updateBoardPage.do?boardNum=${bdata.boardNum}" style="text-decoration: none; color: #6b7770;">수정</a></b></li>
+										<li><b><a href="deleteBoard.do?boardNum=${bdata.boardNum}" style="text-decoration: none; color: #6b7770;">삭제</a></b></li>
 									</ul>
 									<header>
 										<p id="boardTitle">${bdata.title}</p>
@@ -153,9 +137,8 @@ i {
 											<li class="icon solid fa-user">${bdata.nickName}</li>
 											<li class="icon fa-clock">${bdata.boardDate}</li>
 											<c:if test="${not empty memberID}">
-												<li><i id="rc" class="icon fa-heart"
-													style="color: #f22202;" title="추천"></i>
-													<p class="cnt" style="display : inline-block;">${bdata.recommendCnt}</p></li>
+												<li><i id="rc" class="icon fa-heart" style="color: #f22202;" title="추천"></i>
+													<p class="cnt" style="display: inline-block;">${bdata.recommendCnt}</p></li>
 												<li><i id="ph" class="icon solid fa-ban" title="신고"></i></li>
 											</c:if>
 										</ul>
@@ -169,8 +152,8 @@ i {
 								 -->
 									<section>
 										<div id="editor">
-										<c:if test="${not empty bdata.boardImg}">
-											<img src="images/boardImg/${bdata.boardImg}" alt="" />
+											<c:if test="${not empty bdata.boardImg}">
+												<img src="images/boardImg/${bdata.boardImg}" alt="" />
 											</c:if>
 											<p>${bdata.content}</p>
 										</div>
@@ -179,11 +162,8 @@ i {
 								<!-- 댓글 작성 -->
 								<c:if test="${not empty memberID}">
 									<section id="insertCommentBox">
-										<form id="insertComment" action="insertComment.do">
-											<input type="hidden" name="boardNum"
-												value="${bdata.boardNum}"> <input type="text"
-												name="comments" placeholder="댓글 작성 내용" required> <input
-												style="width: 80px;" type="submit" value="작성">
+										<form id="insertComment" action="insertComment.do" method="POST">
+											<input type="hidden" name="boardNum" value="${bdata.boardNum}"> <input type="text" name="comments" placeholder="댓글 작성 내용" required> <input style="width: 80px;" type="submit" value="작성">
 										</form>
 									</section>
 								</c:if>
@@ -201,8 +181,12 @@ i {
 											</ul>
 											<h1>${cdata.comments}</h1>
 											<ul class="meta">
-												<li class="icon fa-heart">댓글 추천수 변수 없음</li>
-												<li class="icon solid fa-ban">${cdata.prohibitCnt}</li>
+												<c:if test="${cdata.check eq '0' }">
+													<li><i class="icon solid fa-ban comments" style="color: #e7e4e4" onclick="javascript:funcComments('${cdata.commentsNum}' , '${cdata.check}', this)" title="신고"></i></li>
+												</c:if>
+												<c:if test="${cdata.check eq '1' }">
+													<li><i class="icon solid fa-ban comments" style="color: #f58300;" onclick="javascript:funcComments('${cdata.commentsNum}' , '${cdata.check}', this)" title="신고"></i></li>
+												</c:if>
 											</ul>
 
 											<!-- 대댓글 -->
@@ -214,6 +198,12 @@ i {
 														<ul class="meta">
 															<li class="icon solid fa-user">${rdata.nickName}</li>
 															<li class="icon fa-clock">${rdata.replyDate}</li>
+															<c:if test="${rdata.check eq '0'}">
+																<li><i class="icon solid fa-ban reply" style="color: #e7e4e4;" onclick="javascript:funcReply('${rdata.replyNum}', '${rdata.check}', this)" title="신고"></i></li>
+															</c:if>
+															<c:if test="${rdata.check eq '1'}">
+																<li><i class="icon solid fa-ban reply" style="color: #f58300;" onclick="javascript:funcReply('${rdata.replyNum}', '${rdata.check}', this)" title="신고"></i></li>
+															</c:if>
 														</ul>
 													</section>
 												</c:if>
@@ -223,22 +213,15 @@ i {
 												<c:if test="${not empty memberID}">
 													<button class="insertReplyBtn">대댓글 작성</button>
 												</c:if>
-												<section id="replyInsertBox" class="insertReply"
-													style="display: none;">
+												<section id="replyInsertBox" class="insertReply" style="display: none;">
 													<form id="replyInsert" action="insertReply.do">
-														<input type="hidden" name="boardNum"
-															value="${cdata.boardNum}"> <input type="hidden"
-															name="commentsNum" value="${cdata.commentsNum}">
-														<input type="text" name="reply" placeholder="대댓글 작성 내용"
-															required> <input style="width: 80px;"
-															type="submit" value="작성">
+														<input type="hidden" name="boardNum" value="${cdata.boardNum}"> <input type="hidden" name="commentsNum" value="${cdata.commentsNum}"> <input type="text" name="reply" placeholder="대댓글 작성 내용" required> <input style="width: 80px;" type="submit" value="작성">
 													</form>
 												</section>
 											</div>
 											<!-- 대댓글 여기까지 -->
 
-											<hr
-												style="border: 0; border-top: solid 1px #a7b5ac; margin: 1em 0.5em 1em 0;">
+											<hr style="border: 0; border-top: solid 1px #a7b5ac; margin: 1em 0.5em 1em 0;">
 											<!-- 댓글 여기까지 -->
 										</c:forEach>
 									</c:if>
@@ -265,13 +248,7 @@ i {
 								<span>What's this about?</span>
 							</h2>
 							<p>
-								This is <strong>TXT</strong>, yet another free responsive site
-								template designed by <a href="http://twitter.com/ajlkn">AJ</a>
-								for <a href="http://html5up.net">HTML5 UP</a>. It's released
-								under the <a href="http://html5up.net/license/">Creative
-									Commons Attribution</a> license so feel free to use it for whatever
-								you're working on (personal or commercial), just be sure to give
-								us credit for the design. That's basically it :)
+								This is <strong>TXT</strong>, yet another free responsive site template designed by <a href="http://twitter.com/ajlkn">AJ</a> for <a href="http://html5up.net">HTML5 UP</a>. It's released under the <a href="http://html5up.net/license/">Creative Commons Attribution</a> license so feel free to use it for whatever you're working on (personal or commercial), just be sure to give us credit for the design. That's basically it :)
 							</p>
 						</section>
 
@@ -284,16 +261,11 @@ i {
 								<span>Get in touch</span>
 							</h2>
 							<ul class="contact">
-								<li><a class="icon brands fa-facebook-f" href="#"><span
-										class="label">Facebook</span></a></li>
-								<li><a class="icon brands fa-twitter" href="#"><span
-										class="label">Twitter</span></a></li>
-								<li><a class="icon brands fa-instagram" href="#"><span
-										class="label">Instagram</span></a></li>
-								<li><a class="icon brands fa-dribbble" href="#"><span
-										class="label">Dribbble</span></a></li>
-								<li><a class="icon brands fa-linkedin-in" href="#"><span
-										class="label">LinkedIn</span></a></li>
+								<li><a class="icon brands fa-facebook-f" href="#"><span class="label">Facebook</span></a></li>
+								<li><a class="icon brands fa-twitter" href="#"><span class="label">Twitter</span></a></li>
+								<li><a class="icon brands fa-instagram" href="#"><span class="label">Instagram</span></a></li>
+								<li><a class="icon brands fa-dribbble" href="#"><span class="label">Dribbble</span></a></li>
+								<li><a class="icon brands fa-linkedin-in" href="#"><span class="label">LinkedIn</span></a></li>
 							</ul>
 						</section>
 
@@ -322,6 +294,48 @@ i {
 		  language: 'ko'
 		});
 	</script>  -->
+	<script>
+	function funcComments(commentsNum, prohibit, iconColor){
+		   console.log(commentsNum);
+		   console.log(prohibit);
+		   $.ajax({
+	           url: 'commentsProhibit.do?phresult=' + prohibit + '&commentsNum=' + commentsNum,
+	           type: 'POST',
+	           success: function(phresult){
+	              console.log('phresult [' + phresult + ']');
+	              if (phresult == 1) {
+	                 $(iconColor).css("color", "#f58300");
+	              } else if (phresult == 0) {
+	                 $(iconColor).css("color", "#e7e4e4");
+	              };
+	           },
+	           error: function(error){
+	              alert('error [' + error + ']');
+	           }
+	        });
+	   }
+	
+	function funcReply(replyNum, prohibit, iconColor){
+		   console.log(replyNum);
+		   console.log(prohibit);
+		   $.ajax({
+	           url: 'replyProhibit.do?phresult=' + prohibit + '&replyNum=' + replyNum,
+	           type: 'POST',
+	           success: function(phresult){
+	              console.log('phresult [' + phresult + ']');
+	              if (phresult == 1) {
+	                 $(iconColor).css("color", "#f58300");
+	              } else if (phresult == 0) {
+	                 $(iconColor).css("color", "#e7e4e4");
+	              };
+	           },
+	           error: function(error){
+	              alert('error [' + error + ']');
+	           }
+	        });
+	   }
+	</script>
+
 	<script type="text/javascript">
    $(document).ready(function(){
       var recommend = parseInt(${recommend});
@@ -341,7 +355,7 @@ i {
 
       $("#rc").on("click", function(){
          $.ajax({
-            url: 'boardRecommend.do?rcresult=' + recommend +'&boardNum=' + parseInt(${bdata.boardNum}),
+            url: 'boardRecommend.do?rcresult=' + recommend + '&boardNum=' + parseInt(${bdata.boardNum}),
             type: 'POST',
             success: function(rcresult){
                console.log('rcresult [' + rcresult + ']');
@@ -384,7 +398,6 @@ i {
             }
          });
       });
-      
       
    });
    

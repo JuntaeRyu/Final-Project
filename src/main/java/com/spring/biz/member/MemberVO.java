@@ -9,6 +9,7 @@ public class MemberVO {
     private String phoneNum;   	// 회원의 전화보호를 저장하는 멤버변수
     private int	gender;   		// 회원의 성별을 저장하는 멤버변수
     private String address;   	// 회원의 주소를 저장하는 멤버변수
+    private String detailAddress;   // 회원의 상세주소를 저장하는 멤버변수
     private int role;   		// 회원의 권한을 저장하는 멤버변수
 
     // 서치컨디션
@@ -104,6 +105,16 @@ public class MemberVO {
 	// 회원 주소를 설정하는 메서드
 	public void setAddress(String address) {
 		this.address = address;
+	}
+	
+	// 회원의 상세주소를 반환하는 메서드
+	public String getDetailAddress() {
+		return detailAddress;
+	}
+
+	// 회원의 상세주소를 설정하는 메서드
+	public void setDetailAddress(String detailAddress) {
+		this.detailAddress = detailAddress;
 	}
 
 	// 회원 권한을 반환하는 메서드

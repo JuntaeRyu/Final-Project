@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="NPNC"%>
@@ -14,10 +13,8 @@
 <head>
 <title>HealthDuo</title>
 <meta charset="utf-8" />
-<meta name="viewport"
-	content="width=device-width, initial-scale=1, user-scalable=no" />
-<link rel="icon" href="assets/css/images/favicon.ico"
-	type="image/x-icon" />
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+<link rel="icon" href="assets/css/images/favicon.ico" type="image/x-icon" />
 <link rel="stylesheet" href="assets/css/main.css" />
 </head>
 <body class="homepage is-preload">
@@ -48,7 +45,7 @@
 					<section id="bannermember">
 						<div class="content">
 							<h2>Welcome to HealthDuo</h2>
-							<p>${nickName}님 환영합니다</p>
+							<p>${nickName}님환영합니다</p>
 						</div>
 					</section>
 				</c:when>
@@ -56,7 +53,7 @@
 					<section id="banner">
 						<div class="content">
 							<h2>Welcome to HealthDuo</h2>
-							<p>${nickName}관리자님 환영합니다</p>
+							<p>${nickName}관리자님환영합니다</p>
 						</div>
 					</section>
 				</c:when>
@@ -72,18 +69,10 @@
 							<!-- Highlight -->
 							<section class="box highlight">
 								<ul class="special">
-									<li><a href="prohibitListPage.do"
-										class="icon solid fa-comment-slash" title="신고글 목록"><span
-											class="label"></span></a></li>
-									<li><a href="boardListPage.do"
-										class="icon solid fa-book-open" title="커뮤니티 목록"><span
-											class="label"></span></a></li>
-									<li><a href="memberListPage.do"
-										class="icon solid fa-users" title="회원 관리"><span
-											class="label"></span></a></li>
-									<li><a href="insertNoticePage.do"
-										class="icon solid fa-bullhorn" title="공지사항 작성"><span
-											class="label"></span></a></li>
+									<li><a href="prohibitListPage.do" class="icon solid fa-comment-slash" title="신고글 목록"><span class="label"></span></a></li>
+									<li><a href="boardListPage.do" class="icon solid fa-book-open" title="커뮤니티 목록"><span class="label"></span></a></li>
+									<li><a href="memberListPage.do" class="icon solid fa-users" title="회원 관리"><span class="label"></span></a></li>
+									<li><a href="insertNoticePage.do" class="icon solid fa-bullhorn" title="공지사항 작성"><span class="label"></span></a></li>
 								</ul>
 							</section>
 						</div>
@@ -96,7 +85,7 @@
 								<span>매칭 프로필</span>
 							</h2>
 							<div>
-							<c:if test="${empty mempdatas}">
+								<c:if test="${empty mempdatas}">
 								현재 가입된 프로필이 없습니다.
 							</c:if>
 								<div class="row">
@@ -105,18 +94,13 @@
 											<!-- Feature -->
 											<section class="box feature">
 												<c:if test="${empty mpdata.profileImg}">
-													<a href="profileDetailPage.do?profileNum=${mpdata.profileNum}"
-														class="image featured"> <img src="images/default.png"
-														alt="images/default.png" /></a>
+													<a href="profileDetailPage.do?profileNum=${mpdata.profileNum}" class="profileimage image featured"> <img src="images/default.png" alt="images/default.png" /></a>
 												</c:if>
 												<c:if test="${not empty mpdata.profileImg}">
-													<a href="profileDetailPage.do?profileNum=${mpdata.profileNum}"
-														class="image featured"> <img
-														src="images/profileImg/${mpdata.profileImg}" alt="images/default.png" /></a>
+													<a href="profileDetailPage.do?profileNum=${mpdata.profileNum}" class="profileimage image featured"> <img src="images/profileImg/${mpdata.profileImg}" alt="images/default.png" /></a>
 												</c:if>
 												<h3>
-													<a href="profileDetailPage.do?profileNum=${mpdata.profileNum}"
-														class="icon solid fa-user">${mpdata.nickName}</a>
+													<a href="profileDetailPage.do?profileNum=${mpdata.profileNum}" class="icon solid fa-user">${mpdata.nickName}</a>
 												</h3>
 												<c:if test="${empty mpdata.shortIntro}">
 													<p>작성된 한줄 소개가 없습니다.</p>
@@ -152,38 +136,28 @@
 													<header>
 														<h3 class="icon solid fa-crown" style="color: #fbdf50"></h3>
 														<h2>
-															<a
-																href="boardDetailPage.do?boardNum=${firstBdata.boardNum}">${firstBdata.title}</a>
+															<a href="boardDetailPage.do?boardNum=${firstBdata.boardNum}">${firstBdata.title}</a>
 														</h2>
 														<h1 class="icon solid fa-user">${firstBdata.nickName}</h1>
 														<ul class="meta">
 															<c:if test="${firstBdata.recommendCnt == 0}">
-																<li class="icon fa-heart">
-																	${firstBdata.recommendCnt}</li>
+																<li class="icon fa-heart">${firstBdata.recommendCnt}</li>
 															</c:if>
 															<c:if test="${firstBdata.recommendCnt != 0}">
-																<li class="icon solid fa-heart">
-																	${firstBdata.recommendCnt}</li>
+																<li class="icon solid fa-heart">${firstBdata.recommendCnt}</li>
 															</c:if>
 															<c:if test="${firstBdata.boardCommentsCnt == 0}">
-																<li class="icon fa-comments">
-																	${firstBdata.boardCommentsCnt}</li>
+																<li class="icon fa-comments">${firstBdata.boardCommentsCnt}</li>
 															</c:if>
 															<c:if test="${firstBdata.boardCommentsCnt != 0}">
-																<li class="icon solid fa-comments">
-																	${firstBdata.boardCommentsCnt}</li>
+																<li class="icon solid fa-comments">${firstBdata.boardCommentsCnt}</li>
 															</c:if>
 															<li class="icon fa-clock">${firstBdata.boardDate}</li>
 														</ul>
 													</header>
-													<a
-														href="boardDetailPage.do?boardNum=${firstBdata.boardNum}"
-														class="image featured"><img
-														src="images/boardImg/${firstBdata.boardImg}" alt="" /></a>
+													<a href="boardDetailPage.do?boardNum=${firstBdata.boardNum}" class="image featured"><img src="images/boardImg/${firstBdata.boardImg}" alt="" /></a>
 													<p>${firstBdata.content}</p>
-													<a
-														href="boardDetailPage.do?boardNum=${firstBdata.boardNum}"
-														class="button">글 상세보기</a>
+													<a href="boardDetailPage.do?boardNum=${firstBdata.boardNum}" class="button">글 상세보기</a>
 												</article>
 											</c:if>
 										</div>
@@ -199,8 +173,7 @@
 																<article class="box post-summary">
 																	<h1 class="icon solid fa-crown" style="color: #9a9a98"></h1>
 																	<h4>
-																		<a
-																			href="boardDetailPage.do?boardNum=${bdata.boardNum}">${bdata.title}</a>
+																		<a href="boardDetailPage.do?boardNum=${bdata.boardNum}">${bdata.title}</a>
 																	</h4>
 																	<h6 class="icon solid fa-user">${bdata.nickName}</h6>
 																	<ul class="meta">
@@ -208,16 +181,13 @@
 																			<li class="icon fa-heart">${bdata.recommendCnt}</li>
 																		</c:if>
 																		<c:if test="${bdata.recommendCnt != 0}">
-																			<li class="icon solid fa-heart">
-																				${bdata.recommendCnt}</li>
+																			<li class="icon solid fa-heart">${bdata.recommendCnt}</li>
 																		</c:if>
 																		<c:if test="${bdata.boardCommentsCnt == 0}">
-																			<li class="icon fa-comments">
-																				${bdata.boardCommentsCnt}</li>
+																			<li class="icon fa-comments">${bdata.boardCommentsCnt}</li>
 																		</c:if>
 																		<c:if test="${bdata.boardCommentsCnt != 0}">
-																			<li class="icon solid fa-comments">
-																				${bdata.boardCommentsCnt}</li>
+																			<li class="icon solid fa-comments">${bdata.boardCommentsCnt}</li>
 																		</c:if>
 																		<li class="icon fa-clock">${bdata.boardDate}</li>
 																	</ul>
@@ -229,8 +199,7 @@
 																<article class="box post-summary">
 																	<h1 class="icon solid fa-crown" style="color: #92692f"></h1>
 																	<h4>
-																		<a
-																			href="boardDetailPage.do?boardNum=${bdata.boardNum}">${bdata.title}</a>
+																		<a href="boardDetailPage.do?boardNum=${bdata.boardNum}">${bdata.title}</a>
 																	</h4>
 																	<h6 class="icon solid fa-user">${bdata.nickName}</h6>
 																	<ul class="meta">
@@ -238,16 +207,13 @@
 																			<li class="icon fa-heart">${bdata.recommendCnt}</li>
 																		</c:if>
 																		<c:if test="${bdata.recommendCnt != 0}">
-																			<li class="icon solid fa-heart">
-																				${bdata.recommendCnt}</li>
+																			<li class="icon solid fa-heart">${bdata.recommendCnt}</li>
 																		</c:if>
 																		<c:if test="${bdata.boardCommentsCnt == 0}">
-																			<li class="icon fa-comments">
-																				${bdata.boardCommentsCnt}</li>
+																			<li class="icon fa-comments">${bdata.boardCommentsCnt}</li>
 																		</c:if>
 																		<c:if test="${bdata.boardCommentsCnt != 0}">
-																			<li class="icon solid fa-comments">
-																				${bdata.boardCommentsCnt}</li>
+																			<li class="icon solid fa-comments">${bdata.boardCommentsCnt}</li>
 																		</c:if>
 																		<li class="icon fa-clock">${bdata.boardDate}</li>
 																	</ul>
@@ -258,8 +224,7 @@
 															<li>
 																<article class="box post-summary">
 																	<h4>
-																		<a
-																			href="boardDetailPage.do?boardNum=${bdata.boardNum}">${bdata.title}</a>
+																		<a href="boardDetailPage.do?boardNum=${bdata.boardNum}">${bdata.title}</a>
 																	</h4>
 																	<h6 class="icon solid fa-user">${bdata.nickName}</h6>
 																	<ul class="meta">
@@ -267,16 +232,13 @@
 																			<li class="icon fa-heart">${bdata.recommendCnt}</li>
 																		</c:if>
 																		<c:if test="${bdata.recommendCnt != 0}">
-																			<li class="icon solid fa-heart">
-																				${bdata.recommendCnt}</li>
+																			<li class="icon solid fa-heart">${bdata.recommendCnt}</li>
 																		</c:if>
 																		<c:if test="${bdata.boardCommentsCnt == 0}">
-																			<li class="icon fa-comments">
-																				${bdata.boardCommentsCnt}</li>
+																			<li class="icon fa-comments">${bdata.boardCommentsCnt}</li>
 																		</c:if>
 																		<c:if test="${bdata.boardCommentsCnt != 0}">
-																			<li class="icon solid fa-comments">
-																				${bdata.boardCommentsCnt}</li>
+																			<li class="icon solid fa-comments">${bdata.boardCommentsCnt}</li>
 																		</c:if>
 																		<li class="icon fa-clock">${bdata.boardDate}</li>
 																	</ul>
@@ -296,12 +258,11 @@
 				</div>
 			</div>
 		</section>
-		<button id="scrollToTop" onclick="scrollToTop()"
-			class="icon solid fa-chevron-up"></button>
-		
+		<button id="scrollToTop" onclick="scrollToTop()" class="icon solid fa-chevron-up"></button>
+
 		<!-- Footer -->
 		<NPNC:healthDuo_footer />
-		
+
 	</div>
 
 	<!-- Scripts -->

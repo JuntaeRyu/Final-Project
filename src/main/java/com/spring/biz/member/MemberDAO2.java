@@ -16,23 +16,23 @@ public class MemberDAO2 {
 	// SQL 쿼리문
 
 	// 회원가입
-	private final String sql_INSERT = "INSERT INTO MEMBER (MEMBERID, MEMBERPW, NAME, NICKNAME, EMAIL, PHONENUM, GENDER, ADDRESS) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+	private final String sql_INSERT = "INSERT INTO MEMBER (MEMBERID, MEMBERPW, NAME, NICKNAME, EMAIL, PHONENUM, GENDER, ADDRESS, DETAILADDRESS) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	// 회원 및 관리자 목록
-	private final String sql_SELECTALL_MEMBERLIST = "SELECT MEMBERID,NAME,NICKNAME,PHONENUM,GENDER,ADDRESS,ROLE FROM MEMBER WHERE ROLE = ?";
+	private final String sql_SELECTALL_MEMBERLIST = "MEMBERID, MEMBERPW, NAME, NICKNAME, EMAIL, PHONENUM, GENDER, ADDRESS, DETAILADDRESS, ROLE FROM MEMBER WHERE ROLE = ?";
 //	// 회원(!관리자) 목록
 //	private final String sql_SELECTALL_HELCELL = "SELECT MEMBERID,NAME,NICKNAME,PHONENUM,GENDER,ADDRESS,ROLE FROM MEMBER WHERE ROLE = 3";
 //	// 관리자 목록
 //	private final String sql_SELECTALL_HELLS = "SELECT MEMBERID,NAME,NICKNAME,PHONENUM,GENDER,ADDRESS,ROLE FROM MEMBER WHERE ROLE = 1";
 	// 회원 중복검사및 아이디로 정보 추출
-	private final String sql_SELECTONE_DUPLICATE = "SELECT MEMBERID,MEMBERPW,NAME,NICKNAME,EMAIL,PHONENUM,GENDER,ADDRESS,ROLE FROM MEMBER WHERE MEMBERID=?";
+	private final String sql_SELECTONE_DUPLICATE = "SELECT MEMBERID, MEMBERPW, NAME, NICKNAME, EMAIL, PHONENUM, GENDER, ADDRESS, DETAILADDRESS, ROLE FROM MEMBER WHERE MEMBERID=?";
 	// 회원 닉네임 중복 검사
 	private final String sql_SELECTONE_DUPLICATE_NICKNAME = "SELECT NICKNAME FROM MEMBER WHERE NICKNAME=?";
 	// 회원 이메일 중복 검사
 	private final String sql_SELECTONE_DUPLICATE_EMAIL = "SELECT EMAIL FROM MEMBER WHERE EMAIL=?";
 	// 회원 로그인
-	private final String sql_SELECTONE_LOGIN = "SELECT MEMBERID,MEMBERPW,NAME,NICKNAME,EMAIL,PHONENUM,GENDER,ADDRESS,ROLE FROM MEMBER WHERE MEMBERID=? AND MEMBERPW=?"; // 로그인
+	private final String sql_SELECTONE_LOGIN = "SELECT MEMBERID, MEMBERPW, NAME, NICKNAME, EMAIL, PHONENUM, GENDER, ADDRESS, DETAILADDRESS, ROLE FROM MEMBER WHERE MEMBERID=? AND MEMBERPW=?"; // 로그인
 	// 회원 주소 변경
-	private final String sql_UPDATE_ADDRESS = "UPDATE MEMBER SET ADDRESS=? WHERE MEMBERID=?";
+	private final String sql_UPDATE_ADDRESS = "UPDATE MEMBER SET ADDRESS=? AND SET DETAILADDRESS=? WHERE MEMBERID=?";
 	// 회원 이메일 변경
 	private final String sql_UPDATE_EMAIL = "UPDATE MEMBER SET EMAIL=? WHERE MEMBERID=?";
 	// 회원 닉네임 변경
@@ -49,7 +49,7 @@ public class MemberDAO2 {
 	public boolean insert(MemberVO mVO) { // DB에 객체정보 저장
 
 		// 쿼리문 수정 및 실행 후 결과를 저장
-		int result = jdbcTemplate.update(sql_INSERT, mVO.getMemberID(), mVO.getMemberPW(), mVO.getName(), mVO.getNickName(), mVO.getEmail(), mVO.getPhoneNum(), mVO.getGender(), mVO.getAddress());
+		int result = jdbcTemplate.update(sql_INSERT, mVO.getMemberID(), mVO.getMemberPW(), mVO.getName(), mVO.getNickName(), mVO.getEmail(), mVO.getPhoneNum(), mVO.getGender(), mVO.getAddress(), mVO.getDetailAddress());
 
 		// 검색 결과 리턴
 		if (result<=0) {
@@ -114,7 +114,7 @@ public class MemberDAO2 {
 		}
 		// 주소 변경
 		else if(mVO.getSearchCondition().equals("updateAddress")) {
-			result = jdbcTemplate.update(sql_UPDATE_ADDRESS, mVO.getAddress(), mVO.getMemberID());
+			result = jdbcTemplate.update(sql_UPDATE_ADDRESS, mVO.getAddress(),mVO.getDetailAddress(), mVO.getMemberID());
 		}
 		// 이메일 변경
 		else if(mVO.getSearchCondition().equals("updateEmail")) {
@@ -167,6 +167,7 @@ class MemberRowMapper implements RowMapper<MemberVO> {
 		mdata.setGender(rs.getInt("GENDER"));
 		mdata.setPhoneNum(rs.getString("PHONENUM"));
 		mdata.setAddress(rs.getString("ADDRESS"));
+		mdata.setDetailAddress(rs.getString("DETAILADDRESS"));
 		mdata.setRole(rs.getInt("ROLE"));
 		
 
@@ -188,6 +189,7 @@ class MemberListRowMapper implements RowMapper<MemberVO> {
 		mdata.setGender(rs.getInt("GENDER"));
 		mdata.setPhoneNum(rs.getString("PHONENUM"));
 		mdata.setAddress(rs.getString("ADDRESS"));
+		mdata.setDetailAddress(rs.getString("DETAILADDRESS"));
 		mdata.setRole(rs.getInt("ROLE"));
 		
 		
@@ -210,6 +212,7 @@ class DuplicateIDRowMapper implements RowMapper<MemberVO> {
 		mdata.setGender(rs.getInt("GENDER"));
 		mdata.setPhoneNum(rs.getString("PHONENUM"));
 		mdata.setAddress(rs.getString("ADDRESS"));
+		mdata.setDetailAddress(rs.getString("DETAILADDRESS"));
 		mdata.setRole(rs.getInt("ROLE"));
 		
 		return mdata;

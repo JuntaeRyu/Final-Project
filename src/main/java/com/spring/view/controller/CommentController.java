@@ -33,6 +33,7 @@ public class CommentController {
 
 		if(flag) {
 			model.addAttribute("boardNum", cVO.getBoardNum());
+//			session.setAttribute("boardNum", cVO.getBoardNum());
 			
 			return "boardDetailPage.do";
 		} else {

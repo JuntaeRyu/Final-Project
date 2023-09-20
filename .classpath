@@ -34,5 +34,6 @@
 	<classpathentry kind="lib" path="D:/RYU/resource/jstl-1.2.jar"/>
 	<classpathentry kind="lib" path="D:/RYU/resource/ojdbc6.jar"/>
 	<classpathentry kind="lib" path="D:/RYU/resource/taglibs-standard-impl-1.2.5.jar"/>
+	<classpathentry kind="lib" path="D:/RYU/resource/jsoup-1.16.1.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

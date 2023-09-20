@@ -13,8 +13,17 @@ public class CommentsVO {
     // 서치 컨디션 (검색 조건)
     private String searchCondition;			// 검색 조건을 저장하는 멤버 변수
     private String nickName;		// 작성자 닉네임을 저장하는 멤버 변수
+    private int check;
     
-    // 댓글 번호를 반환하는 메서드
+    public int getCheck() {
+		return check;
+	}
+
+	public void setCheck(int check) {
+		this.check = check;
+	}
+
+	// 댓글 번호를 반환하는 메서드
     public int getCommentsNum() {
         return commentsNum;
     }

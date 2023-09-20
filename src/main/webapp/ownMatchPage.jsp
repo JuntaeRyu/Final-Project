@@ -248,84 +248,81 @@ ul.pagination li a {
 					</div>
 					<div class="col-9 col-12-medium imp-medium">
 						<div class="content">
-
+							<article class="box page-content" style="margin-bottom: 2em;">
+							<c:set var="receiverTotalItems" value="${fn:length(receiverdatas)}"/>
+							<c:set var="receiverEndRnum" value="3" />
 							<!-- Content -->
 
-							<h2>수신 리스트</h2>
-							<section id="boardListBox">
-								<c:if test="${empty bdatas}">
-									<h2 style="text-align: center;">받은 매칭신청이 없습니다.</h2>
+							<h3>수신 리스트</h3>
+							<section id="box features" style="display: flex; flex-wrap: wrap; background-color: #f2fde9; margin-bottom: 10px;">
+								<c:if test="${empty receiverdatas}">
+									<h2 style="text-align: center; margin: 10px auto;">받은 매칭신청이 없습니다.</h2>
 								</c:if>
-								<c:if test="${not empty bdatas}">
-									<table class="meta">
-										<thead>
-											<tr class="tab">
-												<th><span>받은날짜</span></th>
-												<th><span>닉네임</span></th>
-												<th><span>추천수</span></th>
-											</tr>
-										</thead>
-										<tbody>
-											<tr>
-												<td class="icon solid fa-eye">조회수</td>
-												<td class="icon solid fa-eye">조회수</td>
-												<td class="icon solid fa-eye">조회수</td>
-											</tr>
-										</tbody>
-									</table>
-									<ul class="pagination">
-										<!-- 페이지네이션 내용 추가 -->
-										<c:set var="totalPages" value="${(totalPosts + 9) / 10}" />
-										<c:forEach var="page" begin="1" end="${totalPages}">
-											<c:if test="${page eq currentPage}">
-												<li class="active">${page}</li>
-											</c:if>
-											<c:if test="${page ne currentPage}">
-												<li><a href="javascript:void(0)" onclick="changePage(${page})">${page}</a></li>
-											</c:if>
-										</c:forEach>
-									</ul>
+								<c:if test="${not empty receiverdatas}">
+									<c:forEach var="receiverdata" items="${receiverdatas}" begin="0" end="${receiverTotalItems}" varStatus="receiverStatus">
+										<div id="${receiverStatus.index}" class="col-3 col-6-medium col-12-small receiverItem" style="display: none; margin: 6px; width:260px; border: 1px solid #b9deb4; border-radius: 10px;">
+											<section class="box feature">
+												<c:if test="${empty receiverdata.profileImg}">
+													<a href="profileDetailPage.do?profileNum=${receiverdata.profileNum}"
+														class="image profileimage featured"> <img src="images/default.png"
+														alt="images/default.png" /></a>
+												</c:if>
+												<c:if test="${not empty receiverdata.profileImg}">
+													<a href="profileDetailPage.do?profileNum=${receiverdata.profileNum}"
+														class="image profileimage featured"> <img
+														src="images/profileImg/${receiverdata.profileImg}" alt="${receiverdata.profileImg}" /></a>
+												</c:if>
+												<h3>
+													<a href="profileDetailPage.do?profileNum=${receiverdata.profileNum}"> ${receiverdata.senderNickName}</a>
+												</h3>
+												<p>${receiverdata.shortIntro}</p>
+											</section>
+										</div>
+									</c:forEach>
 								</c:if>
 							</section>
-
+								<div class="col-12" style="text-align: right; padding-top: 20px; margin-right:10px;">
+									<button id="receiverMoreBtn" class="icon solid fa-plus">더보기</button>
+								</div>
+							</article>
 							<hr>
+							<article class="box page-content" style="margin-bottom: 2em;">
+							<!-- Content -->
+							<c:set var="senderTotalItems" value="${fn:length(senderdatas)}"/>
+							<c:set var="senderEndRnum" value="3" />
 
-							<h2>발신 리스트</h2>
-							<section id="boardListBox">
-								<c:if test="${empty bdatas}">
-									<h2 style="text-align: center;">보낸 매칭요청이 없습니다.</h2>
+							<h3>발신 리스트</h3>
+							<section id="box features" style="display: flex; flex-wrap: wrap; background-color: #f2fde9; margin-bottom: 10px;">
+								<c:if test="${empty senderdatas}">
+									<h2 style="text-align: center; margin: 10px auto;">보낸 매칭신청이 없습니다.</h2>
 								</c:if>
-								<c:if test="${not empty bdatas}">
-									<table class="meta">
-										<thead>
-											<tr class="tab">
-												<th><span>보낸날짜</span></th>
-												<th><span>닉네임</span></th>
-												<th><span>추천수</span></th>
-											</tr>
-										</thead>
-										<tbody>
-											<tr>
-												<td class="icon solid fa-eye">조회수</td>
-												<td class="icon solid fa-eye">조회수</td>
-												<td class="icon solid fa-eye">조회수</td>
-											</tr>
-										</tbody>
-									</table>
-									<ul class="pagination">
-										<!-- 페이지네이션 내용 추가 -->
-										<c:set var="totalPages" value="${(totalPosts + 9) / 10}" />
-										<c:forEach var="page" begin="1" end="${totalPages}">
-											<c:if test="${page eq currentPage}">
-												<li class="active">${page}</li>
-											</c:if>
-											<c:if test="${page ne currentPage}">
-												<li><a href="javascript:void(0)" onclick="changePage(${page})">${page}</a></li>
-											</c:if>
-										</c:forEach>
-									</ul>
+								<c:if test="${not empty senderdatas}">
+									<c:forEach var="senderdata" items="${senderdatas}" begin="0" end="${receiverTotalItems}" varStatus="senderStatus">
+										<div id="${senderStatus.index}" class="col-3 col-6-medium col-12-small senderItem" style="display: none; margin: 6px; width:260px; border: 1px solid #b9deb4; border-radius: 10px;">
+											<section class="box feature">
+												<c:if test="${empty senderdata.profileImg}">
+													<a href="profileDetailPage.do?profileNum=${senderdata.profileNum}"
+														class="image profileimage featured"> <img src="images/default.png"
+														alt="images/default.png" /></a>
+												</c:if>
+												<c:if test="${not empty senderdata.profileImg}">
+													<a href="profileDetailPage.do?profileNum=${senderdata.profileNum}"
+														class="image profileimage featured"> <img
+														src="images/profileImg/${senderdata.profileImg}" alt="${senderdata.profileImg}" /></a>
+												</c:if>
+												<h3>
+													<a href="profileDetailPage.do?profileNum=${senderdata.profileNum}"> ${senderdata.receiverNickName}</a>
+												</h3>
+												<p>${senderdata.shortIntro}</p>
+											</section>
+										</div>
+									</c:forEach>
 								</c:if>
 							</section>
+								<div class="col-12" style="text-align: right; padding-top: 20px; margin-right:10px;">
+									<button id="senderMoreBtn" class="icon solid fa-plus">더보기</button>
+								</div>
+							</article>
 						</div>
 					</div>
 				</div>
@@ -382,8 +379,9 @@ ul.pagination li a {
 	</div>
 
 	<!-- Scripts -->
-
-	<!-- Scripts -->
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js"
+		integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+		crossorigin="anonymous"></script>
 	<script>
 	const openModalBtnMember = document.getElementById("openModalBtnMember");
 	
@@ -419,20 +417,6 @@ ul.pagination li a {
     	checkModal.style.display = "none";
     });
 
-    //
-   /* submitBtnMember.click(function(){
-    	const enteredPassword = passwordInputMember.value;
-    	if (enteredPassword === '${mdata.mpw}') { // ${mdata.mpw}
-			// 비밀번호가 일치하면 최종확인
-			passwordModalMember.style.display = "none";
-			checkModal.style.display = "block";
-		} else {
-			alert("비밀번호가 일치하지 않습니다");
-			passwordModalMember.style.display = "none";
-		}
-    	
-    }); */
-    
     function clickbtn(){
     	const enteredPassword = passwordInputMember.value;
         
@@ -446,25 +430,57 @@ ul.pagination li a {
   		}
     };
     
-    
-    
-    
-    
-    
-     /* submitBtnMember.addEventListener("click", () => {
-      const enteredPassword = passwordInputMember.value;
-      
-      if (enteredPassword === '${mdata.mpw}') { // ${mdata.mpw}
-			// 비밀번호가 일치하면 최종확인
-			passwordModalMember.style.display = "none";
-			checkModal.style.display = "block";
-		} else {
-			alert("비밀번호가 일치하지 않습니다");
-			passwordModalMember.style.display = "none";
+    // 내가 받은 목록
+    $(document).ready(function(){
+		var receiverEndRnum = ${receiverEndRnum};
+                  
+		for (i = 0; i < receiverEndRnum; i++){
+			document.getElementsByClassName("col-3 col-6-medium col-12-small receiverItem")[i].style.display="block";
 		}
-      
-    }); */
+                  
+		$('#receiverMoreBtn').click(function(){
+			receiverEndRnum += 3;
+			if(receiverEndRnum >= ${receiverTotalItems}){
+				var con = document.getElementById("receiverMoreBtn");
+				con.style.display = "none";
+			}
+			for (i = 0; i < receiverEndRnum; i++){
+				document.getElementsByClassName("col-3 col-6-medium col-12-small receiverItem")[i].style.display="block";
+			}
+		});
+           
+           if(receiverEndRnum >= ${receiverTotalItems}){
+             var con = document.getElementById("receiverMoreBtn");
+             con.style.display = "none";
+          }
+
+	});
     
+    // 내가 보낸 목록
+    $(document).ready(function(){
+		var senderEndRnum = ${senderEndRnum};
+                  
+		for (i = 0; i < senderEndRnum; i++){
+			document.getElementsByClassName("col-3 col-6-medium col-12-small senderItem")[i].style.display="block";
+		}
+                  
+		$('#senderMoreBtn').click(function(){
+			senderEndRnum += 3;
+			if(senderEndRnum >= ${senderTotalItems}){
+				var con = document.getElementById("senderMoreBtn");
+				con.style.display = "none";
+			}
+			for (i = 0; i < senderEndRnum; i++){
+				document.getElementsByClassName("col-3 col-6-medium col-12-small senderItem")[i].style.display="block";
+			}
+		});
+           
+           if(senderEndRnum >= ${senderTotalItems}){
+             var con = document.getElementById("senderMoreBtn");
+             con.style.display = "none";
+          }
+
+	});
 	</script>
 	<script src="assets/js/jquery.min.js"></script>
 	<script src="assets/js/jquery.dropotron.min.js"></script>
@@ -487,11 +503,4 @@ ul.pagination li a {
 		</c:otherwise>
 	</c:choose>
 </body>
-<script type="text/javascript">
-    // JavaScript 함수: 페이지 이동 시 탭 상태를 유지하고 해당 탭의 페이지로 이동하는 함수
-    function changePage(page) {
-        // 예제에서는 페이지를 새로고침하는 방식으로 처리하였지만, 실제로는 AJAX를 사용하여 비동기적으로 페이지를 변경하는 것이 좋습니다.
-        window.location.href = "boardListPage.do?page=" + page;
-    }
-</script>
 </html>

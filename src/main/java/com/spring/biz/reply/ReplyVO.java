@@ -11,8 +11,17 @@ public class ReplyVO {
     // 대댓글에 대한 작업 선택 조건 (서치 컨디션)
     private String searchCondition;
     private String nickName;		// 대댓글 작성자 닉네임
+    private int check;
     
-    // 대댓글 번호를 반환하는 메서드
+    public int getCheck() {
+		return check;
+	}
+
+	public void setCheck(int check) {
+		this.check = check;
+	}
+
+	// 대댓글 번호를 반환하는 메서드
     public int getReplyNum() {
         return replyNum;
     }

@@ -121,8 +121,8 @@ button {
 											<button onclick="sample6_execDaumPostcode()">우편번호 찾기</button>
 										</div>
 										<div class="verification-container">
-											<input type="text" id="sample6_address" placeholder="주소"><br>
-											<input type="text" id="sample6_extraAddress" name="address" placeholder="상세주소">
+											<input type="text" id="sample6_address" name="address" placeholder="주소"><br>
+											<input type="text" id="sample6_extraAddress" name="detailAddress" placeholder="상세주소">
 										</div>
 										<p>원활한 매칭을 위해 동까지만 저장됩니다</p>
 										<p>&nbsp;</p>

@@ -169,10 +169,24 @@ public class BoardController {
 
 		rcVO.setMemberID((String)session.getAttribute("memberID"));
 		rcVO.setCommonNum(Integer.parseInt(request.getParameter("boardNum")));
-
-		pVO.setMemberID((String)session.getAttribute("memberID"));
+		
+		pVO.setMemberID((String)session.getAttribute("memberID")); 
 		pVO.setCommonNum(Integer.parseInt(request.getParameter("boardNum")));
-
+		
+//		if(session.getAttribute("boardNum") == null) {
+//		}
+//		else {
+//			int num = (int)(session.getAttribute("boardNum"));
+//			
+//			rcVO.setCommonNum(num);
+//			
+//			pVO.setCommonNum(num);
+//			
+//			bVO.setBoardNum(num);
+//			
+//			session.removeAttribute("boardNum");
+//		}
+		
 		// RecommendDAO를 통해 해당 게시글에 대한 사용자의 추천 여부를 확인합니다.
 		rcVO = recommendService.selectOne(rcVO);
 
@@ -195,7 +209,7 @@ public class BoardController {
 		} else {
 			request.setAttribute("prohibit", 0);
 		}
-
+		
 		rVO.setSearchCondition("totalReply");
 
 		List<CommentsVO> cdatas = commentsService.selectAll(cVO);
@@ -205,15 +219,50 @@ public class BoardController {
 		List<ReplyVO> rdatas = replyService.selectAll(rVO);
 
 		List<ReplyVO> replies = new ArrayList<ReplyVO>();
-
+		
 		for(int i = 0; i < cdatas.size(); i++) {
 			if(bVO.getBoardNum() == cdatas.get(i).getBoardNum()) {
+				
 				comments.add(cdatas.get(i));
-
+				
 				for(int j = 0; j < rdatas.size(); j++) {
 					if(cdatas.get(i).getCommentsNum() == rdatas.get(j).getCommentsNum()) {
 						replies.add(rdatas.get(j));
 					}
+				}
+			}
+		}
+		
+		for(int i = 0; i < comments.size(); i++) {
+			comments.get(i).setCheck(0);
+			
+			pVO = new ProhibitVO();
+			
+			pVO.setMemberID((String)session.getAttribute("memberID"));
+			pVO.setCommonNum(comments.get(i).getCommentsNum());
+			
+			pVO = prohibitService.selectOne(pVO);
+			
+			if(pVO != null) {
+				if(pVO.getCommonNum() == comments.get(i).getCommentsNum()) {
+					comments.get(i).setCheck(1);
+				}
+			}
+		}
+		
+		for(int i = 0; i < replies.size(); i++) {
+			replies.get(i).setCheck(0);
+			
+			pVO = new ProhibitVO();
+			
+			pVO.setMemberID((String)session.getAttribute("memberID"));
+			pVO.setCommonNum(replies.get(i).getReplyNum());
+			
+			pVO = prohibitService.selectOne(pVO);
+			
+			if(pVO != null) {
+				if(pVO.getCommonNum() == replies.get(i).getReplyNum()) {
+					replies.get(i).setCheck(1);
 				}
 			}
 		}

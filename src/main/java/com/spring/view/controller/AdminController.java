@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.spring.biz.board.BoardService;
 import com.spring.biz.board.BoardVO;
@@ -95,6 +96,31 @@ public class AdminController {
 		model.addAttribute("phdatas", phbdatas);
 
 		return "prohibitListPage.jsp";
+	}
+	
+	@RequestMapping(value = "/deleteProhibitList.do")
+	public String deleteProhibitList(@RequestParam("number") List<String> boardNums, BoardVO bVO) {
+		System.out.println("로그: Mypage: deleteProhibitList() ");
+		
+		bVO.setSearchCondition("prohibitBoard");
+
+		List<BoardVO> phbdatas = boardService.selectAll(bVO);
+		
+		for(int i = 0; i < phbdatas.size(); i++) {
+			for (String boardNum : boardNums) {
+				if(phbdatas.get(i).getBoardNum() == Integer.parseInt(boardNum)) {
+
+					bVO = phbdatas.get(i);
+
+					bVO.setSearchCondition("boardNum");
+
+					boardService.delete(bVO);
+				}
+			}
+		}
+		
+		return "prohibitListPage.do";
+		
 	}
 
 }

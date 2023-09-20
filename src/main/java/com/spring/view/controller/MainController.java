@@ -1,5 +1,6 @@
 package com.spring.view.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -30,13 +31,13 @@ public class MainController {
 	@RequestMapping(value = "/main.do")
 	public String main(MemberProfileVO mpVO, BoardVO bVO,CommentsVO cVO, Random random, Model model) {
 		System.out.println("로그: MainController: main() ");
-		
+
 		mpVO.setSearchCondition("mainProfile");
-		
+
 		List<MemberProfileVO> mpdatas = memberProfileService.selectAll(mpVO);
 		System.out.println("mpdatas:" + mpdatas);
 
-		if(mpdatas.isEmpty() || mpdatas.size()==0) {
+		if(mpdatas.isEmpty() || mpdatas.size() == 0) {
 			System.out.println("멤버 프로필 data가 비어있음");
 		}
 
@@ -52,14 +53,13 @@ public class MainController {
 			}
 
 			bVO = bdatas.get(0);
+			
 			bdatas.remove(0);
-
-
 		}
 		model.addAttribute("mempdatas", mpdatas);
 		model.addAttribute("firstBdata", bVO);
 		model.addAttribute("bdatas", bdatas);
-		
+
 		return "main.jsp";
 	}
 }

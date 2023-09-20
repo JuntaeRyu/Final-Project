@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="NPNC"%>
 
@@ -14,8 +13,7 @@
 <title>HealthDuo</title>
 <meta charset="utf-8" />
 <!-- <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" /> -->
-<link rel="icon" href="assets/css/images/favicon.ico"
-	type="image/x-icon" />
+<link rel="icon" href="assets/css/images/favicon.ico" type="image/x-icon" />
 <link rel="stylesheet" href="assets/css/main.css" />
 <style>
 #title-cell {
@@ -25,6 +23,7 @@
 	text-overflow: ellipsis;
 	margin: 0.5em 0 0.5em 0;
 }
+
 ul.pagination {
 	list-style: none;
 	display: flex;
@@ -91,58 +90,58 @@ ul.pagination li a {
 										<h2 style="text-align: center; margin: 0.2em 0 0.2em 0;">현재 게시글이 없습니다</h2>
 									</c:if>
 									<c:if test="${not empty pagedata.currentPageBoards}">
-										<table class="meta">
-											<thead>
-												<tr class="tab">
-													<th><span></span></th>
-													<th><span>목록</span></th>
-													<th><span>제목</span></th>
-													<th><span>작성자</span></th>
-													<th><span>날짜</span></th>
-													<th><span>댓글수</span></th>
-													<th><span>조회수</span></th>
-													<th><span>추천수</span></th>
-												</tr>
-											</thead>
-											<tbody>
-												<c:forEach var="v" items="${pagedata.currentPageBoards}">
-													<tr>
-														<td style="width: 35px;"><input type="checkbox"
-																name="selected_items" value="${v.boardNum}"></td>
-														<c:if test="${v.category eq 1 }">
-															<td class="icon">정보</td>
-														</c:if>
-														<c:if test="${v.category eq 2 }">
-															<td class="icon">잡담</td>
-														</c:if>
-														<c:if test="${v.category eq 0 }">
-															<td class="icon">공지사항</td>
-														</c:if>
-														<td class="title"><h1 id="title-cell">
-																<a href="boardDetailPage.do?boardNum=${v.boardNum}">${v.title}</a>
-															</h1></td>
-														<td class="icon solid fa-user"> ${v.nickName}</td>
-														<td class="icon fa-clock"> ${v.boradDate}</td>
-														<c:if test="${v.boardCommentsCnt == 0}">
-															<td class="icon fa-comments"> ${v.boardCommentsCnt}</td>
-														</c:if>
-														<c:if test="${v.boardCommentsCnt !=0}">
-															<td class="icon solid fa-comments"> ${v.boardCommentsCnt}</td>
-														</c:if>
-														<c:if test="${v.viewCnt == 0}">
-															<td class="icon fa-eye"> ${v.viewCnt}</td>
-														</c:if>
-														<c:if test="${v.viewCnt !=0}">
-															<td class="icon solid fa-eye"> ${v.viewCnt}</td>
-														</c:if>
-														<c:if test="${v.recommendCnt == 0}">
-															<td class="icon fa-heart"> ${v.recommendCnt}</td>
-														</c:if>
-														<c:if test="${v.recommendCnt != 0}">
-															<td class="icon solid fa-heart"> ${v.recommendCnt}</td>
-														</c:if>
+										<form action="deleteProhibitList.do" method="POST">
+											<table class="meta">
+												<thead>
+													<tr class="tab">
+														<th><span></span></th>
+														<th><span>목록</span></th>
+														<th><span>제목</span></th>
+														<th><span>작성자</span></th>
+														<th><span>날짜</span></th>
+														<th><span>댓글수</span></th>
+														<th><span>조회수</span></th>
+														<th><span>추천수</span></th>
 													</tr>
-													<!-- <tr>
+												</thead>
+												<tbody>
+													<c:forEach var="v" items="${pagedata.currentPageBoards}">
+														<tr>
+															<td style="width: 35px;"><input type="checkbox" name="number" value="${v.boardNum}"></td>
+															<c:if test="${v.category eq 1 }">
+																<td class="icon">정보</td>
+															</c:if>
+															<c:if test="${v.category eq 2 }">
+																<td class="icon">잡담</td>
+															</c:if>
+															<c:if test="${v.category eq 0 }">
+																<td class="icon">공지사항</td>
+															</c:if>
+															<td class="title"><h1 id="title-cell">
+																	<a href="boardDetailPage.do?boardNum=${v.boardNum}">${v.title}</a>
+																</h1></td>
+															<td class="icon solid fa-user">${v.nickName}</td>
+															<td class="icon fa-clock">${v.boradDate}</td>
+															<c:if test="${v.boardCommentsCnt == 0}">
+																<td class="icon fa-comments">${v.boardCommentsCnt}</td>
+															</c:if>
+															<c:if test="${v.boardCommentsCnt !=0}">
+																<td class="icon solid fa-comments">${v.boardCommentsCnt}</td>
+															</c:if>
+															<c:if test="${v.viewCnt == 0}">
+																<td class="icon fa-eye">${v.viewCnt}</td>
+															</c:if>
+															<c:if test="${v.viewCnt !=0}">
+																<td class="icon solid fa-eye">${v.viewCnt}</td>
+															</c:if>
+															<c:if test="${v.recommendCnt == 0}">
+																<td class="icon fa-heart">${v.recommendCnt}</td>
+															</c:if>
+															<c:if test="${v.recommendCnt != 0}">
+																<td class="icon solid fa-heart">${v.recommendCnt}</td>
+															</c:if>
+														</tr>
+														<!-- <tr>
 															<td class="icon"> 정보</td>
 															<td class="title"><h1><a href="#">asdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdf</a></h1></td>
 															<td class="icon solid fa-user"> 작성자</td>
@@ -151,22 +150,23 @@ ul.pagination li a {
 															<td class="icon solid fa-eye"> 조회수</td>
 															<td class="icon solid fa-heart"> 34</td>
 														</tr>  -->
+													</c:forEach>
+												</tbody>
+											</table>
+											<ul class="pagination">
+												<!-- 페이지네이션 내용 추가 -->
+												<c:set var="totalPages" value="${(pagedata.totalPosts + pagedata.postPerPage -1) / pagedata.postPerPage}" />
+												<c:forEach var="page" begin="1" end="${totalPages}">
+													<c:if test="${page eq pagedata.currentPage}">
+														<li class="active">${page}</li>
+													</c:if>
+													<c:if test="${page ne pagedata.currentPage}">
+														<li><a href="javascript:void(0)" onclick="changePage(${page})">${page}</a></li>
+													</c:if>
+													<input id="checkBoradDelete" type="submit" value="선택글 삭제">
 												</c:forEach>
-											</tbody>
-										</table>
-										<ul class="pagination">
-											<!-- 페이지네이션 내용 추가 -->
-											<c:set var="totalPages" value="${(pagedata.totalPosts + pagedata.postPerPage -1) / pagedata.postPerPage}" />
-											<c:forEach var="page" begin="1" end="${totalPages}">
-												<c:if test="${page eq pagedata.currentPage}">
-													<li class="active">${page}</li>
-												</c:if>
-												<c:if test="${page ne pagedata.currentPage}">
-													<li><a href="javascript:void(0)" onclick="changePage(${page})">${page}</a></li>
-												</c:if>
-												<input id="checkBoradDelete" type="submit" value="선택글 삭제">
-											</c:forEach>
-										</ul>
+											</ul>
+										</form>
 									</c:if>
 								</section>
 
@@ -191,13 +191,7 @@ ul.pagination li a {
 								<span>What's this about?</span>
 							</h2>
 							<p>
-								This is <strong>TXT</strong>, yet another free responsive site
-								template designed by <a href="http://twitter.com/ajlkn">AJ</a>
-								for <a href="http://html5up.net">HTML5 UP</a>. It's released
-								under the <a href="http://html5up.net/license/">Creative
-									Commons Attribution</a> license so feel free to use it for whatever
-								you're working on (personal or commercial), just be sure to give
-								us credit for the design. That's basically it :)
+								This is <strong>TXT</strong>, yet another free responsive site template designed by <a href="http://twitter.com/ajlkn">AJ</a> for <a href="http://html5up.net">HTML5 UP</a>. It's released under the <a href="http://html5up.net/license/">Creative Commons Attribution</a> license so feel free to use it for whatever you're working on (personal or commercial), just be sure to give us credit for the design. That's basically it :)
 							</p>
 						</section>
 
@@ -210,16 +204,11 @@ ul.pagination li a {
 								<span>Get in touch</span>
 							</h2>
 							<ul class="contact">
-								<li><a class="icon brands fa-facebook-f" href="#"><span
-										class="label">Facebook</span></a></li>
-								<li><a class="icon brands fa-twitter" href="#"><span
-										class="label">Twitter</span></a></li>
-								<li><a class="icon brands fa-instagram" href="#"><span
-										class="label">Instagram</span></a></li>
-								<li><a class="icon brands fa-dribbble" href="#"><span
-										class="label">Dribbble</span></a></li>
-								<li><a class="icon brands fa-linkedin-in" href="#"><span
-										class="label">LinkedIn</span></a></li>
+								<li><a class="icon brands fa-facebook-f" href="#"><span class="label">Facebook</span></a></li>
+								<li><a class="icon brands fa-twitter" href="#"><span class="label">Twitter</span></a></li>
+								<li><a class="icon brands fa-instagram" href="#"><span class="label">Instagram</span></a></li>
+								<li><a class="icon brands fa-dribbble" href="#"><span class="label">Dribbble</span></a></li>
+								<li><a class="icon brands fa-linkedin-in" href="#"><span class="label">LinkedIn</span></a></li>
 							</ul>
 						</section>
 
@@ -261,4 +250,11 @@ ul.pagination li a {
 		</c:otherwise>
 	</c:choose>
 </body>
+<script type="text/javascript">
+    // JavaScript 함수: 페이지 이동 시 탭 상태를 유지하고 해당 탭의 페이지로 이동하는 함수
+    function changePage(page) {
+        // 예제에서는 페이지를 새로고침하는 방식으로 처리하였지만, 실제로는 AJAX를 사용하여 비동기적으로 페이지를 변경하는 것이 좋습니다.
+        window.location.href = "prohibitListPage.do?currentPage=" + page;
+    }
+</script>
 </html>

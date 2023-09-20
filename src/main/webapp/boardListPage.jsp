@@ -260,7 +260,7 @@ ul.pagination li a {
     // JavaScript 함수: 페이지 이동 시 탭 상태를 유지하고 해당 탭의 페이지로 이동하는 함수
     function changePage(page) {
         // 예제에서는 페이지를 새로고침하는 방식으로 처리하였지만, 실제로는 AJAX를 사용하여 비동기적으로 페이지를 변경하는 것이 좋습니다.
-        window.location.href = "boardListPage.do?page=" + page;
+        window.location.href = "boardListPage.do?currentPage=" + page;
     }
 </script>
 </html>

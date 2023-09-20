@@ -58,18 +58,18 @@
 									</div>
 									 -->
 									<c:set var="totalItems" value="${fn:length(mpdatas)}"/>
-									<c:set var="endRnum" value="12" />
+									<c:set var="endRnum" value="8" />
 									<c:forEach var="mpdata" items="${mpdatas}" begin="0" end="${totalItems}" varStatus="status">
 										<div id="${status.index}" class="col-3 col-6-medium col-12-small mpdataItem" style="display: none;">
 											<section class="box feature">
 												<c:if test="${empty mpdata.profileImg}">
 													<a href="profileDetailPage.do?profileNum=${mpdata.profileNum}"
-														class="image featured"> <img src="images/default.png"
+														class="image profileimage featured"> <img src="images/default.png"
 														alt="images/default.png" /></a>
 												</c:if>
 												<c:if test="${not empty mpdata.profileImg}">
 													<a href="profileDetailPage.do?profileNum=${mpdata.profileNum}"
-														class="image featured"> <img
+														class="image profileimage featured"> <img
 														src="images/profileImg/${mpdata.profileImg}" alt="${mpdata.profileImg}" /></a>
 												</c:if>
 												<h3>
@@ -190,7 +190,7 @@
 			}
                       
 			$('#moreBtn').click(function(){
-				endRnum += 12;
+				endRnum += 8;
 				if(endRnum >= ${totalItems}){
 					var con = document.getElementById("moreBtn");
 					con.style.display = "none";
