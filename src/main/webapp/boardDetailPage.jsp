@@ -134,7 +134,7 @@ i {
 									<header>
 										<p id="boardTitle">${bdata.title}</p>
 										<ul class="meta">
-											<li class="icon solid fa-user">${bdata.nickName}</li>
+											<li class="icon solid fa-user"><a href="profileDetailPage.do?memberID=${bdata.memberID}">${bdata.nickName}</a></li>
 											<li class="icon fa-clock">${bdata.boardDate}</li>
 											<c:if test="${not empty memberID}">
 												<li><i id="rc" class="icon fa-heart" style="color: #f22202;" title="추천"></i>

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 public class WarnServiceImpl implements WarnService {
 	
 	@Autowired
-	private WarnDAO2 wDAO;
+	private InterfaceWarnDAO wDAO;
 
 	@Override
 	public boolean insert(WarnVO wVO) {

@@ -10,7 +10,7 @@ import java.util.List;
 import com.spring.biz.common.JDBCUtil;
 
 //@Repository("MatchingDAO")
-public class MatchingDAO {
+public class MatchingDAO implements InterfaceMatchingDAO{
 
 	private String sql_INSERT = "INSERT INTO MATCHING (MATCHINGNUM, SENDERID, RECEIVERID) VALUES ((SELECT NVL(MAX(MATCHINGNUM),0)+1 FROM MATCHING),?, ?)";
 	private String sql_SELECTALL = "SELECT MATCHINGNUM, SENDERID, RECEIVERID, ACCEPT FROM MATCHING WHERE SENDERID = ? OR RECEIVERID = ?";

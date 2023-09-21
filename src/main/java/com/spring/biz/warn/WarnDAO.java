@@ -10,7 +10,7 @@ import java.util.List;
 import com.spring.biz.common.JDBCUtil;
 
 // @Repository("warnDAO")
-public class WarnDAO {
+public class WarnDAO implements InterfaceWarnDAO{
 
 	private final String sql_INSERT = "INSERT INTO WARN (WARNNUM, MEMBERID, WARNTYPE, WARNDATE) VALUES ((SELECT NVL(MAX(WARNNUM),0)+1 FROM WARN),?, ?, SYSTIMESTAMP)";
 	private final String sql_SELECTALL = "SELECT WARNNUM, MEMBERID, WARNTYPE, TO_CHAR(WARNDATE, 'YYYY-MM-DD') AS WARNDATE FROM WARN WHERE MEMBERID = ?";
@@ -30,7 +30,7 @@ public class WarnDAO {
 			pstmt = conn.prepareStatement(sql_INSERT);
 
 			// SQL 쿼리문 수정
-			pstmt.setString(1, wVO.getMenberID());
+			pstmt.setString(1, wVO.getMemberID());
 			pstmt.setInt(2, wVO.getWarnType());
 
 			// SQL 쿼리문 실행 및 결과 저장
@@ -57,7 +57,7 @@ public class WarnDAO {
 			conn = JDBCUtil.connect();
 			// SQL 쿼리문 입력
 			pstmt = conn.prepareStatement(sql_SELECTALL);
-			pstmt.setString(1, wVO.getMenberID());
+			pstmt.setString(1, wVO.getMemberID());
 
 			// SQL 쿼리문 실행
 			rs = pstmt.executeQuery();
@@ -66,7 +66,7 @@ public class WarnDAO {
 				//"SELECT REPLYNUM,REPLY,COMMENTNUM,MID,PROHIBITCNT FROM REPLY";
 				WarnVO wdata = new WarnVO();
 				wdata.setWarnNum(rs.getInt("WARNNUM"));
-				wdata.setMenberID(rs.getString("MEMBERID"));
+				wdata.setMemberID(sql_INSERT);
 				wdata.setWarnType(rs.getInt("WARNTYPE"));
 				wdata.setWarnDate(rs.getString("WARNDATE"));
 				wdatas.add(wdata);

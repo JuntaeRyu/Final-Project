@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 import com.spring.biz.common.JDBCUtil;
 
-public class ProhibitDAO {
+public class ProhibitDAO implements InterfaceProhibitDAO {
 	// SQL 쿼리문
 	private final String sql_INSERT = "INSERT INTO PROHIBIT (MEMBERID,COMMONNUM) VALUES ( ? , ? )";
 //	private final String sql_SELECTALL = "SELECT PROHIBITNUM,MEMBERID,COMMONNUM FROM PROHIBIT WHERE COMMONNUM=?";

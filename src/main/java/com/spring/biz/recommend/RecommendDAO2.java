@@ -10,8 +10,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-@Repository("recommendDAO")
-public class RecommendDAO2 {
+@Repository
+public class RecommendDAO2 implements InterfaceRecommendDAO{
 	// 추천 추가
 	private final String sql_INSERT = "INSERT INTO RECOMMEND (RECOMMENDNUM, MEMBERID,COMMONNUM) VALUES ((SELECT NVL(MAX(RECOMMENDNUM),0)+1 FROM RECOMMEND), ? , ? )";
 //	private final String sql_SELECTALL = "SELECT RECOMMENDNUM,MEMBERID,COMMONNUM FROM RECOMMEND WHERE COMMONNUM=?";

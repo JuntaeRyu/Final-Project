@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 public class CommentsServiceImpl implements CommentsService{
 
 	@Autowired
-	private CommentsDAO2 cDAO;
+	private InterfaceCommentsDAO cDAO;
 	
 	@Override
 	public CommentsVO selectOne(CommentsVO cVO) {

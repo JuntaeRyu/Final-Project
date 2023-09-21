@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 public class ProhibitServiceImpl implements ProhibitService{
 
 	@Autowired
-	private ProhibitDAO2 pDAO;
+	private InterfaceProhibitDAO pDAO;
 	
 	@Override
 	public ProhibitVO selectOne(ProhibitVO pVO) {

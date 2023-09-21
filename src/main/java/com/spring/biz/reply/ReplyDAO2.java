@@ -9,8 +9,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-@Repository("replyDAO")
-public class ReplyDAO2 {
+@Repository
+public class ReplyDAO2 implements InterfaceReplyDAO{
 	////////////////////// 쿼리문 ////////////////////////////////////////////////////	
 	// 대댓글 작성
 	private final String sql_INSERT = "INSERT INTO REPLY (REPLYNUM, REPLY, COMMENTSNUM, MEMBERID, REPLYDATE) VALUES ((SELECT NVL(MAX(REPLYNUM),29999)+1 FROM REPLY), ?, ?, ?, SYSTIMESTAMP)";

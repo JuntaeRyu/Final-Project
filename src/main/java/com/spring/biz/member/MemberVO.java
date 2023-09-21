@@ -10,11 +10,11 @@ public class MemberVO {
     private int	gender;   		// 회원의 성별을 저장하는 멤버변수
     private String address;   	// 회원의 주소를 저장하는 멤버변수
     private String detailAddress;   // 회원의 상세주소를 저장하는 멤버변수
+    private int warnCnt;    	// 경고횟수를 저장하는 멤버 변수
     private int role;   		// 회원의 권한을 저장하는 멤버변수
 
     // 서치컨디션
     private String searchCondition;    	// 검색 조건을 저장하는 멤버 변수
-    private int warnCnt;    			// 경고횟수를 저장하는 멤버 변수
 	
     
     // 검색 조건을 반환하는 메서드

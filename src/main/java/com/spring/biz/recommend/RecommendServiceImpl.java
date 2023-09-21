@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 public class RecommendServiceImpl implements RecommendService{
 
 	@Autowired
-	private RecommendDAO2 rcDAO;
+	private InterfaceRecommendDAO rcDAO;
 	
 	@Override
 	public RecommendVO selectOne(RecommendVO rcVO) {

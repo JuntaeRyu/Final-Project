@@ -10,8 +10,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-@Repository("prohibitDAO")
-public class ProhibitDAO2 {
+@Repository
+public class ProhibitDAO2 implements InterfaceProhibitDAO{
 
 	// 신고 추가
 	private final String sql_INSERT = "INSERT INTO PROHIBIT (PROHIBITNUM,MEMBERID,COMMONNUM) VALUES ((SELECT NVL(MAX(PROHIBITNUM),59999)+1 FROM PROHIBIT), ? , ? )";

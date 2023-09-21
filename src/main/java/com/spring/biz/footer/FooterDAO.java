@@ -9,7 +9,7 @@ import java.util.List;
 import com.spring.biz.common.JDBCUtil;
 
 //@Repository("FooterDAO")
-public class FooterDAO {
+public class FooterDAO implements InterfaceFooterDAO{
 
 	private String sql_INSERT = "INSERT INTO FOOTER (COMPANYNAME, COMPANYCEO, COMPANYEMAIL, COMPANYPHONENUM, COMPANYINFO) VALUES (?, ?, ?, ?, ?)";
 //	private String sql_SELECTALL = "";

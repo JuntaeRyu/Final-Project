@@ -9,8 +9,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-@Repository("FooterDAO")
-public class FooterDAO2 {
+@Repository
+public class FooterDAO2 implements InterfaceFooterDAO {
 	
 	// footer에 들어가는 회사 소개 등을 작성
 	private String sql_INSERT = "INSERT INTO FOOTER (COMPANYNAME, COMPANYCEO, COMPANYEMAIL, COMPANYPHONENUM, COMPANYINFO) VALUES (?, ?, ?, ?, ?)";

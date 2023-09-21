@@ -4,11 +4,12 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.spring.biz.advertisement.AdvertisementService;
 import com.spring.biz.advertisement.AdvertisementVO;
-import com.spring.biz.advertisement.Crawring;
+import com.spring.biz.advertisement.Crawling;
 
 @Controller
 public class CrawlingController {
@@ -16,11 +17,11 @@ public class CrawlingController {
 	@Autowired
 	private AdvertisementService advertisementService;
 	
-	@RequestMapping(value = "/crawring.do")
-	public String crawring () {
+	@RequestMapping(value = "/crawling.do")
+	public String crawling (Model model) {
 		
-		List<AdvertisementVO> hdex = Crawring.crawlingHdex();
-		List<AdvertisementVO> zerotohero = Crawring.crawlingZerotohero();
+		List<AdvertisementVO> hdex = Crawling.crawlingHdex();
+		List<AdvertisementVO> zerotohero = Crawling.crawlingZerotohero();
 		
 		boolean flag = false; // 오류 확인용
 		
@@ -48,7 +49,20 @@ public class CrawlingController {
 //			System.out.println(adata.getSiteUrl());
 //		}
 		
+		model.addAttribute("adatas", advertisementService.selectAll(null));
+		
 		return "main.do";
+	}
+	
+	@RequestMapping(value = "/reset.do")
+	public String reset () {
+		
+		if (!advertisementService.reset(null)) {
+			System.out.println("로그: 오류났으니 일단 프로그램 정지");
+			return "#";
+		}
+		
+		return "crawling.do";
 	}
 	
 }

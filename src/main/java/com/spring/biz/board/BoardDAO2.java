@@ -10,8 +10,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-@Repository("boardDAO")
-public class BoardDAO2 {
+@Repository
+public class BoardDAO2 implements InterfaceBoardDAO{
 	// 게시글 작성
 	private final String sql_INSERT = "INSERT INTO BOARD "
 			+ "(BOARDNUM, TITLE, CONTENT, MEMBERID, CATEGORY, BOARDIMG, BOARDDATE) "

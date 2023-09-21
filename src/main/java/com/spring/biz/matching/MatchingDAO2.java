@@ -9,8 +9,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-@Repository("MatchingDAO")
-public class MatchingDAO2 {
+@Repository
+public class MatchingDAO2 implements InterfaceMatchingDAO{
 
 	// 매칭 신청
 	private String sql_INSERT = "INSERT INTO MATCHING (MATCHINGNUM, SENDERID, RECEIVERID) VALUES ((SELECT NVL(MAX(MATCHINGNUM),0)+1 FROM MATCHING),?, ?)";

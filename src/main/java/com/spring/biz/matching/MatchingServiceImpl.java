@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 public class MatchingServiceImpl implements MatchingService {
 
 	@Autowired
-	private MatchingDAO2 mcDAO;
+	private InterfaceMatchingDAO mcDAO;
 	
 	@Override
 	public boolean insert(MatchingVO mcVO) {

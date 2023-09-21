@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 import com.spring.biz.common.JDBCUtil;
 
-public class MemberProfileDAO {
+public class MemberProfileDAO implements InterfaceMemberProfileDAO {
 	
 	// SQL 쿼리문
 	private final String sql_INSERT = "INSERT INTO MEMBERPROFILE (PROFILENUM, MEMBERID, PROFILEIMG, SHORTINTRO, INTRO, PROHIBITCNT) VALUES ((SELECT NVL(MAX(PROFILENUM),0)+1 FROM MEMBERPROFILE), ?, ?, ?, ?, ?)";

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 public class MemberProfileServiceImpl implements MemberProfileService{
 
 	@Autowired
-	private MemberProfileDAO2 mpDAO;
+	private InterfaceMemberProfileDAO mpDAO;
 	
 	@Override
 	public MemberProfileVO selectOne(MemberProfileVO mpVO) {

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 public class ReplyServiceImpl implements ReplyService{
 
 	@Autowired
-	private ReplyDAO2 rDAO;
+	private InterfaceReplyDAO rDAO;
 	
 	@Override
 	public ReplyVO selectOne(ReplyVO rVO) {

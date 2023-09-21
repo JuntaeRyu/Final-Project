@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 import com.spring.biz.common.JDBCUtil;
 
-public class RecommendDAO {
+public class RecommendDAO implements InterfaceRecommendDAO{
 	private final String sql_INSERT ="INSERT INTO RECOMMEND (MEMBERID,COMMONNUM) VALUES ( ? , ? )";
 //	private final String sql_SELECTALL ="SELECT RECOMMENDNUM,MEMBERID,COMMONNUM FROM RECOMMEND WHERE COMMONNUM=?";
 	private final String sql_SELECTONE ="SELECT RECOMMENDNUM,MEMBERID,COMMONNUM FROM RECOMMEND WHERE MEMBERID=? AND COMMONNUM=?";

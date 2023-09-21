@@ -10,8 +10,8 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 
-@Repository("memberProfileDAO")
-public class MemberProfileDAO2 {
+@Repository
+public class MemberProfileDAO2 implements InterfaceMemberProfileDAO{
 
 	// 회원 프로필 작성
 	private final String sql_INSERT = "INSERT INTO MEMBERPROFILE (PROFILENUM, MEMBERID, PROFILEIMG, SHORTINTRO, INTRO) VALUES ((SELECT NVL(MAX(PROFILENUM),0)+1 FROM MEMBERPROFILE), ?, ?, ?, ?)";

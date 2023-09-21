@@ -10,27 +10,29 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-@Repository("memberDAO")
-public class MemberDAO2 {
+@Repository
+public class MemberDAO2 implements InterfaceMemberDAO{
 
 	// SQL 쿼리문
 
 	// 회원가입
 	private final String sql_INSERT = "INSERT INTO MEMBER (MEMBERID, MEMBERPW, NAME, NICKNAME, EMAIL, PHONENUM, GENDER, ADDRESS, DETAILADDRESS) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	// 회원 및 관리자 목록
-	private final String sql_SELECTALL_MEMBERLIST = "MEMBERID, MEMBERPW, NAME, NICKNAME, EMAIL, PHONENUM, GENDER, ADDRESS, DETAILADDRESS, ROLE FROM MEMBER WHERE ROLE = ?";
+	private final String sql_SELECTALL_MEMBERLIST = "SELECT M.MEMBERID, M.MEMBERPW,M.NAME, M.NICKNAME, M.EMAIL, M.PHONENUM, M.GENDER, M.ADDRESS, M.DETAILADDRESS, M.ROLE, "
+			+ "(SELECT COUNT(*) FROM WARN W WHERE W.MEMBERID = M.MEMBERID) AS WARNCNT "
+			+ "FROM MEMBER M WHERE M.ROLE = ?";
 //	// 회원(!관리자) 목록
 //	private final String sql_SELECTALL_HELCELL = "SELECT MEMBERID,NAME,NICKNAME,PHONENUM,GENDER,ADDRESS,ROLE FROM MEMBER WHERE ROLE = 3";
 //	// 관리자 목록
 //	private final String sql_SELECTALL_HELLS = "SELECT MEMBERID,NAME,NICKNAME,PHONENUM,GENDER,ADDRESS,ROLE FROM MEMBER WHERE ROLE = 1";
 	// 회원 중복검사및 아이디로 정보 추출
-	private final String sql_SELECTONE_DUPLICATE = "SELECT MEMBERID, MEMBERPW, NAME, NICKNAME, EMAIL, PHONENUM, GENDER, ADDRESS, DETAILADDRESS, ROLE FROM MEMBER WHERE MEMBERID=?";
+	private final String sql_SELECTONE_DUPLICATE = "SELECT M.MEMBERID, M.MEMBERPW, M.NAME, M.NICKNAME, M.EMAIL, M.PHONENUM, M.GENDER, M.ADDRESS, M.DETAILADDRESS, M.ROLE, (SELECT COUNT(*) FROM WARN W WHERE W.MEMBERID = M.MEMBERID) AS WARNCNT FROM MEMBER WHERE MEMBERID=?";
 	// 회원 닉네임 중복 검사
 	private final String sql_SELECTONE_DUPLICATE_NICKNAME = "SELECT NICKNAME FROM MEMBER WHERE NICKNAME=?";
 	// 회원 이메일 중복 검사
 	private final String sql_SELECTONE_DUPLICATE_EMAIL = "SELECT EMAIL FROM MEMBER WHERE EMAIL=?";
 	// 회원 로그인
-	private final String sql_SELECTONE_LOGIN = "SELECT MEMBERID, MEMBERPW, NAME, NICKNAME, EMAIL, PHONENUM, GENDER, ADDRESS, DETAILADDRESS, ROLE FROM MEMBER WHERE MEMBERID=? AND MEMBERPW=?"; // 로그인
+	private final String sql_SELECTONE_LOGIN = "SELECT M.MEMBERID, M.MEMBERPW, M.NAME, M.NICKNAME, M.EMAIL, M.PHONENUM, M.GENDER, M.ADDRESS, M.DETAILADDRESS, M.ROLE, (SELECT COUNT(*) FROM WARN W WHERE W.MEMBERID = M.MEMBERID) AS WARNCNT FROM MEMBER WHERE MEMBERID=? AND MEMBERPW=?"; // 로그인
 	// 회원 주소 변경
 	private final String sql_UPDATE_ADDRESS = "UPDATE MEMBER SET ADDRESS=? AND SET DETAILADDRESS=? WHERE MEMBERID=?";
 	// 회원 이메일 변경
@@ -169,6 +171,7 @@ class MemberRowMapper implements RowMapper<MemberVO> {
 		mdata.setAddress(rs.getString("ADDRESS"));
 		mdata.setDetailAddress(rs.getString("DETAILADDRESS"));
 		mdata.setRole(rs.getInt("ROLE"));
+		mdata.setWarnCnt(rs.getInt("WARNCNT"));
 		
 
 		return mdata;
@@ -191,6 +194,7 @@ class MemberListRowMapper implements RowMapper<MemberVO> {
 		mdata.setAddress(rs.getString("ADDRESS"));
 		mdata.setDetailAddress(rs.getString("DETAILADDRESS"));
 		mdata.setRole(rs.getInt("ROLE"));
+		mdata.setWarnCnt(rs.getInt("ROLE"));
 		
 		
 		return mdata;
@@ -214,6 +218,7 @@ class DuplicateIDRowMapper implements RowMapper<MemberVO> {
 		mdata.setAddress(rs.getString("ADDRESS"));
 		mdata.setDetailAddress(rs.getString("DETAILADDRESS"));
 		mdata.setRole(rs.getInt("ROLE"));
+		mdata.setWarnCnt(rs.getInt("WARNCNT"));
 		
 		return mdata;
 	}

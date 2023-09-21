@@ -16,6 +16,45 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 <link rel="icon" href="assets/css/images/favicon.ico" type="image/x-icon" />
 <link rel="stylesheet" href="assets/css/main.css" />
+<style type="text/css">
+.advertisement {
+	position:sticky;
+	float:left;
+    display: flex;
+    width:10%;
+    min-width:70px;
+    max-height:100%;
+    background-color:lightgray;
+    flex-direction: column;
+    align-items: center; /* 가로 가운데 정렬 */
+    text-align: center; /* 텍스트 가운데 정렬 */
+}
+
+.productName {
+ 	white-space: nowrap;
+    overflow: hidden;
+	text-overflow: ellipsis;
+	display: block;
+    width: 100%;
+}
+
+.product {
+    max-width: 100%;
+    background-color:lightgreen;
+    padding: 3px;
+    margin-bottom: 5px; /* 각 상품 아래 여백 */
+}
+
+.productImg {
+    background-color:white;
+    max-width: 100%;
+    height: auto;
+}
+
+.productPay {
+	text-size-adjust: auto;
+}
+</style>
 </head>
 <body class="homepage is-preload">
 	<div id="page-wrapper">
@@ -61,6 +100,17 @@
 		</c:if>
 		<!-- Main -->
 		<section id="main">
+			<div class="advertisement">
+				<c:forEach var="adata" items="${adatas}">
+					<div class="product">
+						<b class="productName">${adata.item}</b>
+						<a href="${adata.siteUrl}" class="productUrl">
+							<img alt="${adata.item}" src="${adata.itemImg}" class="productImg">
+						</a>
+						<div class="productPay">${adata.itemPay}</div>
+					</div>
+				</c:forEach>
+			</div>
 			<div class="container">
 				<div class="row gtr-200">
 					<!-- 여기부터 -->

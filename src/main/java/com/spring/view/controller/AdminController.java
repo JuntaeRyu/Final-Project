@@ -16,6 +16,8 @@ import com.spring.biz.comments.CommentsService;
 import com.spring.biz.comments.CommentsVO;
 import com.spring.biz.member.MemberService;
 import com.spring.biz.member.MemberVO;
+import com.spring.biz.warn.WarnService;
+import com.spring.biz.warn.WarnVO;
 
 @Controller
 public class AdminController {
@@ -28,6 +30,9 @@ public class AdminController {
 
 	@Autowired
 	private CommentsService commentsService;
+	
+	@Autowired
+	private WarnService warnService;
 
 	@RequestMapping(value = "/adminPage.do")
 	public String admingPage(MemberVO mVO, HttpSession session, Model model) {
@@ -99,7 +104,7 @@ public class AdminController {
 	}
 	
 	@RequestMapping(value = "/deleteProhibitList.do")
-	public String deleteProhibitList(@RequestParam("number") List<String> boardNums, BoardVO bVO) {
+	public String deleteProhibitList(@RequestParam("number") List<String> boardNums, BoardVO bVO, WarnVO wVO) {
 		System.out.println("로그: Mypage: deleteProhibitList() ");
 		
 		bVO.setSearchCondition("prohibitBoard");
@@ -115,6 +120,12 @@ public class AdminController {
 					bVO.setSearchCondition("boardNum");
 
 					boardService.delete(bVO);
+					wVO.setSearchCondition("boardWarn");
+					boolean flag=warnService.insert(wVO);
+					if(!flag) {
+						System.out.println("adminController deleteProhibitList 경고누적 실패");
+					}
+					
 				}
 			}
 		}

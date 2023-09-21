@@ -1,6 +1,5 @@
 package com.spring.view.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -9,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.spring.biz.advertisement.AdvertisementService;
 import com.spring.biz.board.BoardService;
 import com.spring.biz.board.BoardVO;
 import com.spring.biz.comments.CommentsService;
@@ -27,6 +27,9 @@ public class MainController {
 
 	@Autowired
 	private CommentsService commentsService;
+	
+	@Autowired
+	private AdvertisementService advertisementService;
 
 	@RequestMapping(value = "/main.do")
 	public String main(MemberProfileVO mpVO, BoardVO bVO,CommentsVO cVO, Random random, Model model) {
@@ -59,6 +62,8 @@ public class MainController {
 		model.addAttribute("mempdatas", mpdatas);
 		model.addAttribute("firstBdata", bVO);
 		model.addAttribute("bdatas", bdatas);
+		
+		model.addAttribute("adatas", advertisementService.selectAll(null));
 
 		return "main.jsp";
 	}

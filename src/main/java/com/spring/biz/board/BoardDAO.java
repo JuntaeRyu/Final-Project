@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 import com.spring.biz.common.JDBCUtil;
 
-public class BoardDAO {
+public class BoardDAO implements InterfaceBoardDAO{
 	// SQL 쿼리문
 	// 게시글 작성
 	private final String sql_INSERT = "INSERT INTO BOARD "

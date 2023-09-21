@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 public class FooterServiceImpl implements FooterService {
 
 	@Autowired
-	private FooterDAO2 fDAO;
+	private InterfaceFooterDAO fDAO;
 	
 	@Override
 	public boolean insert(FooterVO fVO) {

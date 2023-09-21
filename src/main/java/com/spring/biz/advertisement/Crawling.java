@@ -10,11 +10,10 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.springframework.stereotype.Repository;
 
 //멤버변수없이 메서드만 존재하는 클래스
 //: 메서드 실행이 목적
-public class Crawring {
+public class Crawling {
 
 	// hdex 상품 크롤링
 	public static List<AdvertisementVO> crawlingHdex() {

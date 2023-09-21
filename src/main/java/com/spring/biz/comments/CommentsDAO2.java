@@ -10,8 +10,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-@Repository("commentDAO")
-public class CommentsDAO2 {
+@Repository
+public class CommentsDAO2 implements InterfaceCommentsDAO{
 
 	// 댓글 작성
 	private final String sql_INSERT = "INSERT INTO COMMENTS (COMMENTSNUM, COMMENTS, BOARDNUM, MEMBERID, COMMENTSDATE) VALUES ((SELECT NVL(MAX(COMMENTSNUM),19999)+1 FROM COMMENTS), ?, ?, ?, SYSTIMESTAMP)";

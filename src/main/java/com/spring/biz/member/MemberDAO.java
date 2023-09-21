@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 import com.spring.biz.common.JDBCUtil;
 
-public class MemberDAO {
+public class MemberDAO implements InterfaceMemberDAO{
 	// SQL 쿼리문
 	// 회원가입
 	private final String sql_INSERT = "INSERT INTO MEMBER (MEMBERID, MEMBERPW, NAME, NICKNAME, EMAIL, PHONENUM, GENDER, ADDRESS) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
