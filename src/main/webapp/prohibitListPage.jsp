@@ -17,7 +17,7 @@
 <link rel="stylesheet" href="assets/css/main.css" />
 <style>
 #title-cell {
-	width: auto; /* 원하는 크기로 조정할 수 있습니다 */
+	width: 200px; /* 원하는 크기로 조정할 수 있습니다 */
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
@@ -121,7 +121,7 @@ ul.pagination li a {
 																	<a href="boardDetailPage.do?boardNum=${v.boardNum}">${v.title}</a>
 																</h1></td>
 															<td class="icon solid fa-user">${v.nickName}</td>
-															<td class="icon fa-clock">${v.boradDate}</td>
+															<td class="icon fa-clock">${v.boardDate}</td>
 															<c:if test="${v.boardCommentsCnt == 0}">
 																<td class="icon fa-comments">${v.boardCommentsCnt}</td>
 															</c:if>

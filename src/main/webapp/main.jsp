@@ -206,7 +206,7 @@
 														</ul>
 													</header>
 													<a href="boardDetailPage.do?boardNum=${firstBdata.boardNum}" class="image featured"><img src="images/boardImg/${firstBdata.boardImg}" alt="" /></a>
-													<p>${firstBdata.content}</p>
+													<p style="white-space: pre-wrap">${firstBdata.content}</p>
 													<a href="boardDetailPage.do?boardNum=${firstBdata.boardNum}" class="button">글 상세보기</a>
 												</article>
 											</c:if>

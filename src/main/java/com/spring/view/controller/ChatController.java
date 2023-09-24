@@ -11,9 +11,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 public class ChatController {
 	
-	@RequestMapping(value = "/chat.action", method = { RequestMethod.GET })
+	@RequestMapping(value = "/chat.do", method = { RequestMethod.GET })
 	public String chat (HttpServletRequest req, HttpServletResponse resp, HttpSession session) {
-		return "chat";
+		
+		return "chatingRoomPage.jsp";
 	}
 	
 }

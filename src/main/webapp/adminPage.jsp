@@ -194,7 +194,7 @@ ul.pagination li a {
 									<li>
 										<article class="box post-summary">
 											<h3>
-												<a class="chooseBtn">전체목록</a>
+												<a class="chooseBtn" href="adminPage.do">전체목록</a>
 											</h3>
 										</article>
 									</li>
@@ -202,7 +202,7 @@ ul.pagination li a {
 									<li>
 										<article class="box post-summary">
 											<h3>
-												<a class="chooseBtn">회원목록</a>
+												<a class="chooseBtn" href="adminPage.do?role=3">회원목록</a>
 											</h3>
 										</article>
 									</li>
@@ -210,7 +210,7 @@ ul.pagination li a {
 									<li>
 										<article class="box post-summary">
 											<h3>
-												<a class="chooseBtn">관리자목록</a>
+												<a class="chooseBtn" href="adminPage.do?role=2">관리자목록</a>
 											</h3>
 										</article>
 									</li>
@@ -226,20 +226,20 @@ ul.pagination li a {
 							<!-- Content -->
 							<h2 style="color: #bead7c;">검색창</h2>
 							<section id="adminInfo">
-								<form name="search">
+								<form name="adminPage.do">
+									<input type="hidden" name="role" value="${searchRole}">
 									<table class="pull-right">
 										<tr>
 											<td class="adminTd1"><select class="form-control"
-												id="searchField" name="searchField">
-													<option value="0">선택</option>
-													<option value="memberID">아이디</option>
-													<option value="nickName">닉네임</option>
+												name="searchType">
+													<c:forEach var="v" items="${searchMap}">
+														<option value="${v.value}">${v.key}</option>
+													</c:forEach>
 											</select></td>
-											<td class="adminTd2"><input type="text"
-												class="form-control" placeholder="검색어 입력" id="searchText"
-												name="searchText" maxlength="100"></td>
-											<td class="adminTd3"><button type="submit"
-													class="searchBtn">검색</button></td>
+											<td class="adminTd2"><input type="text" class="form-control" name="searchText" maxlength="100"
+												placeholder="검색어를 입력하세요."></td>
+											
+											<td class="adminTd3"><input type="submit" class="searchBtn" value="검색"></td>
 										</tr>
 									</table>
 								</form>
@@ -248,45 +248,46 @@ ul.pagination li a {
 							<hr>
 
 							<section id="memberListBox">
+								<c:if test="${fn:length(mdatas) <= 0}">
+									<h2 style="text-align: center;">불러올 목록이 없습니다</h2>
+								</c:if>
+								<c:if test="${fn:length(mdatas) > 0}">
 								<table class="meta">
 									<thead>
 										<tr class="tab">
-											<td class="icon solid fa-user"><span>아이디</span></td>
-											<td class="icon solid fa-user"><span>이름</span></td>
-											<td class="icon solid fa-user"><span>닉네임</span></td>
-											<td class="icon solid fa-user"><span>전화번호</span></td>
-											<td class="icon solid fa-user"><span>성별</span></td>
-											<td class="icon solid fa-user"><span>관리자여부</span></td>
+											<td class="icon solid fa-id-card"><span> 아이디</span></td>
+											<td class="icon solid fa-address-card"><span> 이름</span></td>
+											<td class="icon fa-address-card"><span> 닉네임</span></td>
+											<td class="icon solid fa-phone"><span> 전화번호</span></td>
+											<td class="icon solid fa-venus-mars"><span> 성별</span></td>
+											<td class="icon solid fa-address-book"><span>
+													관리자여부</span></td>
 										</tr>
 									</thead>
 									<tbody id="adminTableBody">
-										<c:forEach var="v" items="${currentPageAdmins}">
+										<c:forEach var="v" items="${mdatas}">
 											<tr>
-
-												<td class="icon solid fa-user">${v.mid}</td>
-												<td class="icon solid fa-user">${v.name}</td>
-												<td class="icon solid fa-user">${v.nickName}</td>
-												<td class="icon solid fa-user">${v.phoneNum}</td>
-												<td class="icon solid fa-user">${v.gender}</td>
-												<td class="icon solid fa-user">${v.recommendCnt}</td>
+												<td>${v.memberID}</td>
+												<td>${v.name}</td>
+												<td>${v.nickName}</td>
+												<td class="icon solid fa-phone">${v.phoneNum}</td>
+												<c:if test="${v.gender eq 1}">
+													<td class="icon solid fa-mars">남성</td>
+												</c:if>
+												<c:if test="${v.gender eq 2}">
+													<td class="icon solid fa-venus">여성</td>
+												</c:if>
+												<c:if test="${v.role eq 2}">
+													<td>관리자</td>
+												</c:if>
+												<c:if test="${v.role eq 3}">
+													<td>회원</td>
+												</c:if>
 											</tr>
 										</c:forEach>
 									</tbody>
 								</table>
-
-								<ul class="pagination">
-									<!-- 페이지네이션 내용 추가 -->
-									<c:set var="totalPages" value="${(totalPosts + 9) / 10}" />
-									<c:forEach var="page" begin="1" end="${totalPages}">
-										<c:if test="${page eq currentPage}">
-											<li class="active">${page}</li>
-										</c:if>
-										<c:if test="${page ne currentPage}">
-											<li><a href="javascript:void(0)"
-												onclick="changePage(${page})">${page}</a></li>
-										</c:if>
-									</c:forEach>
-								</ul>
+								</c:if>
 							</section>
 						</div>
 					</div>
@@ -355,57 +356,6 @@ ul.pagination li a {
 	</div>
 
 	<!-- Scripts -->
-
-	<!-- Scripts -->
-	<script>
-	const openModalBtnMember = document.getElementById("openModalBtnMember");
-	
-    const passwordModalMember = document.getElementById("deleteMemberModal");
-    const checkModal = document.getElementById("checkModal");
-    
-    const closeBtnMember = passwordModalMember.querySelector(".close");
-    
-    const submitBtnMember = document.getElementById("submitBtnMember");
-    const checkBtn = document.getElementById("checkBtn");
-    const cancleBtn = document.getElementById("cancleBtn");
-    
-    const passwordInputMember = document.getElementById("passwordMember");
-
-    // 회원탈퇴 버튼을 눌렀다면 모달창 생성
-    openModalBtnMember.addEventListener("click", () => {
-    	passwordModalMember.style.display = "block";
-    });
-
-    // 모달창의 x버튼을 눌렀다면 모달창 끄기
-    closeBtnMember.addEventListener("click", () => {
-   		passwordModalMember.style.display = "none";
-    });
-
-    // 최종 확인에서 탈퇴를 선택했다면
-    checkBtn.addEventListener("click", () => {
-    	checkModal.style.display = "none";
-    	location.href = "deleteMember.do";
-    });
-
-    // 최종 확인에서 취소를 했다면
-    cancleBtn.addEventListener("click", () => {
-    	checkModal.style.display = "none";
-    });
-    
-    function clickbtn(){
-    	const enteredPassword = passwordInputMember.value;
-        
-        if (enteredPassword === '${mdata.mpw}') { // ${mdata.mpw}
-  			// 비밀번호가 일치하면 최종확인
-  			passwordModalMember.style.display = "none";
-  			checkModal.style.display = "block";
-  		} else {
-  			alert("비밀번호가 일치하지 않습니다");
-  			passwordModalMember.style.display = "none";
-  		}
-    };
-    
-	</script>
 	<script src="assets/js/jquery.min.js"></script>
 	<script src="assets/js/jquery.dropotron.min.js"></script>
 	<script src="assets/js/jquery.scrolly.min.js"></script>
@@ -428,90 +378,11 @@ ul.pagination li a {
 	</c:choose>
 </body>
 <script type="text/javascript">
-    // JavaScript 함수: 페이지 이동 시 탭 상태를 유지하고 해당 탭의 페이지로 이동하는 함수
-    function changePage(page) {
-        // 예제에서는 페이지를 새로고침하는 방식으로 처리하였지만, 실제로는 AJAX를 사용하여 비동기적으로 페이지를 변경하는 것이 좋습니다.
-        window.location.href = "boardListPage.do?page=" + page;
-    }
+	// JavaScript 함수: 페이지 이동 시 탭 상태를 유지하고 해당 탭의 페이지로 이동하는 함수
+	function changePage(page) {
+		// 예제에서는 페이지를 새로고침하는 방식으로 처리하였지만, 실제로는 AJAX를 사용하여 비동기적으로 페이지를 변경하는 것이 좋습니다.
+		window.location.href = "boardListPage.do?page=" + page;
+	}
 </script>
-
-<!-- 전체목록, 회원목록, 관리자목록 -->
-<script type="text/javascript">
-									    $(document).ready(function(){ // 이 페이지가 다 열렸을때(로딩끝났을때) 아래 함수를 실행한다.
-									        $(".chooseBtn").on("click", function(){
-									            var searchField = $(this).text(); // C와 변수명 정하기
-									            console.log(searchField);
-									            
-									           $.ajax({
-									                url: 'adminPage.do?searchField=' + searchField, 
-									                type: 'POST',
-									                success: function(result){
-									                    // 결과 배열을 순회하면서 각 요소를 테이블 행으로 추가합니다.
-									                    var adminTableBody = $('#adminTableBody');
-									                    adminTableBody.empty(); // 기존 내용 삭제
-									                    
-									                    for (var i = 0; i < result.length; i++) {
-									                        var admin = result[i];
-									                        var rowHtml = '<tr>' +
-									                            '<td class="icon solid fa-user">' + admin.memberId + '</td>' +
-									                            '<td class="icon solid fa-user">' + admin.name + '</td>' +
-									                            '<td class="icon solid fa-user">' + admin.nickName + '</td>' +
-									                            '<td class="icon solid fa-user">' + admin.phoneNum + '</td>' +
-									                            '<td class="icon solid fa-user">' + admin.gender + '</td>' +
-									                            '<td class="icon solid fa-user">' + admin.recommendCnt + '</td>' +
-									                            '</tr>';
-									                        adminTableBody.append(rowHtml);
-									                    }
-									                    
-									                    console.log('result: ', result);
-									                },
-									                error: function(error){
-									                    console.log(error);
-									                }
-									            });
-									        });
-									    });
-									</script>
-
-<!-- 검색 비동기 -->
-<script type="text/javascript">
-							    $(document).ready(function(){ // 이 페이지가 다 열렸을때(로딩끝났을때) 아래 함수를 실행한다.
-							        $(".searchBtn").on("click", function(){
-							            var searchField = $('#searchField').val(); // C와 변수명 정하기
-							            var searchText = $('#searchText').val(); // C와 변수명 정하기
-							    
-							            $.ajax({
-							                url: 'adminPage.do?searchField=' + searchField + '&searchText=' + searchText, 
-							                type: 'POST',
-							                success: function(result){
-							                    // 결과 배열을 순회하면서 각 요소를 테이블 행으로 추가합니다.
-							                    var adminTableBody = $('#adminTableBody');
-							                    adminTableBody.empty(); // 기존 내용 삭제
-							                    
-							                    for (var i = 0; i < result.length; i++) {
-							                        var admin = result[i];
-							                        var rowHtml = '<tr>' +
-							                            '<td class="icon solid fa-user">' + admin.memberId + '</td>' +
-							                            '<td class="icon solid fa-user">' + admin.name + '</td>' +
-							                            '<td class="icon solid fa-user">' + admin.nickName + '</td>' +
-							                            '<td class="icon solid fa-user">' + admin.phoneNum + '</td>' +
-							                            '<td class="icon solid fa-user">' + admin.gender + '</td>' +
-							                            '<td class="icon solid fa-user">' + admin.recommendCnt + '</td>' +
-							                            '</tr>';
-							                        adminTableBody.append(rowHtml);
-							                    }
-							                    
-							                    console.log('result: ', result);
-							                },
-							                error: function(error){
-							                    console.log(error);
-							                }
-							            });
-							        });
-							    });
-							</script>
-
-
-
 
 </html>

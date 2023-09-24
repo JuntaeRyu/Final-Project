@@ -128,6 +128,8 @@ public class LogController {
 		System.out.println("로그: LogController: logout() ");
 
 		session.removeAttribute("memberID");
+		session.removeAttribute("nickName");
+		session.removeAttribute("role");
 
 		return "main.do";
 	}

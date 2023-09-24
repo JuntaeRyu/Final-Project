@@ -9,6 +9,10 @@
 
 	<context:component-scan base-package="com.spring.view.controller" />
 	
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="maxUploadSize" value="-1" />
+	</bean>
+	
 	<aop:aspectj-autoproxy />
 	
 </beans>

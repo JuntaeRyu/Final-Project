@@ -9,6 +9,7 @@
 -->
 <html>
 <style>
+
 i {
 	cursor: pointer;
 }
@@ -124,11 +125,13 @@ i {
 							<!-- Content -->
 							<article class="box page-content">
 								<section id="datailBoardBox">
-									<c:if test="${memberID eq bdata.memberID }">
+									<c:if test="${memberID eq bdata.memberID || role eq 2}">
 										<i id="boardButton" class="icon solid fa-bars"></i>
 									</c:if>
 									<ul id="menuList">
+										<c:if test="${ role ne 2}">
 										<li><b><a href="updateBoardPage.do?boardNum=${bdata.boardNum}" style="text-decoration: none; color: #6b7770;">수정</a></b></li>
+										</c:if>
 										<li><b><a href="deleteBoard.do?boardNum=${bdata.boardNum}" style="text-decoration: none; color: #6b7770;">삭제</a></b></li>
 									</ul>
 									<header>

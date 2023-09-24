@@ -2171,6 +2171,7 @@ ul.meta li:before {
 }
 
 #editor {
+ 	white-space: pre-wrap;
 	width: auto;
 	height: auto;
 }

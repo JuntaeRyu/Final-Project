@@ -81,6 +81,7 @@ public class MypageController {
 
 		List<MatchingVO> senderdatas = matchingService.selectAll(mcVO);
 
+		System.out.println("senderdatas"+senderdatas);
 		model.addAttribute("senderdatas", senderdatas);
 		//////////////////////////////////// 현재 로그인한 회원이 받은거
 		mcVO.setReceiverID((String)session.getAttribute("memberID"));

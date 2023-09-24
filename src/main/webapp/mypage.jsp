@@ -50,7 +50,7 @@ button {
 .modal {
 	box-sizing: border-box !important;
 	transition: ease all 0.5s;
-	display: none;
+	display: block;
 	position: fixed;
 	z-index: 1;
 	left: 0;
@@ -131,26 +131,8 @@ textarea.fixed-width {
 
 </head>
 <body class="is-preload">
-	<!-- 회원탈퇴 모달 -->
-	<div id="deleteMemberModal" class="modal">
-		<div class="modal-content">
-			<form>
-				<span class="close">&times;</span> <label style="font-size: 25px;"
-					for="password">비밀번호 확인</label> <input style="width: 100%"
-					type="password" id="passwordMember" placeholder="비밀번호를 입력하세요">
-				<button id="submitBtnMember" onclick="clickbtn()">확인</button>
-			</form>
-		</div>
-	</div>
-
-	<!-- 회원탈퇴 최종확인 -->
-	<div id="checkModal" class="modal">
-		<div class="modal-content">
-			<label>정말로 탈퇴하시겠습니까?</label>
-			<button id="checkBtn">확인</button>
-			<button id="cancleBtn">취소</button>
-		</div>
-	</div>
+	
+	<NPNC:resign />
 
 	<div id="page-wrapper">
 
@@ -331,60 +313,11 @@ textarea.fixed-width {
 		</footer>
 
 	</div>
-
-	<!-- Scripts -->
-	<script>
-	const openModalBtnMember = document.getElementById("openModalBtnMember");
-	
-    const passwordModalMember = document.getElementById("deleteMemberModal");
-    const checkModal = document.getElementById("checkModal");
-    
-    const closeBtnMember = passwordModalMember.querySelector(".close");
-    const passwordInput = document.getElementById("passwordMember");
-    
-    const submitBtnMember = document.getElementById("submitBtnMember");
-    const checkBtn = document.getElementById("checkBtn");
-    const cancleBtn = document.getElementById("cancleBtn");
-    
-    const passwordInputMember = document.getElementById("passwordMember");
-
-    // 회원탈퇴 버튼을 눌렀다면 모달창 생성
-    openModalBtnMember.addEventListener("click", () => {
-    	passwordModalMember.style.display = "block";
-    });
-
-    // 모달창의 x버튼을 눌렀다면 모달창 끄기
-    closeBtnMember.addEventListener("click", () => {
-   		passwordModalMember.style.display = "none";
-   		passwordInput.value = ""; // 입력된 값을 비움
-    });
-
-    // 최종 확인에서 탈퇴를 선택했다면
-    checkBtn.addEventListener("click", () => {
-    	checkModal.style.display = "none";
-    	location.href = "deleteMember.do";
-    });
-
-    // 최종 확인에서 취소를 했다면
-    cancleBtn.addEventListener("click", () => {
-    	checkModal.style.display = "none";
-    });
-    
-    function clickbtn(){
-    	const enteredPassword = passwordInputMember.value;
-        
-        if (enteredPassword === '${mdata.memberPW}') {
-  			// 비밀번호가 일치하면 최종확인
-  			passwordModalMember.style.display = "none";
-  			passwordInput.value = ""; // 입력된 값을 비움
-  			checkModal.style.display = "block";
-  		} else {
-  			alert("비밀번호가 일치하지 않습니다");
-  			passwordModalMember.style.display = "none";
-  			passwordInput.value = ""; // 입력된 값을 비움
-  		}
-    };
-    
+	<script type="text/javascript">
+	 // 회원탈퇴 버튼을 눌렀다면 모달창 생성
+    $('#openModalBtnMember').click(function () {
+    	$('#deleteMemberModal').show();
+    })
 	</script>
 	<script src="assets/js/jquery.min.js"></script>
 	<script src="assets/js/jquery.dropotron.min.js"></script>

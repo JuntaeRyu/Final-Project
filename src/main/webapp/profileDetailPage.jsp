@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="NPNC"%>
 <!DOCTYPE HTML>
@@ -308,14 +307,11 @@ label {
 <title>HealthDuo</title>
 <meta charset="utf-8" />
 <!-- <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" /> -->
-<link rel="icon" href="assets/css/images/favicon.ico"
-	type="image/x-icon" />
+<link rel="icon" href="assets/css/images/favicon.ico" type="image/x-icon" />
 <link rel="stylesheet" href="assets/css/main.css" />
 </head>
 <body class="is-preload">
-	<script src="https://code.jquery.com/jquery-3.7.0.min.js"
-		integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g="
-		crossorigin="anonymous"></script>
+	<script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
 	<div id="page-wrapper">
 
 		<!-- Header -->
@@ -387,12 +383,8 @@ label {
 								<h2 class="major">
 									<span>Ipsum Dolore</span>
 								</h2>
-								<a href="#" class="image featured"><img
-									src="images/pic03.jpg" alt="" /></a>
-								<p>Donec sagittis massa et leo semper scele risque metus
-									faucibus. Morbi congue mattis mi. Phasellus sed nisl vitae
-									risus tristique volutpat. Cras rutrum sed commodo luctus
-									blandit.</p>
+								<a href="#" class="image featured"><img src="images/pic03.jpg" alt="" /></a>
+								<p>Donec sagittis massa et leo semper scele risque metus faucibus. Morbi congue mattis mi. Phasellus sed nisl vitae risus tristique volutpat. Cras rutrum sed commodo luctus blandit.</p>
 								<a href="#" class="button alt">Learn more</a>
 							</section>
 
@@ -401,11 +393,7 @@ label {
 								<h2 class="major">
 									<span>Magna Feugiat</span>
 								</h2>
-								<p>Rhoncus dui quis euismod. Maecenas lorem tellus, congue
-									et condimentum ac, ullamcorper non sapien. Donec sagittis massa
-									et leo semper scele risque metus faucibus. Morbi congue mattis
-									mi. Phasellus sed nisl vitae risus tristique volutpat. Cras
-									rutrum sed commodo luctus blandit.</p>
+								<p>Rhoncus dui quis euismod. Maecenas lorem tellus, congue et condimentum ac, ullamcorper non sapien. Donec sagittis massa et leo semper scele risque metus faucibus. Morbi congue mattis mi. Phasellus sed nisl vitae risus tristique volutpat. Cras rutrum sed commodo luctus blandit.</p>
 								<a href="#" class="button alt">Learn more</a>
 							</section>
 
@@ -425,18 +413,15 @@ label {
 											<img class="centered-image" src="images/default.png" alt="images/default.png" />
 										</c:if>
 										<c:if test="${not empty mpdata.profileImg}">
-											<img class="centered-image" src="images/profileImg/${mpdata.profileImg}"
-												alt="images/default.png" />
+											<img class="centered-image" src="images/profileImg/${mpdata.profileImg}" alt="images/default.png" />
 										</c:if>
 									</div>
 									<p class="useId">${mpdata.nickName}</p>
-									<p class="useEmail" style="margin-bottom: 50px;">
-										${mpdata.address}</p>
+									<p class="useEmail" style="margin-bottom: 50px;">${mpdata.address}</p>
 									<ul class="meta" style="font-size: 1.5em;">
 										<c:if test="${not empty memberID}">
-											<li><i id="rc" class="icon fa-heart"
-												style="color: #f22202;" title="추천"></i>
-												<p class="cnt" style="display : inline-block;">${mpdata.recommendCnt}</p></li>
+											<li><i id="rc" class="icon fa-heart" style="color: #f22202;" title="추천"></i>
+												<p class="cnt" style="display: inline-block;">${mpdata.recommendCnt}</p></li>
 											<li><i id="ph" class="icon solid fa-ban" title="신고"></i></li>
 										</c:if>
 									</ul>
@@ -447,8 +432,7 @@ label {
 									<textarea> ${mpdata.intro}</textarea>
 								</section>
 
-								<button style="float: right;" type="button"
-									onclick="location.href='';">매칭 신청</button>
+								<button style="float: right;" type="button" onclick="location.href='applyMatching.do?receiverID=${mpdata.memberID}';">매칭 신청</button>
 
 							</article>
 
@@ -459,8 +443,7 @@ label {
 				</div>
 			</div>
 		</section>
-		<button id="scrollToTop" onclick="scrollToTop()"
-			class="icon solid fa-chevron-up"></button>
+		<button id="scrollToTop" onclick="scrollToTop()" class="icon solid fa-chevron-up"></button>
 		<!-- Footer -->
 		<footer id="footer">
 			<div class="container">
@@ -473,13 +456,7 @@ label {
 								<span>What's this about?</span>
 							</h2>
 							<p>
-								This is <strong>TXT</strong>, yet another free responsive site
-								template designed by <a href="http://twitter.com/ajlkn">AJ</a>
-								for <a href="http://html5up.net">HTML5 UP</a>. It's released
-								under the <a href="http://html5up.net/license/">Creative
-									Commons Attribution</a> license so feel free to use it for whatever
-								you're working on (personal or commercial), just be sure to give
-								us credit for the design. That's basically it :)
+								This is <strong>TXT</strong>, yet another free responsive site template designed by <a href="http://twitter.com/ajlkn">AJ</a> for <a href="http://html5up.net">HTML5 UP</a>. It's released under the <a href="http://html5up.net/license/">Creative Commons Attribution</a> license so feel free to use it for whatever you're working on (personal or commercial), just be sure to give us credit for the design. That's basically it :)
 							</p>
 						</section>
 
@@ -492,16 +469,11 @@ label {
 								<span>Get in touch</span>
 							</h2>
 							<ul class="contact">
-								<li><a class="icon brands fa-facebook-f" href="#"><span
-										class="label">Facebook</span></a></li>
-								<li><a class="icon brands fa-twitter" href="#"><span
-										class="label">Twitter</span></a></li>
-								<li><a class="icon brands fa-instagram" href="#"><span
-										class="label">Instagram</span></a></li>
-								<li><a class="icon brands fa-dribbble" href="#"><span
-										class="label">Dribbble</span></a></li>
-								<li><a class="icon brands fa-linkedin-in" href="#"><span
-										class="label">LinkedIn</span></a></li>
+								<li><a class="icon brands fa-facebook-f" href="#"><span class="label">Facebook</span></a></li>
+								<li><a class="icon brands fa-twitter" href="#"><span class="label">Twitter</span></a></li>
+								<li><a class="icon brands fa-instagram" href="#"><span class="label">Instagram</span></a></li>
+								<li><a class="icon brands fa-dribbble" href="#"><span class="label">Dribbble</span></a></li>
+								<li><a class="icon brands fa-linkedin-in" href="#"><span class="label">LinkedIn</span></a></li>
 							</ul>
 						</section>
 

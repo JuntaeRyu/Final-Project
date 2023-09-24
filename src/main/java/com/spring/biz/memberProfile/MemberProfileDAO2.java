@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -53,8 +54,8 @@ public class MemberProfileDAO2 implements InterfaceMemberProfileDAO{
 	//	private final String sql_DELETE = "DELETE FROM MEMBER WHERE MEMBERID=?";
 	// JDBC(자바 데이터베이스 커넥트) 도구
 	// 중복검사에 쿼리문 굳이 다필요한지 확인
-	
-	
+
+
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 
@@ -94,16 +95,23 @@ public class MemberProfileDAO2 implements InterfaceMemberProfileDAO{
 	/////////////////// selectOne ///////////////////////////////////////////////
 	public MemberProfileVO selectOne(MemberProfileVO mpVO) {
 
-		if(mpVO.getSearchCondition()==null) {
-			System.out.println("memberProfileDAO2 selectOne 서치컨디션 null");
+		try {
+
+			if(mpVO.getSearchCondition()==null) {
+				System.out.println("memberProfileDAO2 selectOne 서치컨디션 null");
+			}
+			else if(mpVO.getSearchCondition().equals("memberProfile")) {
+				Object[] args = { mpVO.getProfileNum() };
+				return jdbcTemplate.queryForObject(sql_SELECTONE_MEMBERPROFILE, args, new MemberProfileRowMapper2());
+			}
+			else if(mpVO.getSearchCondition().equals("myProfile")) {
+				Object[] args = { mpVO.getMemberID() };
+				return jdbcTemplate.queryForObject(sql_SELECTONE_MYPROFILE, args, new MemberProfileRowMapper());
+			}
 		}
-		else if(mpVO.getSearchCondition().equals("memberProfile")) {
-			Object[] args = { mpVO.getProfileNum() };
-			return jdbcTemplate.queryForObject(sql_SELECTONE_MEMBERPROFILE, args, new MemberProfileRowMapper2());
-		}
-		else if(mpVO.getSearchCondition().equals("myProfile")) {
-			Object[] args = { mpVO.getMemberID() };
-			return jdbcTemplate.queryForObject(sql_SELECTONE_MYPROFILE, args, new MemberProfileRowMapper());
+		catch(EmptyResultDataAccessException e) {
+			System.out.println("MemberProfileDAO2 selectOne 데이터 비어있음");
+			return null;
 		}
 		// 검색 실패라면
 		return null;
@@ -185,11 +193,11 @@ class MemberProfileRowMapper implements RowMapper<MemberProfileVO> {
 }
 
 class MemberProfileRowMapper2 implements RowMapper<MemberProfileVO> {
-	
+
 	@Override
 	public MemberProfileVO mapRow(ResultSet rs, int rowNum) throws SQLException {
 		MemberProfileVO mpdata = new MemberProfileVO();
-		
+
 		mpdata.setProfileNum(rs.getInt("PROFILENUM"));
 		mpdata.setMemberID(rs.getString("MEMBERID"));
 		mpdata.setProfileImg(rs.getString("PROFILEIMG"));
@@ -199,8 +207,8 @@ class MemberProfileRowMapper2 implements RowMapper<MemberProfileVO> {
 		mpdata.setRecommendCnt(rs.getInt("RECOMMENDCNT"));
 		mpdata.setNickName(rs.getString("NICKNAME"));
 		mpdata.setAddress(rs.getString("ADDRESS"));
-		
+
 		return mpdata;
 	}
-	
+
 }

@@ -15,6 +15,8 @@ public class MemberVO {
 
     // 서치컨디션
     private String searchCondition;    	// 검색 조건을 저장하는 멤버 변수
+	private String searchType;		// 검색종류를 저장하는 멤버변수
+	private String searchText;		// 검색단어를 저장하는 멤버변수
 	
     
     // 검색 조건을 반환하는 메서드
@@ -47,6 +49,23 @@ public class MemberVO {
 		this.memberPW = memberPW;
 	}
 	
+	//
+	public String getSearchType() {
+		return searchType;
+	}
+
+	public void setSearchType(String searchType) {
+		this.searchType = searchType;
+	}
+
+	public String getSearchText() {
+		return searchText;
+	}
+
+	public void setSearchText(String searchText) {
+		this.searchText = searchText;
+	}
+
 	// 회원 이름을 반환하는 메서드
 	public String getName() {
 		return name;

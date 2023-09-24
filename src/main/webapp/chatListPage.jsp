@@ -19,7 +19,7 @@
 <link rel="stylesheet" href="assets/css/main.css" />
 <style>
 #title-cell {
-	width: 80%; /* 원하는 크기로 조정할 수 있습니다 */
+	width: 200px; /* 원하는 크기로 조정할 수 있습니다 */
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
