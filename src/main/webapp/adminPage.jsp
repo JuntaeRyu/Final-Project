@@ -248,10 +248,6 @@ ul.pagination li a {
 							<hr>
 
 							<section id="memberListBox">
-								<c:if test="${fn:length(mdatas) <= 0}">
-									<h2 style="text-align: center;">불러올 목록이 없습니다</h2>
-								</c:if>
-								<c:if test="${fn:length(mdatas) > 0}">
 								<table class="meta">
 									<thead>
 										<tr class="tab">
@@ -287,7 +283,6 @@ ul.pagination li a {
 										</c:forEach>
 									</tbody>
 								</table>
-								</c:if>
 							</section>
 						</div>
 					</div>
@@ -384,5 +379,81 @@ ul.pagination li a {
 		window.location.href = "boardListPage.do?page=" + page;
 	}
 </script>
+
+<!-- 검색 비동기 -->
+<script type="text/javascript">
+	$(document)
+			.ready(
+					function() { // 이 페이지가 다 열렸을때(로딩끝났을때) 아래 함수를 실행한다.
+						$(".searchBtn")
+								.on(
+										"click",
+										function() {
+											var searchCondition = $(
+													'#searchCondition').val(); // C와 변수명 정하기
+											var searchText = $('#searchText')
+													.val(); // C와 변수명 정하기
+
+											$
+													.ajax({
+														url : 'searchAdmin.do?searchCondition='
+																+ searchField
+																+ '&nickName='
+																+ searchText
+																+ '&memberID='
+																+ serchText,
+														type : 'POST',
+														success : function(
+																result) {
+															// 결과 배열을 순회하면서 각 요소를 테이블 행으로 추가합니다.
+															var adminTableBody = $('#adminTableBody');
+															adminTableBody
+																	.empty(); // 기존 내용 삭제
+
+															for (var i = 0; i < result.length; i++) {
+																var admin = result[i];
+																var genderIconClass = admin.gender === 1 ? 'fa-mars'
+																		: 'fa-venus';
+																var roleText = admin.role === 2 ? '관리자'
+																		: '회원';
+																var rowHtml = '<tr>'
+																		+ '<td>'
+																		+ admin.memberId
+																		+ '</td>'
+																		+ '<td>'
+																		+ admin.name
+																		+ '</td>'
+																		+ '<td>'
+																		+ admin.nickName
+																		+ '</td>'
+																		+ '<td class="icon solid fa-phone">'
+																		+ admin.phoneNum
+																		+ '</td>'
+																		+ '<td class="icon solid '+ genderIconClass +'">'
+																		+ admin.gender === 1 ? '남성'
+																		: '여성'
+																				+ '</td>'
+																				+ '<td>'
+																				+ roleText
+																				+ '</td>'
+																				+ '</tr>';
+																adminTableBody
+																		.append(rowHtml);
+															}
+
+															console.log(
+																	'result: ',
+																	result);
+														},
+														error : function(error) {
+															console.log(error);
+														}
+													});
+										});
+					});
+</script>
+
+
+
 
 </html>

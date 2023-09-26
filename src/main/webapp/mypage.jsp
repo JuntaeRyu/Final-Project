@@ -239,11 +239,11 @@ textarea.fixed-width {
 								</section>
 								<section id="mypageShortIntroduction">
 								<h3>한줄 소개글</h3>
-									<textarea class="fixed-width">${mpdata.shortIntro}</textarea>
+									<textarea class="fixed-width" readonly>${mpdata.shortIntro}</textarea>
 								</section>
 								<section id="mypageintroduction">
 								<h3>소개글</h3>
-									<textarea class="fixed-width">${mpdata.intro}</textarea>
+									<textarea class="fixed-width" readonly>${mpdata.intro}</textarea>
 								</section>
 							</article>
 

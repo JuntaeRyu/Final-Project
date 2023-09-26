@@ -4,12 +4,14 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -42,7 +44,7 @@ public class MypageController {
 	@Autowired
 	private MatchingService matchingService;
 
-	@RequestMapping(value = "/mypage.do")
+	@RequestMapping(value = "/mypage.do", method = RequestMethod.GET)
 	public String mypage(MemberVO mVO, MemberProfileVO mpVO, HttpSession session, Model model) {
 		System.out.println("로그: Mypage: mypage()");
 
@@ -71,7 +73,7 @@ public class MypageController {
 		}
 	}
 
-	@RequestMapping(value = "/ownMatchPage.do")
+	@RequestMapping(value = "/ownMatchPage.do", method = RequestMethod.GET)
 	public String ownMatchPage(MatchingVO mcVO, HttpSession session, Model model) {
 		System.out.println("로그: Mypage: ownMatchPage()");
 
@@ -81,7 +83,6 @@ public class MypageController {
 
 		List<MatchingVO> senderdatas = matchingService.selectAll(mcVO);
 
-		System.out.println("senderdatas"+senderdatas);
 		model.addAttribute("senderdatas", senderdatas);
 		//////////////////////////////////// 현재 로그인한 회원이 받은거
 		mcVO.setReceiverID((String)session.getAttribute("memberID"));
@@ -94,7 +95,7 @@ public class MypageController {
 		return "ownMatchPage.jsp";
 	}
 
-	@RequestMapping(value = "/ownBoardListPage.do")
+	@RequestMapping(value = "/ownBoardListPage.do", method = RequestMethod.GET)
 	public String ownBoardListPage(BoardVO bVO, CommentsVO cVO, HttpSession session, Model model) {
 		System.out.println("로그: Mypage: ownBaordListPage() ");
 
@@ -116,10 +117,11 @@ public class MypageController {
 		return "ownBoardListPage.jsp";
 	}
 
-	@RequestMapping(value = "/deleteOwnBoardList.do")
-	public String deleteOwnBoard(@RequestParam("number") List<String> boardNums, BoardVO bVO, CommentsVO cVO, HttpSession session, Model model) {
+	@RequestMapping(value = "/deleteOwnBoardList.do", method = RequestMethod.POST)
+	public String deleteOwnBoardList(@RequestParam("number") List<String> boardNums, BoardVO bVO, CommentsVO cVO, 
+			HttpSession session, Model model) {
 		System.out.println("로그: Mypage: deleteOwnBoard() ");
-
+		
 		System.out.println("boardNums: " + boardNums);
 
 		bVO.setMemberID((String)session.getAttribute("memberID"));
@@ -141,10 +143,9 @@ public class MypageController {
 		}
 
 		return "ownBoardListPage.do";
-
 	}
 
-	@RequestMapping(value = "/updateProfilePage.do")
+	@RequestMapping(value = "/updateProfilePage.do", method = RequestMethod.GET)
 	public String updateProfilePage(MemberVO mVO, MemberProfileVO mpVO, HttpSession session, Model model) {
 		System.out.println("로그: Mypage: updateProfilePage()");
 
@@ -165,7 +166,7 @@ public class MypageController {
 		return "updateProfilePage.jsp";
 	}
 
-	@RequestMapping(value = "updateProfileImg.do")
+	@RequestMapping(value = "/updateProfileImg.do", method = RequestMethod.POST)
 	public String updateProfileImg(MemberVO mVO, MemberProfileVO mpVO, HttpSession session, Model model) throws IllegalStateException, IOException {
 		System.out.println("로그: Mypage: updateProfileImg() ");
 
@@ -201,7 +202,7 @@ public class MypageController {
 		}
 
 		if(flag) {
-			return "updateProfilePage.do";
+			return "redirect:updateProfilePage.do";
 		}
 		else {
 			model.addAttribute("title", "프로필 이미지 변경 실패..");
@@ -212,7 +213,7 @@ public class MypageController {
 		}
 	}
 
-	@RequestMapping(value = "/updateShortIntro.do")
+	@RequestMapping(value = "/updateShortIntro.do", method = RequestMethod.POST)
 	public String updateShortIntro(MemberProfileVO mpVO, Model model) {
 		System.out.println("로그: Mypage: updateShortIntro() ");
 
@@ -224,7 +225,7 @@ public class MypageController {
 		boolean flag = memberProfileService.update(mpVO);
 
 		if(flag) {
-			return "updateProfilePage.do";
+			return "redirect:updateProfilePage.do";
 		}
 		else {
 			model.addAttribute("title", "한줄 소개글 수정 실패..");
@@ -235,7 +236,7 @@ public class MypageController {
 		}
 	}
 
-	@RequestMapping(value = "/updateIntro.do")
+	@RequestMapping(value = "/updateIntro.do", method = RequestMethod.POST)
 	public String updateIntro(MemberProfileVO mpVO, Model model) {
 		System.out.println("로그: Mypage: updateIntro() ");
 
@@ -247,7 +248,7 @@ public class MypageController {
 		boolean flag = memberProfileService.update(mpVO);
 
 		if(flag) {
-			return "updateProfilePage.do";
+			return "redirect:updateProfilePage.do";
 		}
 		else {
 			model.addAttribute("title", "소개글 수정 실패..");
@@ -258,8 +259,8 @@ public class MypageController {
 		}
 	}
 
-	@RequestMapping(value = "/updateInfoPage.do")
-	public String updateMpwPage(MemberVO mVO, HttpSession session, Model model) {
+	@RequestMapping(value = "/updateInfoPage.do", method = RequestMethod.GET)
+	public String updateInfoPage(MemberVO mVO, HttpSession session, Model model) {
 		System.out.println("로그: Mypage: updateInfoPage()");
 
 		mVO.setMemberID((String)session.getAttribute("memberID"));
@@ -272,8 +273,8 @@ public class MypageController {
 		return "updateInfoPage.jsp";
 	}
 
-	@RequestMapping(value = "/updateMemberPW.do")
-	public String updateMpw(MemberVO mVO, HttpSession session, Model model) {
+	@RequestMapping(value = "/updateMemberPW.do", method = RequestMethod.POST)
+	public String updateMemberPW(MemberVO mVO, HttpSession session, Model model) {
 		System.out.println("로그: Mypage: updateMpw()");
 
 		mVO.setMemberID((String)session.getAttribute("memberID"));
@@ -282,7 +283,7 @@ public class MypageController {
 		boolean flag = memberService.update(mVO);
 
 		if(flag) {
-			return "logout.do";
+			return "redirect:logout.do";
 		} 
 		else {
 			model.addAttribute("title", "비밀번호 변경 실패..");
@@ -293,7 +294,7 @@ public class MypageController {
 		}
 	}
 
-	@RequestMapping(value = "/updateNickName.do")
+	@RequestMapping(value = "/updateNickName.do", method = RequestMethod.POST)
 	public String updateNickName(MemberVO mVO, HttpSession session, Model model) {
 
 		mVO.setMemberID((String)session.getAttribute("memberID"));
@@ -302,7 +303,7 @@ public class MypageController {
 		boolean flag = memberService.update(mVO);
 
 		if(flag) {
-			return "updateInfoPage.do";
+			return "redirect:updateInfoPage.do";
 		}
 		else {
 			model.addAttribute("title", "닉네임 변경 실패..");
@@ -313,7 +314,7 @@ public class MypageController {
 		}
 	}
 
-	@RequestMapping(value = "/updateEmail.do")
+	@RequestMapping(value = "/updateEmail.do", method = RequestMethod.POST)
 	public String updateEmail(MemberVO mVO, HttpSession session, Model model) {
 
 		mVO.setMemberID((String)session.getAttribute("memberID"));
@@ -322,7 +323,7 @@ public class MypageController {
 		boolean flag = memberService.update(mVO);
 
 		if(flag) {
-			return "updateInfoPage.do";
+			return "redirect:updateInfoPage.do";
 		}
 		else {
 			model.addAttribute("title", "이메일 변경 실패..");
@@ -333,7 +334,7 @@ public class MypageController {
 		}
 	}
 
-	@RequestMapping(value = "/updateAddress.do")
+	@RequestMapping(value = "/updateAddress.do", method = RequestMethod.POST)
 	public String updateAddress(MemberVO mVO, HttpSession session, Model model) {
 
 		mVO.setMemberID((String)session.getAttribute("memberID"));
@@ -342,7 +343,7 @@ public class MypageController {
 		boolean flag = memberService.update(mVO);
 
 		if(flag) {
-			return "updateInfoPage.do";
+			return "redirect:updateInfoPage.do";
 		}
 		else {
 			model.addAttribute("title", "주소 변경 실패..");
@@ -353,7 +354,7 @@ public class MypageController {
 		}
 	}
 
-	@RequestMapping(value = "/deleteMember.do")
+	@RequestMapping(value = "/deleteMember.do", method = RequestMethod.POST)
 	public String deleteMember(MemberVO mVO, HttpSession session, Model model) {
 		System.out.println("로그: Mypage: deleteMember()");
 

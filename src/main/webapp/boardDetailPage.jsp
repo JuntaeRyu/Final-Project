@@ -1,5 +1,7 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="NPNC"%>
 <!DOCTYPE HTML>
 <!--
@@ -9,6 +11,24 @@
 -->
 <html>
 <style>
+
+#anotherTitle {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin: 0.5em 0;
+}
+
+#topContent {
+    white-space: pre;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin: 0.5em 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 3; /* 여기서 숫자를 조절하여 표시할 줄 수를 지정할 수 있습니다 */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
 
 i {
 	cursor: pointer;
@@ -27,11 +47,14 @@ i {
 <title>HealthDuo</title>
 <meta charset="utf-8" />
 <!-- <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" /> -->
-<link rel="icon" href="assets/css/images/favicon.ico" type="image/x-icon" />
+<link rel="icon" href="assets/css/images/favicon.ico"
+	type="image/x-icon" />
 <link rel="stylesheet" href="assets/css/main.css" />
 </head>
 <body class="is-preload">
-	<script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+	<script src="https://code.jquery.com/jquery-3.7.0.min.js"
+		integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g="
+		crossorigin="anonymous"></script>
 	<div id="page-wrapper">
 
 		<!-- Header -->
@@ -58,63 +81,35 @@ i {
 							<!-- Recent Posts -->
 							<section>
 								<h2 class="major">
-									<span>Recent Posts</span>
+									<span>해당 게시물 작성자의 다른 게시물들</span>
 								</h2>
 								<ul class="divided">
-									<li>
-										<article class="box post-summary">
-											<h3>
-												<a href="#">A Subheading</a>
-											</h3>
-											<ul class="meta">
-												<li class="icon fa-clock">6 hours ago</li>
-												<li class="icon fa-comments"><a href="#">34</a></li>
-											</ul>
-										</article>
-									</li>
-									<li>
-										<article class="box post-summary">
-											<h3>
-												<a href="#">Another Subheading</a>
-											</h3>
-											<ul class="meta">
-												<li class="icon fa-clock">9 hours ago</li>
-												<li class="icon fa-comments"><a href="#">27</a></li>
-											</ul>
-										</article>
-									</li>
-									<li>
-										<article class="box post-summary">
-											<h3>
-												<a href="#">And Another</a>
-											</h3>
-											<ul class="meta">
-												<li class="icon fa-clock">Yesterday</li>
-												<li class="icon fa-comments"><a href="#">184</a></li>
-											</ul>
-										</article>
-									</li>
+									<c:forEach items="${writerbdatas}" var="post">
+										<li>
+											<article class="box post-summary">
+												<h3 id="anotherTitle">
+													<a href="boardDetail.do?boardNum=${post.boardNum }">${post.title}</a>
+												</h3>
+												<ul class="meta">
+													<li class="icon fa-clock">${post.boardDate}</li>
+													<li class="icon fa-comments">${post.boardCommentsCnt}</li>
+												</ul>
+											</article>
+										</li>
+									</c:forEach>
 								</ul>
-								<a href="#" class="button alt">Archives</a>
+								<a href="boardListPage.do" class="button alt">커뮤니터 보러가기</a>
 							</section>
 
 							<!-- Something -->
 							<section>
 								<h2 class="major">
-									<span>Ipsum Dolore</span>
+									<span>이 달의 게시물</span>
 								</h2>
-								<a href="#" class="image featured"><img src="images/pic03.jpg" alt="" /></a>
-								<p>Donec sagittis massa et leo semper scele risque metus faucibus. Morbi congue mattis mi. Phasellus sed nisl vitae risus tristique volutpat. Cras rutrum sed commodo luctus blandit.</p>
-								<a href="#" class="button alt">Learn more</a>
-							</section>
-
-							<!-- Something -->
-							<section>
-								<h2 class="major">
-									<span>Magna Feugiat</span>
-								</h2>
-								<p>Rhoncus dui quis euismod. Maecenas lorem tellus, congue et condimentum ac, ullamcorper non sapien. Donec sagittis massa et leo semper scele risque metus faucibus. Morbi congue mattis mi. Phasellus sed nisl vitae risus tristique volutpat. Cras rutrum sed commodo luctus blandit.</p>
-								<a href="#" class="button alt">Learn more</a>
+								<a href="boardDetail.do?boardNum=${topbdata.boardNum }" class="image featured"><img
+									src="images/boardImg/${topbdata.boardImg }" alt="" /></a>
+								<p id="topContent">${topbdata.content}</p>
+								<a href="boardListPage.do" class="button alt">커뮤니터 보러가기</a>
 							</section>
 
 						</div>
@@ -130,17 +125,30 @@ i {
 									</c:if>
 									<ul id="menuList">
 										<c:if test="${ role ne 2}">
-										<li><b><a href="updateBoardPage.do?boardNum=${bdata.boardNum}" style="text-decoration: none; color: #6b7770;">수정</a></b></li>
+											<li><form action="updateBoardPage.do" method="post">
+												<input type="hidden" name="boardNum" value="${bdata.boardNum}" />
+												<button type="submit" style="background: none; border: none; text-decoration: none; color: #6b7770;">
+													수정</button>
+											</form></li>
 										</c:if>
-										<li><b><a href="deleteBoard.do?boardNum=${bdata.boardNum}" style="text-decoration: none; color: #6b7770;">삭제</a></b></li>
+										
+										<li>
+										<form action="deleteBoard.do" method="post">
+											<input type="hidden" name="boardNum" value="${bdata.boardNum}" />
+											<button type="submit" style="background: none; border: none; text-decoration: none; color: #6b7770;">
+												삭제</button>
+										</form>
+										</li>
 									</ul>
 									<header>
 										<p id="boardTitle">${bdata.title}</p>
 										<ul class="meta">
-											<li class="icon solid fa-user"><a href="profileDetailPage.do?memberID=${bdata.memberID}">${bdata.nickName}</a></li>
+											<li class="icon solid fa-user"><a
+												href="profileDetailPage.do?memberID=${bdata.memberID}">${bdata.nickName}</a></li>
 											<li class="icon fa-clock">${bdata.boardDate}</li>
 											<c:if test="${not empty memberID}">
-												<li><i id="rc" class="icon fa-heart" style="color: #f22202;" title="추천"></i>
+												<li><i id="rc" class="icon fa-heart"
+													style="color: #f22202;" title="추천"></i>
 													<p class="cnt" style="display: inline-block;">${bdata.recommendCnt}</p></li>
 												<li><i id="ph" class="icon solid fa-ban" title="신고"></i></li>
 											</c:if>
@@ -165,8 +173,12 @@ i {
 								<!-- 댓글 작성 -->
 								<c:if test="${not empty memberID}">
 									<section id="insertCommentBox">
-										<form id="insertComment" action="insertComment.do" method="POST">
-											<input type="hidden" name="boardNum" value="${bdata.boardNum}"> <input type="text" name="comments" placeholder="댓글 작성 내용" required> <input style="width: 80px;" type="submit" value="작성">
+										<form id="insertComment" action="insertComment.do"
+											method="POST">
+											<input type="hidden" name="boardNum"
+												value="${bdata.boardNum}"> <input type="text"
+												name="comments" placeholder="댓글 작성 내용" required> <input
+												style="width: 80px;" type="submit" value="작성">
 										</form>
 									</section>
 								</c:if>
@@ -185,10 +197,16 @@ i {
 											<h1>${cdata.comments}</h1>
 											<ul class="meta">
 												<c:if test="${cdata.check eq '0' }">
-													<li><i class="icon solid fa-ban comments" style="color: #e7e4e4" onclick="javascript:funcComments('${cdata.commentsNum}' , '${cdata.check}', this)" title="신고"></i></li>
+													<li><i class="icon solid fa-ban comments"
+														style="color: #e7e4e4"
+														onclick="javascript:funcComments('${cdata.commentsNum}' , '${cdata.check}', this)"
+														title="신고"></i></li>
 												</c:if>
 												<c:if test="${cdata.check eq '1' }">
-													<li><i class="icon solid fa-ban comments" style="color: #f58300;" onclick="javascript:funcComments('${cdata.commentsNum}' , '${cdata.check}', this)" title="신고"></i></li>
+													<li><i class="icon solid fa-ban comments"
+														style="color: #f58300;"
+														onclick="javascript:funcComments('${cdata.commentsNum}' , '${cdata.check}', this)"
+														title="신고"></i></li>
 												</c:if>
 											</ul>
 
@@ -202,10 +220,16 @@ i {
 															<li class="icon solid fa-user">${rdata.nickName}</li>
 															<li class="icon fa-clock">${rdata.replyDate}</li>
 															<c:if test="${rdata.check eq '0'}">
-																<li><i class="icon solid fa-ban reply" style="color: #e7e4e4;" onclick="javascript:funcReply('${rdata.replyNum}', '${rdata.check}', this)" title="신고"></i></li>
+																<li><i class="icon solid fa-ban reply"
+																	style="color: #e7e4e4;"
+																	onclick="javascript:funcReply('${rdata.replyNum}', '${rdata.check}', this)"
+																	title="신고"></i></li>
 															</c:if>
 															<c:if test="${rdata.check eq '1'}">
-																<li><i class="icon solid fa-ban reply" style="color: #f58300;" onclick="javascript:funcReply('${rdata.replyNum}', '${rdata.check}', this)" title="신고"></i></li>
+																<li><i class="icon solid fa-ban reply"
+																	style="color: #f58300;"
+																	onclick="javascript:funcReply('${rdata.replyNum}', '${rdata.check}', this)"
+																	title="신고"></i></li>
 															</c:if>
 														</ul>
 													</section>
@@ -216,15 +240,23 @@ i {
 												<c:if test="${not empty memberID}">
 													<button class="insertReplyBtn">대댓글 작성</button>
 												</c:if>
-												<section id="replyInsertBox" class="insertReply" style="display: none;">
-													<form id="replyInsert" action="insertReply.do">
-														<input type="hidden" name="boardNum" value="${cdata.boardNum}"> <input type="hidden" name="commentsNum" value="${cdata.commentsNum}"> <input type="text" name="reply" placeholder="대댓글 작성 내용" required> <input style="width: 80px;" type="submit" value="작성">
+												<section id="replyInsertBox" class="insertReply"
+													style="display: none;">
+													<form id="replyInsert" action="insertReply.do"
+														method="POST">
+														<input type="hidden" name="boardNum"
+															value="${cdata.boardNum}"> <input type="hidden"
+															name="commentsNum" value="${cdata.commentsNum}">
+														<input type="text" name="reply" placeholder="대댓글 작성 내용"
+															required> <input style="width: 80px;"
+															type="submit" value="작성">
 													</form>
 												</section>
 											</div>
 											<!-- 대댓글 여기까지 -->
 
-											<hr style="border: 0; border-top: solid 1px #a7b5ac; margin: 1em 0.5em 1em 0;">
+											<hr
+												style="border: 0; border-top: solid 1px #a7b5ac; margin: 1em 0.5em 1em 0;">
 											<!-- 댓글 여기까지 -->
 										</c:forEach>
 									</c:if>
@@ -238,7 +270,8 @@ i {
 				</div>
 			</div>
 		</section>
-		<button id="scrollToTop" onclick="scrollToTop()" class="icon solid fa-chevron-up"></button>
+		<button id="scrollToTop" onclick="scrollToTop()"
+			class="icon solid fa-chevron-up"></button>
 		<!-- Footer -->
 		<footer id="footer">
 			<div class="container">
@@ -251,7 +284,13 @@ i {
 								<span>What's this about?</span>
 							</h2>
 							<p>
-								This is <strong>TXT</strong>, yet another free responsive site template designed by <a href="http://twitter.com/ajlkn">AJ</a> for <a href="http://html5up.net">HTML5 UP</a>. It's released under the <a href="http://html5up.net/license/">Creative Commons Attribution</a> license so feel free to use it for whatever you're working on (personal or commercial), just be sure to give us credit for the design. That's basically it :)
+								This is <strong>TXT</strong>, yet another free responsive site
+								template designed by <a href="http://twitter.com/ajlkn">AJ</a>
+								for <a href="http://html5up.net">HTML5 UP</a>. It's released
+								under the <a href="http://html5up.net/license/">Creative
+									Commons Attribution</a> license so feel free to use it for whatever
+								you're working on (personal or commercial), just be sure to give
+								us credit for the design. That's basically it :)
 							</p>
 						</section>
 
@@ -264,11 +303,16 @@ i {
 								<span>Get in touch</span>
 							</h2>
 							<ul class="contact">
-								<li><a class="icon brands fa-facebook-f" href="#"><span class="label">Facebook</span></a></li>
-								<li><a class="icon brands fa-twitter" href="#"><span class="label">Twitter</span></a></li>
-								<li><a class="icon brands fa-instagram" href="#"><span class="label">Instagram</span></a></li>
-								<li><a class="icon brands fa-dribbble" href="#"><span class="label">Dribbble</span></a></li>
-								<li><a class="icon brands fa-linkedin-in" href="#"><span class="label">LinkedIn</span></a></li>
+								<li><a class="icon brands fa-facebook-f" href="#"><span
+										class="label">Facebook</span></a></li>
+								<li><a class="icon brands fa-twitter" href="#"><span
+										class="label">Twitter</span></a></li>
+								<li><a class="icon brands fa-instagram" href="#"><span
+										class="label">Instagram</span></a></li>
+								<li><a class="icon brands fa-dribbble" href="#"><span
+										class="label">Dribbble</span></a></li>
+								<li><a class="icon brands fa-linkedin-in" href="#"><span
+										class="label">LinkedIn</span></a></li>
 							</ul>
 						</section>
 

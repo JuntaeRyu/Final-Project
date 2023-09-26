@@ -20,13 +20,13 @@ i {
 	font-size: 12px;
 	padding: 10px;
 	margin-bottom: 7px;
-    margin-right: 12px;
+	margin-right: 12px;
 }
 </style>
 <head>
 <title>HealthDuo</title>
 <meta charset="utf-8" />
- <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 <link rel="icon" href="assets/css/images/favicon.ico" type="image/x-icon" />
 <link rel="stylesheet" href="assets/css/main.css" />
 </head>
@@ -38,9 +38,7 @@ i {
 		<header id="header">
 			<div class="logo container">
 				<div>
-					<h1 id="logo">
-						공지사항
-					</h1>
+					<h1 id="logo">공지사항</h1>
 				</div>
 			</div>
 		</header>
@@ -140,7 +138,9 @@ i {
 											<li class="icon solid fa-user">${bdata.nickName}</li>
 											<li class="icon fa-clock">${bdata.boardDate}</li>
 											<c:if test="${not empty memberID}">
-												<li><i id="rc" class="icon fa-heart" style="color: #f22202;" title="추천"></i> ${bdata.recommendCnt}</li>
+												<li><i id="rc" class="icon fa-heart" style="color: #f22202;" title="추천"></i> 
+												<p class="cnt" style="display: inline-block;">${bdata.recommendCnt}</p>
+												</li>
 											</c:if>
 											<!-- <li class="icon fa-comments">${csdatas.size()}</li> -->
 										</ul>
@@ -172,31 +172,31 @@ i {
 										<p>현재 작성된 댓글이 없습니다</p>
 									</c:if>
 									<c:if test="${not empty cdatas}">
-									<c:forEach var="cdata" items="${cdatas}">
-										<ul class="meta" style="text-align: left;">
-											<li class="icon solid fa-user">${cdata.nickName}</li>
-											<li class="icon fa-clock">${cdata.commentsDate }</li>
-										</ul>
-										<h1>${cdata.comments}</h1>
-										<ul class="meta">
-											<li class="icon fa-heart">댓글 추천수 변수 없음</li>
-											<li class="icon solid fa-ban">${cdata.prohibitCnt}</li>
-										</ul>
+										<c:forEach var="cdata" items="${cdatas}">
+											<ul class="meta" style="text-align: left;">
+												<li class="icon solid fa-user">${cdata.nickName}</li>
+												<li class="icon fa-clock">${cdata.commentsDate }</li>
+											</ul>
+											<h1>${cdata.comments}</h1>
+											<ul class="meta">
+												<li class="icon fa-heart">댓글 추천수 변수 없음</li>
+												<li class="icon solid fa-ban">${cdata.prohibitCnt}</li>
+											</ul>
 
-										<!-- 대댓글 -->
-										<c:forEach var="rdata" items="${rdatas}">
-											<c:if test="${cdata.commentsNum eq rdata.commentsNum}">
-												<p id="replyIcon" class="icon solid fa-reply"></p>
-												<section id="replyBox">
-													<h1>${rdata.reply}</h1>
-													<ul class="meta">
-														<li class="icon solid fa-user">${rdata.nickName}</li>
-														<li class="icon fa-clock">${rdata.replyDate}</li>
-													</ul>
-												</section>
-											</c:if>
-										</c:forEach>
-										<!-- 대댓글 작성 -->
+											<!-- 대댓글 -->
+											<c:forEach var="rdata" items="${rdatas}">
+												<c:if test="${cdata.commentsNum eq rdata.commentsNum}">
+													<p id="replyIcon" class="icon solid fa-reply"></p>
+													<section id="replyBox">
+														<h1>${rdata.reply}</h1>
+														<ul class="meta">
+															<li class="icon solid fa-user">${rdata.nickName}</li>
+															<li class="icon fa-clock">${rdata.replyDate}</li>
+														</ul>
+													</section>
+												</c:if>
+											</c:forEach>
+											<!-- 대댓글 작성 -->
 											<div style="text-align: right;">
 												<c:if test="${not empty mid}">
 													<button class="insertReplyBtn">대댓글 작성</button>
@@ -207,11 +207,11 @@ i {
 													</form>
 												</section>
 											</div>
-										<!-- 대댓글 여기까지 -->
+											<!-- 대댓글 여기까지 -->
 
-										<hr style="border: 0; border-top: solid 1px #a7b5ac; margin: 1em 0.5em 1em 0;">
-										<!-- 댓글 여기까지 -->
-									</c:forEach>
+											<hr style="border: 0; border-top: solid 1px #a7b5ac; margin: 1em 0.5em 1em 0;">
+											<!-- 댓글 여기까지 -->
+										</c:forEach>
 									</c:if>
 								</section>
 
@@ -294,16 +294,22 @@ i {
 
       $("#rc").on("click", function(){
          $.ajax({
-            url: 'RcServlet.do?rcresult=' + recommend +'&boardNum=' + parseInt(${bdata.boardNum}),
+            url: 'boardRecommend.do?rcresult=' + recommend +'&boardNum=' + parseInt(${bdata.boardNum}),
             type: 'POST',
             success: function(rcresult){
                console.log('rcresult [' + rcresult + ']');
                if (rcresult == 1) {
                   $("#rc").removeClass("fa-heart").addClass("solid fa-heart");
                   recommend = 1;
+                  var cnt = parseInt($('.cnt').text()) + 1;
+                  console.log(cnt);
+                  $('.cnt').text(cnt);
                } else if (rcresult == 0) {
                   $("#rc").removeClass("solid fa-heart").addClass("fa-heart");
                   recommend = 0;
+                  var cnt = parseInt($('.cnt').text()) - 1;
+                  console.log(cnt);
+                  $('.cnt').text(cnt);
                }
             },
             error: function(error){

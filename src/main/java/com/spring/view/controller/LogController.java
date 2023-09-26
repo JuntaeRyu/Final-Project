@@ -22,14 +22,14 @@ public class LogController {
 	@Autowired
 	private MemberProfileService memberProfileService;
 
-	@RequestMapping(value = "/loginPage.do")
+	@RequestMapping(value = "/loginPage.do", method = RequestMethod.GET)
 	public String loginPage() {
 		System.out.println("로그: LogController: loginPage() ");
 		
-		return "redirect:loginPage.jsp";
+		return "loginPage.jsp";
 	}
 
-	@RequestMapping(value = "/login.do")
+	@RequestMapping(value = "/login.do", method = RequestMethod.POST)
 	public String login(MemberVO mVO, HttpSession session) {
 		System.out.println("로그: LogController: login() ");
 		
@@ -42,7 +42,7 @@ public class LogController {
 			session.setAttribute("nickName", mVO.getNickName());
 			session.setAttribute("role", mVO.getRole());
 			
-			return "main.do";
+			return "redirect:main.do";
 		}
 		else {
 			return "loginPage.do";
@@ -50,11 +50,11 @@ public class LogController {
 
 	}
 
-	@RequestMapping(value = "/signupPage.do")
+	@RequestMapping(value = "/signupPage.do", method = RequestMethod.GET)
 	public String signupPage() {
 		System.out.println("로그: LogController: signupPage() ");
 		
-		return "redirect:signupPage.jsp";
+		return "signupPage.jsp";
 	}
 
 	@RequestMapping(value = "/signup.do", method = RequestMethod.POST)
@@ -123,7 +123,7 @@ public class LogController {
 		}
 	}
 
-	@RequestMapping(value = "/logout.do")
+	@RequestMapping(value = "/logout.do", method = RequestMethod.GET)
 	public String logout(HttpSession session) {
 		System.out.println("로그: LogController: logout() ");
 
@@ -131,7 +131,7 @@ public class LogController {
 		session.removeAttribute("nickName");
 		session.removeAttribute("role");
 
-		return "main.do";
+		return "redirect:main.do";
 	}
 }
 

@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="NPNC"%>
@@ -14,10 +13,8 @@
 <head>
 <title>HealthDuo</title>
 <meta charset="utf-8" />
-<meta name="viewport"
-	content="width=device-width, initial-scale=1, user-scalable=no" />
-<link rel="icon" href="assets/css/images/favicon.ico"
-	type="image/x-icon" />
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+<link rel="icon" href="assets/css/images/favicon.ico" type="image/x-icon" />
 <link rel="stylesheet" href="assets/css/main.css" />
 </head>
 <body class="homepage is-preload">
@@ -57,20 +54,16 @@
 										</section>
 									</div>
 									 -->
-									<c:set var="totalItems" value="${fn:length(mpdatas)}"/>
+									<c:set var="totalItems" value="${fn:length(mpdatas)}" />
 									<c:set var="endRnum" value="8" />
 									<c:forEach var="mpdata" items="${mpdatas}" begin="0" end="${totalItems}" varStatus="status">
 										<div id="${status.index}" class="col-3 col-6-medium col-12-small mpdataItem" style="display: none;">
 											<section class="box feature">
 												<c:if test="${empty mpdata.profileImg}">
-													<a href="profileDetailPage.do?profileNum=${mpdata.profileNum}"
-														class="image profileimage featured"> <img src="images/default.png"
-														alt="images/default.png" /></a>
+													<a href="profileDetailPage.do?profileNum=${mpdata.profileNum}" class="image profileimage featured"> <img src="images/default.png" alt="images/default.png" /></a>
 												</c:if>
 												<c:if test="${not empty mpdata.profileImg}">
-													<a href="profileDetailPage.do?profileNum=${mpdata.profileNum}"
-														class="image profileimage featured"> <img
-														src="images/profileImg/${mpdata.profileImg}" alt="${mpdata.profileImg}" /></a>
+													<a href="profileDetailPage.do?profileNum=${mpdata.profileNum}" class="image profileimage featured"> <img src="images/profileImg/${mpdata.profileImg}" alt="${mpdata.profileImg}" /></a>
 												</c:if>
 												<h3>
 													<a href="profileDetailPage.do?profileNum=${mpdata.profileNum}"> ${mpdata.nickName}</a>
@@ -93,8 +86,7 @@
 		</section>
 
 	</div>
-	<button id="scrollToTop" onclick="scrollToTop()"
-		class="icon solid fa-chevron-up"></button>
+	<button id="scrollToTop" onclick="scrollToTop()" class="icon solid fa-chevron-up"></button>
 	<!-- Footer -->
 	<footer id="footer">
 		<div class="container">
@@ -107,13 +99,7 @@
 							<span>What's this about?</span>
 						</h2>
 						<p>
-							This is <strong>TXT</strong>, yet another free responsive site
-							template designed by <a href="http://twitter.com/ajlkn">AJ</a>
-							for <a href="http://html5up.net">HTML5 UP</a>. It's released
-							under the <a href="http://html5up.net/license/">Creative
-								Commons Attribution</a> license so feel free to use it for whatever
-							you're working on (personal or commercial), just be sure to give
-							us credit for the design. That's basically it :)
+							This is <strong>TXT</strong>, yet another free responsive site template designed by <a href="http://twitter.com/ajlkn">AJ</a> for <a href="http://html5up.net">HTML5 UP</a>. It's released under the <a href="http://html5up.net/license/">Creative Commons Attribution</a> license so feel free to use it for whatever you're working on (personal or commercial), just be sure to give us credit for the design. That's basically it :)
 						</p>
 					</section>
 
@@ -126,16 +112,11 @@
 							<span>Get in touch</span>
 						</h2>
 						<ul class="contact">
-							<li><a class="icon brands fa-facebook-f" href="#"><span
-									class="label">Facebook</span></a></li>
-							<li><a class="icon brands fa-twitter" href="#"><span
-									class="label">Twitter</span></a></li>
-							<li><a class="icon brands fa-instagram" href="#"><span
-									class="label">Instagram</span></a></li>
-							<li><a class="icon brands fa-dribbble" href="#"><span
-									class="label">Dribbble</span></a></li>
-							<li><a class="icon brands fa-linkedin-in" href="#"><span
-									class="label">LinkedIn</span></a></li>
+							<li><a class="icon brands fa-facebook-f" href="#"><span class="label">Facebook</span></a></li>
+							<li><a class="icon brands fa-twitter" href="#"><span class="label">Twitter</span></a></li>
+							<li><a class="icon brands fa-instagram" href="#"><span class="label">Instagram</span></a></li>
+							<li><a class="icon brands fa-dribbble" href="#"><span class="label">Dribbble</span></a></li>
+							<li><a class="icon brands fa-linkedin-in" href="#"><span class="label">LinkedIn</span></a></li>
 						</ul>
 					</section>
 
@@ -154,9 +135,7 @@
 	</footer>
 
 	<!-- Scripts -->
-	<script src="https://code.jquery.com/jquery-3.7.1.min.js"
-		integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
-		crossorigin="anonymous"></script>
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 	<script type="text/javascript">
 		console.log(window.location.pathname);
 		function scrollToTop() {

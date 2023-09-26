@@ -620,7 +620,6 @@ textarea.fixed-width {
     // 최종 확인에서 취소를 했다면
     cancleBtn.addEventListener("click", () => {
     	checkModal.style.display = "none";
-	    passwordInput.value = ""; // 입력된 값을 비움
     });
     function clickbtn(){
     	const enteredPassword = passwordInputMember.value;
@@ -631,7 +630,6 @@ textarea.fixed-width {
   			checkModal.style.display = "block";
   		} else {
   			alert("비밀번호가 일치하지 않습니다");
-    	    passwordInput.value = ""; // 입력된 값을 비움
   			passwordModalMember.style.display = "none";
   		}
     };

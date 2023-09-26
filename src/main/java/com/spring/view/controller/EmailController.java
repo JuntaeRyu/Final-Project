@@ -23,7 +23,7 @@ public class EmailController {
 	@Autowired
 	private JavaMailSender mailSender;
 
-	@RequestMapping(value = "/signupSuccess.do")
+	@RequestMapping(value = "/signupSuccess.do", method = RequestMethod.GET)
 	public String signupSuccess(HttpServletRequest request) {
 		System.out.println("로그: EmailController: signupSuccess() ");
 
@@ -52,7 +52,7 @@ public class EmailController {
 		}
 
 		// 회원가입 성공 후 메인 페이지로 이동
-		return "main.do";
+		return "redirect:main.do";
 	}
 
 	@RequestMapping(value = "/findIDEmailCheck.do", method = RequestMethod.POST)

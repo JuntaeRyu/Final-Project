@@ -17,7 +17,7 @@
 <link rel="stylesheet" href="assets/css/main.css" />
 <style>
 #title-cell {
-	width: 200px; /* 원하는 크기로 조정할 수 있습니다 */
+	width: auto; /* 원하는 크기로 조정할 수 있습니다 */
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
@@ -288,7 +288,9 @@ label {
 												<tbody>
 													<c:forEach var="v" items="${bdatas}">
 														<tr>
-															<td style="width: 35px;"><input type="checkbox" name="number" value="${v.boardNum}"></td>
+															<td style="width: 35px;">
+															<input type="checkbox" name="number" value="${v.boardNum}">
+															</td>
 															<c:if test="${v.category eq 1 }">
 																<td class="icon">정보</td>
 															</c:if>
@@ -449,7 +451,7 @@ label {
   			passwordInput.value = ""; // 입력된 값을 비움
   		}
     };
-    
+
 	</script>
 	<script src="assets/js/jquery.min.js"></script>
 	<script src="assets/js/jquery.dropotron.min.js"></script>

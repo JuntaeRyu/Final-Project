@@ -45,6 +45,10 @@ public class MemberDAO2 implements InterfaceMemberDAO{
 	private final String sql_SELECTONE_LOGIN = "SELECT M.MEMBERID, M.MEMBERPW, M.NAME, M.NICKNAME, M.EMAIL, M.PHONENUM, M.GENDER, M.ADDRESS, M.DETAILADDRESS, M.ROLE, "
 			+ "(SELECT COUNT(*) FROM WARN W WHERE W.MEMBERID = M.MEMBERID) AS WARNCNT "
 			+ "FROM MEMBER M WHERE MEMBERID=? AND MEMBERPW=?"; // 로그인
+	// 회원 아이디 검색 (이메일)
+	private final String sql_SELECTONE_SEARCHID_EMAIL = "SELECT MEMBERID FROM MEMBER WHERE EMAIL = ?";
+	// 회원 아이디 검색 (전화번호)
+	private final String sql_SELECTONE_SEARCHID_PHONENUM = "SELECT MEMBERID FROM MEMBER WHERE PHONENUM = ?";
 	// 회원 주소 변경
 	private final String sql_UPDATE_ADDRESS = "UPDATE MEMBER SET ADDRESS=? AND SET DETAILADDRESS=? WHERE MEMBERID=?";
 	// 회원 이메일 변경
@@ -144,6 +148,14 @@ public class MemberDAO2 implements InterfaceMemberDAO{
 			else if (mVO.getSearchCondition().equals("login")) {
 				Object[] args = { mVO.getMemberID(), mVO.getMemberPW() };
 				return jdbcTemplate.queryForObject(sql_SELECTONE_LOGIN, args, new MemberRowMapper());
+			}
+			else if (mVO.getSearchCondition().equals("searchIDEmail")) {
+				Object[] args = { mVO.getEmail() };
+				return jdbcTemplate.queryForObject(sql_SELECTONE_SEARCHID_EMAIL, new SearchIDRowMapper(), args);
+			}
+			else if (mVO.getSearchCondition().equals("searchIDPhoneNum")) {
+				Object[] args = { mVO.getPhoneNum() };
+				return jdbcTemplate.queryForObject(sql_SELECTONE_SEARCHID_PHONENUM, new SearchIDRowMapper(), args);
 			}
 		}
 		catch(EmptyResultDataAccessException e) {
@@ -307,6 +319,19 @@ class DuplicateNickNameRowMapper implements RowMapper<MemberVO> {
 
 		mdata.setNickName(rs.getString("NICKNAME"));
 
+		return mdata;
+	}
+}
+// 아이디 검색용 rowmapper
+class SearchIDRowMapper implements RowMapper<MemberVO> {
+	
+	@Override
+	public MemberVO mapRow(ResultSet rs, int rowNum) throws SQLException {
+		
+		MemberVO mdata = new MemberVO();
+		
+		mdata.setMemberID(rs.getString("MEMBERID"));
+		
 		return mdata;
 	}
 }

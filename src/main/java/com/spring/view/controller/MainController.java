@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.spring.biz.advertisement.AdvertisementService;
 import com.spring.biz.board.BoardService;
@@ -31,7 +32,7 @@ public class MainController {
 	@Autowired
 	private AdvertisementService advertisementService;
 
-	@RequestMapping(value = "/main.do")
+	@RequestMapping(value = "/main.do", method = RequestMethod.GET)
 	public String main(MemberProfileVO mpVO, BoardVO bVO,CommentsVO cVO, Random random, Model model) {
 		System.out.println("로그: MainController: main() ");
 

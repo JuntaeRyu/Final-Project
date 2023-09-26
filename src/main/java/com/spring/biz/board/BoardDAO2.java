@@ -34,22 +34,44 @@ public class BoardDAO2 implements InterfaceBoardDAO{
 			+ "(SELECT COUNT(CASE WHEN BOARDNUM = B.BOARDNUM THEN 1 END ) FROM COMMENTS) AS COMMENTSCNT "
 			+ "FROM BOARD B JOIN MEMBER M ON B.MEMBERID=M.MEMBERID "
 			+ "WHERE B.MEMBERID=? ORDER BY BOARDNUM DESC";
+	// 해당 작성자가 작성한 게시물 목록 3개
+	private final String sql_SELECTALL_WRITERBOARD = "SELECT BOARDNUM, TITLE, RECOMMENDCNT, CATEGORY, VIEWCNT, NICKNAME, BOARDDATE, COMMENTSCNT "
+			+ "FROM "
+			+ 		"(SELECT B.BOARDNUM, B.TITLE, B.RECOMMENDCNT, B.CATEGORY, B.VIEWCNT, M.NICKNAME, TO_CHAR(B.BOARDDATE, 'YYYY-MM-DD') AS BOARDDATE, "
+			+ 		"(SELECT COUNT(CASE WHEN C.BOARDNUM = B.BOARDNUM THEN 1 END) FROM COMMENTS C) AS COMMENTSCNT "
+			+ 		"FROM BOARD B JOIN MEMBER M ON B.MEMBERID = M.MEMBERID "
+			+ 		"WHERE B.MEMBERID = ? "
+			+ 		"ORDER BY B.BOARDDATE DESC) "
+			+ "WHERE ROWNUM <= 3";	// 정렬한 후에 가져오는 쿼리문임
 	// 신고 3개이상인 게시물 목록
 	private final String sql_SELECTALL_PROHIBITCNT = "SELECT B.BOARDNUM, B.TITLE, B.MEMBERID, B.PROHIBITCNT, B.RECOMMENDCNT, B.CATEGORY, B.VIEWCNT, M.NICKNAME, "
 			+ "TO_CHAR(B.BOARDDATE, 'YYYY-MM-DD') AS BOARDDATE "
 			+ "FROM BOARD B JOIN MEMBER M ON B.MEMBERID=M.MEMBERID "
 			+ "WHERE B.PROHIBITCNT >= 3 ORDER BY BOARDNUM DESC";
 	// 추천수 top5 게시물 리스트
-	private final String sql_SELECTALL_RANK = "SELECT BOARDNUM, TITLE, CONTENT, PROHIBITCNT, RECOMMENDCNT, CATEGORY, BOARDIMG, VIEWCNT, NICKNAME, BOARDDATE, COMMENTSCNT "
-			+ "FROM (SELECT B.BOARDNUM, B.TITLE, B.CONTENT, B.PROHIBITCNT, B.RECOMMENDCNT,  B.CATEGORY, B.BOARDIMG, B.VIEWCNT, M.NICKNAME, "
-			+ "TO_CHAR(B.BOARDDATE, 'YYYY-MM-DD') AS BOARDDATE, "
-			+ "(SELECT COUNT(CASE WHEN BOARDNUM = B.BOARDNUM THEN 1 END ) FROM COMMENTS) AS COMMENTSCNT "
-			+ "FROM BOARD B JOIN MEMBER M ON B.MEMBERID=M.MEMBERID "
-			+ "WHERE B.CATEGORY IN (1,2) ORDER BY RECOMMENDCNT DESC, VIEWCNT DESC) WHERE ROWNUM <= 5";
+	private final String sql_SELECTALL_RANK = "SELECT BOARDNUM, TITLE, CONTENT, MEMBERID, PROHIBITCNT, RECOMMENDCNT, CATEGORY, BOARDIMG, VIEWCNT, NICKNAME, BOARDDATE, COMMENTSCNT "
+			+ "FROM "
+			+ 		"(SELECT B.BOARDNUM, B.TITLE, B.CONTENT, M.MEMBERID, B.PROHIBITCNT, B.RECOMMENDCNT,  B.CATEGORY, B.BOARDIMG, B.VIEWCNT, M.NICKNAME, "
+			+ 		"TO_CHAR(B.BOARDDATE, 'YYYY-MM-DD') AS BOARDDATE, "
+			+ 		"(SELECT COUNT(CASE WHEN BOARDNUM = B.BOARDNUM THEN 1 END ) FROM COMMENTS) AS COMMENTSCNT "
+			+ 		"FROM BOARD B JOIN MEMBER M ON B.MEMBERID=M.MEMBERID "
+			+ 		"WHERE B.CATEGORY IN (1,2) ORDER BY RECOMMENDCNT DESC, VIEWCNT DESC) "
+			+ "WHERE ROWNUM <= 5";
 	// 게시물 상세페이지
 	private final String sql_SELECTONE = "SELECT B.BOARDNUM, B.TITLE, B.CONTENT, B.MEMBERID, B.PROHIBITCNT, B.RECOMMENDCNT, B.CATEGORY, B.BOARDIMG, B.VIEWCNT, M.NICKNAME, "
 			+ "TO_CHAR(B.BOARDDATE, 'YYYY-MM-DD') AS BOARDDATE "
 			+ "FROM BOARD B JOIN MEMBER M ON B.MEMBERID=M.MEMBERID WHERE B.BOARDNUM=?";
+	// 추천수 1등 게시물
+	private final String sql_SELECTONE_TOPBOARD = "SELECT BOARDNUM, TITLE, CONTENT, MEMBERID, PROHIBITCNT, RECOMMENDCNT, CATEGORY, BOARDIMG, VIEWCNT, NICKNAME, BOARDDATE, COMMENTSCNT "
+			+ "FROM ( "
+			+ "    SELECT B.BOARDNUM, B.TITLE, B.CONTENT, M.MEMBERID, B.PROHIBITCNT, B.RECOMMENDCNT,  B.CATEGORY, B.BOARDIMG, B.VIEWCNT, M.NICKNAME, "
+			+ "    TO_CHAR(B.BOARDDATE, 'YYYY-MM-DD') AS BOARDDATE, "
+			+ "    (SELECT COUNT(CASE WHEN BOARDNUM = B.BOARDNUM THEN 1 END ) FROM COMMENTS) AS COMMENTSCNT, "
+			+ "    ROW_NUMBER() OVER (ORDER BY RECOMMENDCNT DESC, VIEWCNT DESC) AS ranked "
+			+ "    FROM BOARD B "
+			+ "    JOIN MEMBER M ON B.MEMBERID=M.MEMBERID "
+			+ "    WHERE B.CATEGORY IN (1,2)) "
+			+ "WHERE ranked = 1";
 	// 게시물 수정
 	private final String sql_UPDATE_BOARD = "UPDATE BOARD SET TITLE=?, CONTENT=?, BOARDIMG=? WHERE BOARDNUM=?";
 	// 게시물 신고수 갱신
@@ -98,6 +120,10 @@ public class BoardDAO2 implements InterfaceBoardDAO{
 				Object[] args= {bVO.getMemberID()};
 				return jdbcTemplate.query(sql_SELECTALL_MYBOARD, args, new BoardListRowMapper());
 			}
+			else if (bVO.getSearchCondition().equals("writerBoard")) {
+				Object[] args= {bVO.getMemberID()};
+				return jdbcTemplate.query(sql_SELECTALL_WRITERBOARD, args, new BoardListRowMapper());
+			}
 			else if (bVO.getSearchCondition().equals("recommendRank")) {
 				return jdbcTemplate.query(sql_SELECTALL_RANK, new BoardRankRowMapper());
 			}
@@ -112,13 +138,23 @@ public class BoardDAO2 implements InterfaceBoardDAO{
 	public BoardVO selectOne(BoardVO bVO) { 
 		System.out.println("BoardDAO2 로그 selectOne 메서드");
 		try {
-			Object[] args= {bVO.getBoardNum()};
-			return jdbcTemplate.queryForObject(sql_SELECTONE, args, new BoardRowMapper());
+			if(bVO.getSearchCondition()==null) {
+				System.out.println("BoardDAO2 selectOne 서치컨디션 null");
+
+				Object[] args= {bVO.getBoardNum()};
+				
+				return jdbcTemplate.queryForObject(sql_SELECTONE, args, new BoardRowMapper());
+			}
+			else if(bVO.getSearchCondition().equals("topBoard")) {
+				
+				return jdbcTemplate.queryForObject(sql_SELECTONE_TOPBOARD, new BoardRankRowMapper());
+			}
 		}
 		catch(EmptyResultDataAccessException e) {
 			System.out.println("boardDAO2 selectOne 데이터 비어있음");
 			return null;
 		}
+		return null;
 	}
 
 /////////////////// update ///////////////////////////////////////////////
@@ -240,6 +276,7 @@ class BoardRankRowMapper implements RowMapper<BoardVO>{
 		bdata.setBoardNum(rs.getInt("BOARDNUM"));
 		bdata.setTitle(rs.getString("TITLE"));
 		bdata.setContent(rs.getString("CONTENT"));
+		bdata.setMemberID(rs.getString("MEMBERID"));
 		bdata.setProhibitCnt(rs.getInt("PROHIBITCNT"));
 		bdata.setRecommendCnt(rs.getInt("RECOMMENDCNT"));
 		bdata.setCategory(rs.getInt("CATEGORY"));

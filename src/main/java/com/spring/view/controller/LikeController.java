@@ -6,6 +6,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.spring.biz.board.BoardService;
@@ -43,7 +44,7 @@ public class LikeController {
 	private MemberProfileService memberProfileService;
 
 	@ResponseBody
-	@RequestMapping(value = "/boardRecommend.do", produces = "application/json; charset=utf-8")
+	@RequestMapping(value = "/boardRecommend.do", produces = "application/json; charset=utf-8", method = RequestMethod.POST)
 	public String boardRecommend(RecommendVO rcVO, BoardVO bVO, HttpSession session, HttpServletRequest request) {
 		System.out.println("로그: LikeController: Recommend() ");
 
@@ -84,7 +85,7 @@ public class LikeController {
 	}
 
 	@ResponseBody
-	@RequestMapping(value = "/boardProhibit.do", produces = "application/json; charset=utf-8")
+	@RequestMapping(value = "/boardProhibit.do", produces = "application/json; charset=utf-8", method = RequestMethod.POST)
 	public String boardProhibit(ProhibitVO pVO, BoardVO bVO, HttpSession session, HttpServletRequest request) {
 		System.out.println("로그: LikeController:  prohibit() ");
 
@@ -122,7 +123,7 @@ public class LikeController {
 	}
 
 	@ResponseBody
-	@RequestMapping(value = "/profileRecommend.do", produces = "application/json; charset=utf-8")
+	@RequestMapping(value = "/profileRecommend.do", produces = "application/json; charset=utf-8", method = RequestMethod.POST)
 	public String profileRecommend(RecommendVO rcVO, MemberProfileVO mpVO, HttpSession session, HttpServletRequest request) {
 		System.out.println("로그: LikeController: profileRecommend() ");
 
@@ -163,7 +164,7 @@ public class LikeController {
 	}
 
 	@ResponseBody
-	@RequestMapping(value = "/profileProhibit.do", produces = "application/json; charset=utf-8")
+	@RequestMapping(value = "/profileProhibit.do", produces = "application/json; charset=utf-8", method = RequestMethod.POST)
 	public String profileProhibit(ProhibitVO pVO, MemberProfileVO mpVO, HttpSession session, HttpServletRequest request) {
 		System.out.println("로그: LikeController:  profileProhibit() ");
 
@@ -201,7 +202,7 @@ public class LikeController {
 	}
 
 	@ResponseBody
-	@RequestMapping(value = "/commentsProhibit.do", produces = "application/json; charset=utf-8")
+	@RequestMapping(value = "/commentsProhibit.do", produces = "application/json; charset=utf-8", method = RequestMethod.POST)
 	public String commentsProhibit(ProhibitVO pVO, CommentsVO cVO, HttpSession session, HttpServletRequest request) {
 		System.out.println("로그: LikeController:  commentsProhibit() ");
 
@@ -237,7 +238,7 @@ public class LikeController {
 	}
 
 	@ResponseBody
-	@RequestMapping(value = "/replyProhibit.do", produces = "application/json; charset=utf-8")
+	@RequestMapping(value = "/replyProhibit.do", produces = "application/json; charset=utf-8", method = RequestMethod.POST)
 	public String replyProhibit(ProhibitVO pVO, ReplyVO rVO, HttpSession session, HttpServletRequest request) {
 		System.out.println("로그: LikeController:  replyProhibit() ");
 		

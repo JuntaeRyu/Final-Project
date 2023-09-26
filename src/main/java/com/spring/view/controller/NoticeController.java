@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.spring.biz.board.BoardService;
 import com.spring.biz.board.BoardVO;
@@ -36,7 +37,7 @@ public class NoticeController {
 	@Autowired
 	private RecommendService recommendService;
 
-	@RequestMapping(value = "/noticeListPage.do")
+	@RequestMapping(value = "/noticeListPage.do", method = RequestMethod.GET)
 	public String notcieListPage(BoardVO  bVO, PageVO pageVO, Model model) {
 		System.out.println("로그: Notice: noticeListPage() ");
 
@@ -76,7 +77,7 @@ public class NoticeController {
 		return "noticeListPage.jsp";
 	}
 
-	@RequestMapping(value = "/noticeDetailPage.do")
+	@RequestMapping(value = "/noticeDetailPage.do", method = RequestMethod.GET)
 	public String noticeDetailPage(BoardVO bVO, CommentsVO cVO, RecommendVO rcVO, ReplyVO rVO, HttpSession session, HttpServletRequest request) {
 		System.out.println("로그: Notice: noticeDetailPage() ");
 
@@ -132,7 +133,7 @@ public class NoticeController {
 		}
 	}
 
-	@RequestMapping(value = "/insertNoticePage.do")
+	@RequestMapping(value = "/insertNoticePage.do", method = RequestMethod.GET)
 	public String insertNoticePage() {
 		System.out.println("로그: Notice: insertNoticePage() ");
 
@@ -148,7 +149,7 @@ public class NoticeController {
 		boolean flag = boardService.insert(bVO);
 
 		if(flag) {
-			return "noticeListPage.do";
+			return "redirect:noticeListPage.do";
 		} else {
 			model.addAttribute("title", "공지사항작성실패.." );
 			model.addAttribute("text", "다시한번 확인해주세요.." );
@@ -158,7 +159,7 @@ public class NoticeController {
 		}
 	}
 
-	@RequestMapping(value = "/updateNoticePage.do")
+	@RequestMapping(value = "/updateNoticePage.do", method = RequestMethod.POST)
 	public String updateNoticePage(BoardVO bVO, Model model) {
 		System.out.println("로그: Notice: updateNoticePage() ");
 
@@ -167,7 +168,7 @@ public class NoticeController {
 		if (bVO != null) {
 			model.addAttribute("bdata", bVO);
 
-			return "updateNoticePage.jsp";
+			return "redirect:updateNoticePage.jsp";
 		}
 		else {
 			model.addAttribute("title", "요청실패.." );
@@ -179,7 +180,7 @@ public class NoticeController {
 
 	}
 
-	@RequestMapping(value = "/updateNotice.do")
+	@RequestMapping(value = "/updateNotice.do", method = RequestMethod.POST)
 	public String updateNotice(BoardVO bVO, Model model) {
 		System.out.println("로그: Notice: updateNotice() ");
 
@@ -200,14 +201,14 @@ public class NoticeController {
 		}
 	}
 
-	@RequestMapping(value = "/deleteNotice.do")
+	@RequestMapping(value = "/deleteNotice.do", method = RequestMethod.POST)
 	public String deleteNotice(BoardVO bVO, Model model) {
 		System.out.println("로그: Notice: deleteNotice() ");
 
 		boolean flag = boardService.delete(bVO);
 
 		if (flag) {
-			return "noticeListPage.do";
+			return "redirect:noticeListPage.do";
 		}
 		else {
 			// 삭제 실패 메시지를 설정하기 위해 필요한 데이터를 request에 저장합니다.

@@ -165,17 +165,6 @@
 				
 			}
 		});
-		
-		$('#btnDisconnect').click(function() {
-			ws.send('3#' + $('#user').val() + '#');
-			ws.close();
-			
-			$('#btnConnect').attr('disabled', false);
-			$('#btnDisconnect').attr('disabled', true);
-			
-			$('#msg').val('');
-			$('#msg').attr('disabled', true);
-		});
    		
 	</script>
 </body>

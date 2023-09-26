@@ -10,11 +10,10 @@ public class MatchingVO {
 	// 서치컨디션(테이블에는 존재하지않는 칼럼이지만, JAVA 로직에서 사용하기위해 VO에 별도로 생성한 멤버변수)
 	private String senderNickName;
 	private String receiverNickName;
-	private int profileNum;
 	private String profileImg;
 	private String shortIntro;
 	private String SearchCondition;
-	
+	private int profileNum;
 	
 	// 매칭 번호를 반환하는 메서드
 	public int getMatchingNum() {
@@ -113,4 +112,9 @@ public class MatchingVO {
 	public void setProfileNum(int profileNum) {
 		this.profileNum = profileNum;
 	}
+	
+	
+	
+	
+	
 }

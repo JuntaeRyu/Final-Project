@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.spring.biz.comments.CommentsService;
 import com.spring.biz.comments.CommentsVO;
@@ -23,7 +24,7 @@ public class CommentController {
 	@Autowired
 	private ReplyService replyService;
 
-	@RequestMapping(value = "/insertComment.do")
+	@RequestMapping(value = "/insertComment.do", method = RequestMethod.POST)
 	public String insertComment(CommentsVO cVO, HttpSession session, Model model) {
 		System.out.println("로그: Comment: insertComment() ");
 
@@ -46,7 +47,7 @@ public class CommentController {
 
 	}
 
-	@RequestMapping(value = "/updateComment.do")
+	@RequestMapping(value = "/updateComment.do", method = RequestMethod.POST)
 	public String updateComment(CommentsVO cVO, Model model) {
 		System.out.println("로그: Comment: updateComment() ");
 
@@ -71,7 +72,7 @@ public class CommentController {
 
 	}
 
-	@RequestMapping(value = "/deleteComment.do")
+	@RequestMapping(value = "/deleteComment.do", method = RequestMethod.POST)
 	public String deleteComment(CommentsVO cVO, ReplyVO rVO, Model model) {
 		System.out.println("로그: Comment: deleteComment() ");
 
@@ -91,7 +92,7 @@ public class CommentController {
 		return "boardDetailPage.do";
 	}
 
-	@RequestMapping(value = "/insertReply.do")
+	@RequestMapping(value = "/insertReply.do", method = RequestMethod.POST)
 	public String insertReply(ReplyVO rVO, HttpSession session, HttpServletRequest request, Model model) {
 		System.out.println("로그: Comment: insertReply() ");
 
@@ -100,7 +101,7 @@ public class CommentController {
 		boolean flag = replyService.insert(rVO);
 
 		String boardNum = request.getParameter("boardNum");
-
+		
 		System.out.println("boardNum: " + request.getParameter("boardNum"));
 
 		if (flag) {
@@ -117,7 +118,7 @@ public class CommentController {
 		}
 	}
 
-	@RequestMapping(value = "/updateReply.do")
+	@RequestMapping(value = "/updateReply.do", method = RequestMethod.POST)
 	public String updateReply(CommentsVO cVO, ReplyVO rVO, Model model) {
 		System.out.println("로그: Comment: updateReply() ");
 
@@ -144,7 +145,7 @@ public class CommentController {
         }
 	}
 
-	@RequestMapping(value = "/deleteReply.do")
+	@RequestMapping(value = "/deleteReply.do", method = RequestMethod.POST)
 	public String deleteReply(ReplyVO rVO, HttpServletRequest request, Model model) {
 		System.out.println("로그: Comment: deleteReply() ");
         

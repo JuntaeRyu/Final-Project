@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.spring.biz.matching.MatchingService;
 import com.spring.biz.matching.MatchingVO;
@@ -35,7 +36,7 @@ public class MatchingController {
 	@Autowired
 	private MatchingService matchingService;
 
-	@RequestMapping(value = "/matchingPage.do")
+	@RequestMapping(value = "/matchingPage.do", method = RequestMethod.GET)
 	public String matchingPage(MemberProfileVO mpVO, Random random, Model model) {
 		System.out.println("로그: Matching: matchingPage() ");
 
@@ -48,7 +49,7 @@ public class MatchingController {
 		return "matchingPage.jsp";
 	}
 
-	@RequestMapping(value = "/profileDetailPage.do")
+	@RequestMapping(value = "/profileDetailPage.do", method = RequestMethod.GET)
 	public String profileListPage(MemberProfileVO mpVO, RecommendVO rcVO, ProhibitVO pVO, 
 			HttpSession session, HttpServletRequest request, Model model) {
 		System.out.println("로그: Matching: profileDetailPage() ");
@@ -94,7 +95,7 @@ public class MatchingController {
 		return "profileDetailPage.jsp";
 	}
 
-	@RequestMapping(value = "/applyMatching.do")
+	@RequestMapping(value = "/applyMatching.do", method = RequestMethod.POST)
 	public String applyMatching(MatchingVO mcVO, HttpSession session, Model model) {
 		System.out.println("로그: Matching: applyMatching() ");
 
@@ -103,7 +104,7 @@ public class MatchingController {
 		boolean flag = matchingService.insert(mcVO);
 
 		if(flag) {
-			return "ownMatchPage.do";
+			return "redirect:ownMatchPage.do";
 		}
 		else {
 			model.addAttribute("title", "매칭 중복 신청 ..");
@@ -114,14 +115,14 @@ public class MatchingController {
 		}
 	}
 
-	@RequestMapping(value = "/acceptMatching.do")
+	@RequestMapping(value = "/acceptMatching.do", method = RequestMethod.POST)
 	public String acceptMatching(MatchingVO mcVO, Model model) {
 		System.out.println("로그: Matching: acceptMatching() ");
 
 		boolean flag = matchingService.update(mcVO);
 
 		if(flag) {
-			return "ownMatchPage.do";
+			return "redirect:ownMatchPage.do";
 		}
 		else {
 			model.addAttribute("title", "매칭신청 수락 실패..");
@@ -132,14 +133,14 @@ public class MatchingController {
 		}
 	}
 
-	@RequestMapping(value = "/deleteMatching.do")
+	@RequestMapping(value = "/deleteMatching.do", method = RequestMethod.POST)
 	public String deleteMatching(MatchingVO mcVO, Model model) {
 		System.out.println("로그: Matching: deleteMatching() ");
 
 		boolean flag = matchingService.delete(mcVO);
 
 		if(flag) {
-			return "ownMatchPage.do";
+			return "redirect:ownMatchPage.do";
 		}
 		else {
 			model.addAttribute("title", "매칭신청 수락 실패..");
@@ -149,4 +150,14 @@ public class MatchingController {
 			return "goback.jsp";
 		}
 	}
+	
+	@RequestMapping(value = "/chatingRoom.do", method = RequestMethod.GET)
+	public String chatingRoom() {
+		System.out.println("로그: Matching: chatingRoom() ");
+		
+		return "chatingRoomPage.jsp";
+	}
+
+
+
 }

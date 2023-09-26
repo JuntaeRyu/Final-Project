@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.spring.biz.advertisement.AdvertisementService;
 import com.spring.biz.advertisement.AdvertisementVO;
@@ -17,7 +18,7 @@ public class CrawlingController {
 	@Autowired
 	private AdvertisementService advertisementService;
 	
-	@RequestMapping(value = "/crawling.do")
+	@RequestMapping(value = "/crawling.do", method = RequestMethod.GET)
 	public String crawling (Model model) {
 		
 		List<AdvertisementVO> hdex = Crawling.crawlingHdex();
@@ -54,7 +55,7 @@ public class CrawlingController {
 		return "main.do";
 	}
 	
-	@RequestMapping(value = "/reset.do")
+	@RequestMapping(value = "/reset.do", method = RequestMethod.GET)
 	public String reset () {
 		
 		if (!advertisementService.reset(null)) {
@@ -62,7 +63,7 @@ public class CrawlingController {
 			return "#";
 		}
 		
-		return "crawling.do";
+		return "redirect:crawling.do";
 	}
 	
 }

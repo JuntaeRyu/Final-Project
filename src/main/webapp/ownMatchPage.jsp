@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="NPNC"%>
@@ -14,10 +13,8 @@
 <head>
 <title>HealthDuo</title>
 <meta charset="utf-8" />
-<meta name="viewport"
-	content="width=device-width, initial-scale=1, user-scalable=no" />
-<link rel="icon" href="assets/css/images/favicon.ico"
-	type="image/x-icon" />
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+<link rel="icon" href="assets/css/images/favicon.ico" type="image/x-icon" />
 <link rel="stylesheet" href="assets/css/main.css" />
 
 <style type="text/css">
@@ -171,9 +168,7 @@ ul.pagination li a {
 	<!-- 회원탈퇴 모달 -->
 	<div id="deleteMemberModal" class="modal">
 		<div class="modal-content">
-			<span class="close">&times;</span> <label style="font-size: 25px;"
-				for="password">비밀번호 확인</label> <input type="password"
-				id="passwordMember" placeholder="비밀번호를 입력하세요">
+			<span class="close">&times;</span> <label style="font-size: 25px;" for="password">비밀번호 확인</label> <input type="password" id="passwordMember" placeholder="비밀번호를 입력하세요">
 			<button id="submitBtnMember" onclick="clickbtn()">확인</button>
 		</div>
 	</div>
@@ -264,69 +259,47 @@ ul.pagination li a {
 					<div class="col-9 col-12-medium imp-medium">
 						<div class="content">
 							<article class="box page-content" style="margin-bottom: 2em;">
-								<c:set var="receiverTotalItems"
-									value="${fn:length(receiverdatas)}" />
+								<c:set var="receiverTotalItems" value="${fn:length(receiverdatas)}" />
 								<c:set var="receiverEndRnum" value="3" />
 								<!-- Content -->
 
 								<h3>수신 리스트</h3>
-								<section id="box features"
-									style="display: flex; flex-wrap: wrap; background-color: #f2fde9; margin-bottom: 10px;">
+								<section id="box features" style="display: flex; flex-wrap: wrap; background-color: #f2fde9; margin-bottom: 10px;">
 									<c:if test="${empty receiverdatas}">
-										<h2 style="text-align: center; margin: 10px auto;">받은
-											매칭신청이 없습니다.</h2>
+										<h2 style="text-align: center; margin: 10px auto;">받은 매칭신청이 없습니다.</h2>
 									</c:if>
 									<c:if test="${not empty receiverdatas}">
-										<c:forEach var="receiverdata" items="${receiverdatas}"
-											begin="0" end="${receiverTotalItems}"
-											varStatus="receiverStatus">
-											<div id="${receiverStatus.index}"
-												class="col-3 col-6-medium col-12-small receiverItem"
-												style="display: none; margin: 6px; width: 260px; border: 1px solid #b9deb4; border-radius: 10px;">
+										<c:forEach var="receiverdata" items="${receiverdatas}" begin="0" end="${receiverTotalItems}" varStatus="receiverStatus">
+											<div id="${receiverStatus.index}" class="col-3 col-6-medium col-12-small receiverItem" style="display: none; margin: 6px; width: 260px; border: 1px solid #b9deb4; border-radius: 10px;">
 												<section class="box feature" style="margin-bottom: 1em;">
 													<c:if test="${empty receiverdata.profileImg}">
-														<a
-															href="profileDetailPage.do?profileNum=${receiverdata.profileNum}"
-															class="image profileimage featured"> <img
-															src="images/default.png" alt="images/default.png" /></a>
+														<a href="profileDetailPage.do?profileNum=${receiverdata.profileNum}" class="image profileimage featured"> <img src="images/default.png" alt="images/default.png" /></a>
 													</c:if>
 													<c:if test="${not empty receiverdata.profileImg}">
-														<a
-															href="profileDetailPage.do?profileNum=${receiverdata.profileNum}"
-															class="image profileimage featured"> <img
-															src="images/profileImg/${receiverdata.profileImg}"
-															alt="${receiverdata.profileImg}" /></a>
+														<a href="profileDetailPage.do?profileNum=${receiverdata.profileNum}" class="image profileimage featured"> <img src="images/profileImg/${receiverdata.profileImg}" alt="${receiverdata.profileImg}" /></a>
 													</c:if>
 													<h3>
-														<a
-															href="profileDetailPage.do?profileNum=${receiverdata.profileNum}">
-															${receiverdata.senderNickName}</a>
+														<a href="profileDetailPage.do?profileNum=${receiverdata.profileNum}"> ${receiverdata.senderNickName}</a>
 													</h3>
 													<p>${receiverdata.shortIntro}</p>
 												</section>
 												<c:if test="${receiverdata.accept eq 0}">
-													<div
-														style="text-align: center; display: grid; justify-content: center;">
-														<a class="Abtn"
-															href="acceptMatching.do?matchingNum=${receiverdata.matchingNum}">수락</a>
-														<a class="Abtn"
-															href="deleteMatching.do?matchingNum=${receiverdata.matchingNum}">거절</a>
+													<div style="text-align: center; display: grid; justify-content: center;">
+														<a class="Abtn" href="acceptMatching.do?matchingNum=${receiverdata.matchingNum}">수락</a>
+														<a class="Abtn" style="background-color: #FA5858;" href="deleteMatching.do?matchingNum=${receiverdata.matchingNum}">거절</a>
 													</div>
 												</c:if>
 												<c:if test="${receiverdata.accept eq 1}">
-													<div
-														style="text-align: center; display: grid; justify-content: center;">
-														<a class="Abtn" href="chat.do">채팅방가기</a> <a
-															class="Abtn"
-															href="deleteMatching.do?matchingNum=${receiverdata.matchingNum}">삭제</a>
+													<div style="text-align: center; display: grid; justify-content: center;">
+														<a class="Abtn" href="chat.do">채팅방가기</a>
+														<a class="Abtn" style="background-color: #FA5858;" href="deleteMatching.do?matchingNum=${receiverdata.matchingNum}">삭제</a>
 													</div>
 												</c:if>
 											</div>
 										</c:forEach>
 									</c:if>
 								</section>
-								<div class="col-12"
-									style="text-align: right; padding-top: 20px; margin-right: 10px;">
+								<div class="col-12" style="text-align: right; padding-top: 20px; margin-right: 10px;">
 									<button id="receiverMoreBtn" class="icon solid fa-plus">더보기</button>
 								</div>
 							</article>
@@ -337,57 +310,42 @@ ul.pagination li a {
 								<c:set var="senderEndRnum" value="3" />
 
 								<h3>발신 리스트</h3>
-								<section id="box features"
-									style="display: flex; flex-wrap: wrap; background-color: #f2fde9; margin-bottom: 10px;">
+								<section id="box features" style="display: flex; flex-wrap: wrap; background-color: #f2fde9; margin-bottom: 10px;">
 									<c:if test="${empty senderdatas}">
-										<h2 style="text-align: center; margin: 10px auto;">보낸
-											매칭신청이 없습니다.</h2>
+										<h2 style="text-align: center; margin: 10px auto;">보낸 매칭신청이 없습니다.</h2>
 									</c:if>
 									<c:if test="${not empty senderdatas}">
-										<c:forEach var="senderdata" items="${senderdatas}" begin="0"
-											end="${senderTotalItems}" varStatus="senderStatus">
-											<div id="${senderStatus.index}"
-												class="col-3 col-6-medium col-12-small senderItem"
-												style="display: none; margin: 6px; width: 260px; border: 1px solid #b9deb4; border-radius: 10px;">
+										<c:forEach var="senderdata" items="${senderdatas}" begin="0" end="${senderTotalItems}" varStatus="senderStatus">
+											<div id="${senderStatus.index}" class="col-3 col-6-medium col-12-small senderItem" style="display: none; margin: 6px; width: 260px; border: 1px solid #b9deb4; border-radius: 10px;">
 												<section class="box feature" style="margin-bottom: 1em;">
 													<c:if test="${empty senderdata.profileImg}">
-														<a
-															href="profileDetailPage.do?profileNum=${senderdata.profileNum}"
-															class="image profileimage featured"> <img
-															src="images/default.png" alt="images/default.png" /></a>
+														<a href="profileDetailPage.do?profileNum=${senderdata.profileNum}" class="image profileimage featured"> <img src="images/default.png" alt="images/default.png" /></a>
 													</c:if>
 													<c:if test="${not empty senderdata.profileImg}">
-														<a
-															href="profileDetailPage.do?profileNum=${senderdata.profileNum}"
-															class="image profileimage featured"> <img
-															src="images/profileImg/${senderdata.profileImg}"
-															alt="${senderdata.profileImg}" /></a>
+														<a href="profileDetailPage.do?profileNum=${senderdata.profileNum}" class="image profileimage featured"> <img src="images/profileImg/${senderdata.profileImg}" alt="${senderdata.profileImg}" /></a>
 													</c:if>
 													<h3>
-														<a
-															href="profileDetailPage.do?profileNum=${senderdata.profileNum}">
-															${senderdata.receiverNickName}</a>
+														<a href="profileDetailPage.do?profileNum=${senderdata.profileNum}"> ${senderdata.receiverNickName}</a>
 													</h3>
 													<p>${senderdata.shortIntro}</p>
 												</section>
 												<c:if test="${senderdata.accept eq 0}">
 													<div style="text-align: center; display: grid; justify-content: center;">
-														<a class="Abtn" style="color: gray" href="">대기중</a>
-														<a class="Abtn" style="color: red" href="deleteMatching.do?matchingNum=${senderdata.matchingNum}">취소</a>
+														<a class="Abtn" style="background-color: #6E6E6E;">대기중</a>
+														<a class="Abtn" style="background-color: #FA5858;" href="deleteMatching.do?matchingNum=${senderdata.matchingNum}">취소</a>
 													</div>
 												</c:if>
 												<c:if test="${senderdata.accept eq 1}">
 													<div style="text-align: center; display: grid; justify-content: center;">
 														<a class="Abtn" href="chat.do">채팅방가기</a>
-														<a class="Abtn" href="deleteMatching.do?matchingNum=${senderdata.matchingNum}">취소</a>
+														<a class="Abtn" style="background-color: #FA5858;" href="deleteMatching.do?matchingNum=${senderdata.matchingNum}">취소</a>
 													</div>
 												</c:if>
 											</div>
 										</c:forEach>
 									</c:if>
 								</section>
-								<div class="col-12"
-									style="text-align: right; padding-top: 20px; margin-right: 10px;">
+								<div class="col-12" style="text-align: right; padding-top: 20px; margin-right: 10px;">
 									<button id="senderMoreBtn" class="icon solid fa-plus">더보기</button>
 								</div>
 							</article>
@@ -409,13 +367,7 @@ ul.pagination li a {
 								<span>What's this about?</span>
 							</h2>
 							<p>
-								This is <strong>TXT</strong>, yet another free responsive site
-								template designed by <a href="http://twitter.com/ajlkn">AJ</a>
-								for <a href="http://html5up.net">HTML5 UP</a>. It's released
-								under the <a href="http://html5up.net/license/">Creative
-									Commons Attribution</a> license so feel free to use it for whatever
-								you're working on (personal or commercial), just be sure to give
-								us credit for the design. That's basically it :)
+								This is <strong>TXT</strong>, yet another free responsive site template designed by <a href="http://twitter.com/ajlkn">AJ</a> for <a href="http://html5up.net">HTML5 UP</a>. It's released under the <a href="http://html5up.net/license/">Creative Commons Attribution</a> license so feel free to use it for whatever you're working on (personal or commercial), just be sure to give us credit for the design. That's basically it :)
 							</p>
 						</section>
 
@@ -428,16 +380,11 @@ ul.pagination li a {
 								<span>Get in touch</span>
 							</h2>
 							<ul class="contact">
-								<li><a class="icon brands fa-facebook-f" href="#"><span
-										class="label">Facebook</span></a></li>
-								<li><a class="icon brands fa-twitter" href="#"><span
-										class="label">Twitter</span></a></li>
-								<li><a class="icon brands fa-instagram" href="#"><span
-										class="label">Instagram</span></a></li>
-								<li><a class="icon brands fa-dribbble" href="#"><span
-										class="label">Dribbble</span></a></li>
-								<li><a class="icon brands fa-linkedin-in" href="#"><span
-										class="label">LinkedIn</span></a></li>
+								<li><a class="icon brands fa-facebook-f" href="#"><span class="label">Facebook</span></a></li>
+								<li><a class="icon brands fa-twitter" href="#"><span class="label">Twitter</span></a></li>
+								<li><a class="icon brands fa-instagram" href="#"><span class="label">Instagram</span></a></li>
+								<li><a class="icon brands fa-dribbble" href="#"><span class="label">Dribbble</span></a></li>
+								<li><a class="icon brands fa-linkedin-in" href="#"><span class="label">LinkedIn</span></a></li>
 							</ul>
 						</section>
 
@@ -458,9 +405,7 @@ ul.pagination li a {
 	</div>
 
 	<!-- Scripts -->
-	<script src="https://code.jquery.com/jquery-3.7.1.min.js"
-		integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
-		crossorigin="anonymous"></script>
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 	<script>
 	const openModalBtnMember = document.getElementById("openModalBtnMember");
 	
