@@ -36,7 +36,7 @@ public class MatchingController {
 	@Autowired
 	private MatchingService matchingService;
 
-	@RequestMapping(value = "/matchingPage.do", method = RequestMethod.GET)
+	@RequestMapping(value = "/matchingPage.do")
 	public String matchingPage(MemberProfileVO mpVO, Random random, Model model) {
 		System.out.println("로그: Matching: matchingPage() ");
 
@@ -49,7 +49,7 @@ public class MatchingController {
 		return "matchingPage.jsp";
 	}
 
-	@RequestMapping(value = "/profileDetailPage.do", method = RequestMethod.GET)
+	@RequestMapping(value = "/profileDetailPage.do")
 	public String profileListPage(MemberProfileVO mpVO, RecommendVO rcVO, ProhibitVO pVO, 
 			HttpSession session, HttpServletRequest request, Model model) {
 		System.out.println("로그: Matching: profileDetailPage() ");
@@ -95,10 +95,18 @@ public class MatchingController {
 		return "profileDetailPage.jsp";
 	}
 
-	@RequestMapping(value = "/applyMatching.do", method = RequestMethod.POST)
+	@RequestMapping(value = "/applyMatching.do")
 	public String applyMatching(MatchingVO mcVO, HttpSession session, Model model) {
 		System.out.println("로그: Matching: applyMatching() ");
 
+		if(session.getAttribute("memberID") == null) {
+			model.addAttribute("title", "잘못된 접근 입니다..");
+			model.addAttribute("text", "로그인을 해주세요.." );
+			model.addAttribute("icon", "warning" );
+
+			return "goback.jsp";
+		}
+		
 		mcVO.setSenderID((String)session.getAttribute("memberID"));
 
 		boolean flag = matchingService.insert(mcVO);
@@ -151,13 +159,11 @@ public class MatchingController {
 		}
 	}
 	
-	@RequestMapping(value = "/chatingRoom.do", method = RequestMethod.GET)
+	@RequestMapping(value = "/chat.do", method = RequestMethod.POST)
 	public String chatingRoom() {
 		System.out.println("로그: Matching: chatingRoom() ");
 		
-		return "chatingRoomPage.jsp";
+		return "redirect:chatingRoomPage.jsp";
 	}
-
-
 
 }

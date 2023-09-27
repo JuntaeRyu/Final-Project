@@ -17,6 +17,7 @@ import com.spring.biz.board.BoardService;
 import com.spring.biz.board.BoardVO;
 import com.spring.biz.comments.CommentsService;
 import com.spring.biz.comments.CommentsVO;
+import com.spring.biz.member.MemberVO;
 import com.spring.biz.page.PageVO;
 import com.spring.biz.prohibit.ProhibitService;
 import com.spring.biz.prohibit.ProhibitVO;
@@ -44,7 +45,7 @@ public class BoardController {
 	private ProhibitService prohibitService;
 
 
-	@RequestMapping(value = "/boardListPage.do", method = RequestMethod.GET)
+	@RequestMapping(value = "/boardListPage.do")
 	public String boardListPage(BoardVO bVO, CommentsVO cVO, PageVO pageVO, Model model) {
 		System.out.println("로그: Board: boardListPage() ");
 
@@ -85,7 +86,7 @@ public class BoardController {
 		return "boardListPage.jsp";
 	}
 
-	@RequestMapping(value = "/infoListPage.do", method = RequestMethod.GET)
+	@RequestMapping(value = "/infoListPage.do")
 	public String infoListPage(BoardVO bVO, CommentsVO cVO, PageVO pageVO, Model model) {
 		System.out.println("로그: Board: infoListPage() ");
 
@@ -124,7 +125,7 @@ public class BoardController {
 		return "infoListPage.jsp";
 	}
 
-	@RequestMapping(value = "/chatListPage.do", method = RequestMethod.GET)
+	@RequestMapping(value = "/chatListPage.do")
 	public String chatListPage(BoardVO bVO, CommentsVO cVO, PageVO pageVO, Model model) {
 		System.out.println("로그: Board: chatListPage() ");
 
@@ -163,7 +164,7 @@ public class BoardController {
 		return "chatListPage.jsp";
 	}
 
-	@RequestMapping(value = "/boardDetailPage.do", method = RequestMethod.GET)
+	@RequestMapping(value = "/boardDetailPage.do")
 	public String boardDetailPage(BoardVO bVO, RecommendVO rcVO, ProhibitVO pVO, 
 			CommentsVO cVO, ReplyVO rVO, HttpSession session, HttpServletRequest request) {
 		System.out.println("로그: Board: boardDetailPage() ");
@@ -254,8 +255,6 @@ public class BoardController {
 			}
 		}
 
-		
-		
 		// 해당 게시글의 상세 정보를 request에 저장하고, boardPage.jsp로 이동합니다.
 		if (bVO != null) {
 			request.setAttribute("bdata", bVO);
@@ -282,7 +281,6 @@ public class BoardController {
 			request.setAttribute("topbdata", bVO);
 			/////////////////////////////////////////////////////////////////
 			
-			
 			return "boardDetailPage.jsp";
 		}
 		// 해당 게시글이 없는 경우에는 메시지와 함께 경고 페이지를 보여줍니다.
@@ -295,10 +293,18 @@ public class BoardController {
 		}
 	}
 
-	@RequestMapping(value = "/insertBoardPage.do", method = RequestMethod.GET)
-	public String insertBoardPage() {
+	@RequestMapping(value = "/insertBoardPage.do")
+	public String insertBoardPage(HttpSession session, Model model) {
 		System.out.println("로그: Board: insertBoardPage() ");
 
+		if(session.getAttribute("memberID") == null || (Integer)session.getAttribute("role") == 9) {
+			model.addAttribute("title", "잘못된 접근입니다.");
+			model.addAttribute("text", "다시 한번 확인해주세요.");
+			model.addAttribute("icon", "warning");
+
+			return "goback.jsp";
+		}
+		
 		return "insertBoardPage.jsp";
 	}
 
@@ -319,7 +325,6 @@ public class BoardController {
 
 			return "goback.jsp";
 		}
-
 	}
 
 	@RequestMapping(value = "/updateBoardPage.do", method = RequestMethod.POST)
@@ -351,9 +356,7 @@ public class BoardController {
 		boolean flag = boardService.update(bVO);
 
 		if(flag) {
-			model.addAttribute("boardNum", bVO.getBoardNum());
-
-			return "boardDetailPage.do";
+			return "redirect:boardDetailPage.do?boardNum="+bVO.getBoardNum();
 		}
 		else {
 			model.addAttribute("title", "게시글 수정 실패..");

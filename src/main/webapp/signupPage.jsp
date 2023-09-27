@@ -83,14 +83,14 @@ button {
 								<section id="signupBox">
 									<form id="signup" action="signup.do" method="post">
 										<h1><i class="icon solid fa-star" title="필수입력" style="color: #ff6c00;"></i> 아이디</h1>
-										<input type="text" name="memberID" placeholder="아이디 입력" required>
-										<p>4~10글자 사이로 입력해주세요(영어,숫자만 입력가능)</p>
+										<input type="text" name="memberID" id="memberIDInput" placeholder="아이디 입력" required>
+										<p id="memberIDMessage">4~10글자 사이로 입력해주세요 (영어, 숫자만 입력 가능합니다)</p>
 										<h1><i class="icon solid fa-star" title="필수입력" style="color: #ff6c00;"></i> 비밀번호</h1>
 										<input type="password" name="memberPW" placeholder="비밀번호 입력" required>
 										<p>8~13글자 사이로 입력해주세요(영어,숫자만 입력가능)</p>
 										<h1><i class="icon solid fa-star" title="필수입력" style="color: #ff6c00;"></i> 닉네임</h1>
-										<input type="text" name="nickName" placeholder="닉네임 입력" required>
-										<p>최대 12글자</p>
+										<input type="text" name="nickName" id="memberNickNameInput" placeholder="닉네임 입력" required>
+										<p id="memberNickNameMessage">최대 12글자입니다</p>
 										<h1><i class="icon solid fa-star" title="필수입력" style="color: #ff6c00;"></i> 이름</h1>
 										<input type="text" name="name" placeholder="이름 입력" required>
 										<p>실명으로 입력해주세요</p>
@@ -105,8 +105,8 @@ button {
 										</div>
 										<p>&nbsp;</p>
 										<h1>이메일</h1>
-										<input type="email" name="email" placeholder="이메일 입력">
-										<p>&nbsp;</p>
+										<input type="email" name="email" id="memberEmailInput" placeholder="이메일 입력">
+										<p id="memberEmailMessage">이메일은 필수입력이 아닙니다.</p>
 										<h1><i class="icon solid fa-star" title="필수입력" style="color: #ff6c00;"></i> 성별</h1>
 										<div style="text-align: left; margin-left: 20px;">
 											<input type="radio" id="male" name="gender" value="1">
@@ -284,6 +284,113 @@ button {
 	        return false; // 폼 제출을 취소하고 페이지를 리로드 또는 이동하지 않음
 	    }
 	});
+	////// 아이디
+    var memberIDInput = document.getElementById("memberIDInput");
+    var memberIDMessage = document.getElementById("memberIDMessage");
+    // input 이벤트를 처리하는 함수를 정의합니다.
+    function memberIDInputEvent() {
+        var memberIDInputValue = memberIDInput.value; // 입력된 텍스트 가져오기
+        var isValid = /^[A-Za-z0-9]{4,10}$/.test(memberIDInputValue); // 영어와 숫자로만 구성된 4~10글자 검증
+
+        if (isValid) {
+        	$.ajax({
+                url: 'duplicateID.do?memberID=' + memberIDInputValue,
+                type: 'POST',
+                success: function(result){
+                	if(result == 0){
+                		memberIDMessage.style.color = "red";
+        				memberIDMessage.textContent = "중복된아이디입니다.. 다른아이디를 입력해주세요";
+                	}
+                	else if(result == 1){
+                		memberIDMessage.style.color = "#6B7770";
+        				memberIDMessage.textContent = "회원가입 가능!!";
+                	}
+                },
+                error: function(error){
+                   alert("잘못된접근입니다.");
+                }
+             });
+        	event.preventDefault();
+        } else {
+        	memberIDMessage.style.color = "#6B7770";
+        	memberIDMessage.textContent = "4~10글자 사이로 입력해주세요 (영어, 숫자만 입력 가능합니다)";
+        }
+    }
+    // input 이벤트 리스너를 등록합니다.
+    memberIDInput.addEventListener("input", memberIDInputEvent);
+	/////////////////////////////
+    /////////////////////////////
+    ////// 닉네임
+    var memberNickNameInput = document.getElementById("memberNickNameInput");
+    var memberNickNameMessage = document.getElementById("memberNickNameMessage");
+    // input 이벤트를 처리하는 함수를 정의합니다.
+    function nickNameInputEvent() {
+        var nickNameInputValue = memberNickNameInput.value; // 입력된 텍스트 가져오기
+        var isValid = /^[A-Za-z0-9가-힣]{1,12}$/.test(nickNameInputValue);
+
+        if (isValid) {
+        	$.ajax({
+                url: 'duplicateNickName.do?nickName=' + nickNameInputValue,
+                type: 'POST',
+                success: function(result){
+                	if(result == 0){
+                		memberNickNameMessage.style.color = "red";
+                		memberNickNameMessage.textContent = "중복된닉네임입니다.. 다른닉네임을 입력해주세요"; // 유효한 경우 에러 메시지를 지웁니다.
+                	}
+                	else if(result == 1){
+                		memberNickNameMessage.style.color = "#6B7770";
+                		memberNickNameMessage.textContent = "회원가입 가능!!"; // 유효한 경우 에러 메시지를 지웁니다.
+                	}
+                },
+                error: function(error){
+                   alert("잘못된접근입니다.");
+                }
+             });
+        	event.preventDefault();
+        } else {
+            memberNickNameMessage.style.color = "#6B7770";
+        	memberNickNameMessage.textContent = "최대 12글자입니다";
+        }
+    }
+    // input 이벤트 리스너를 등록합니다.
+    memberNickNameInput.addEventListener("input", nickNameInputEvent);
+    /////////////////////////////
+    /////////////////////////////
+    ////// 이메일
+    var memberEmailInput = document.getElementById("memberEmailInput");
+    var memberEmailMessage = document.getElementById("memberEmailMessage");
+    // input 이벤트를 처리하는 함수를 정의합니다.
+    function emailInputEvent() {
+        var EmailInputValue = memberEmailInput.value; // 입력된 텍스트 가져오기
+        var isValid = memberEmailInput.validity.valid; 
+
+        if (isValid) {
+        	$.ajax({
+                url: 'duplicateEmail.do?email=' + EmailInputValue,
+                type: 'POST',
+                success: function(result){
+                	if(result == 0){
+                		memberEmailMessage.style.color = "red";
+                		memberEmailMessage.textContent = "중복된이메일입니다.. 다른이메일을 입력해주세요"; 
+                	}
+                	else if(result == 1){
+                		memberEmailMessage.textContent = "회원가입 가능!!";
+                	}
+                	else if(result == 2){
+                		memberEmailMessage.textContent = "이메일은 필수입력이 아닙니다.";
+                	}
+                },
+                error: function(error){
+                   alert("잘못된접근입니다.");
+                }
+             });
+        	event.preventDefault();
+        } else {
+        	memberEmailMessage.textContent = "다시입력해주세요";
+        }
+    }
+    // input 이벤트 리스너를 등록합니다.
+    memberEmailInput.addEventListener("input", emailInputEvent);
 	</script>
 	<script src="assets/js/jquery.min.js"></script>
 	<script src="assets/js/jquery.dropotron.min.js"></script>

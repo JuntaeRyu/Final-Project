@@ -301,6 +301,7 @@ label {
 .file-input {
 	display: none;
 }
+
 textarea.fixed-width {
 	resize: vertical;
 	width: 850px;
@@ -409,32 +410,44 @@ textarea.fixed-width {
 									<h2 style="color: #bead7c;">프로필</h2>
 									<div class="imageContainer">
 										<c:if test="${empty mpdata.profileImg}">
-											<img class="centered-image" src="images/default.png" alt="images/default.png" /> 
+											<img class="centered-image" src="images/default.png"
+												alt="images/default.png" />
 										</c:if>
 										<c:if test="${not empty mpdata.profileImg}">
-											<img class="centered-image" src="images/profileImg/${mpdata.profileImg}" alt="images/default.png" /> 
+											<img class="centered-image"
+												src="images/profileImg/${mpdata.profileImg}"
+												alt="images/default.png" />
 										</c:if>
-										<i style="font-size: 50px;" id="iconModalBtn" class="icon solid fa-cog" onclick=""></i>
+										<i style="font-size: 50px;" id="iconModalBtn"
+											class="icon solid fa-cog" onclick=""></i>
 									</div>
-									<p class="useId"> ${mpdata.nickName}</p>
+									<p class="useId">${mpdata.nickName}</p>
 
 									<div id="updateProfileModal" class="modal">
 										<div class="update-profile-content">
-											<span class="close">&times;</span> <label style="font-size: 25px;"> 프로필 변경</label>
-											<form action="updateProfileImg.do" method="post" enctype="multipart/form-data" onsubmit="return confirm('정말 프로필을 변경하시겠습니까?')" id="profileForm">
+											<span class="close">&times;</span> <label
+												style="font-size: 25px;"> 프로필 변경</label>
+											<form action="updateProfileImg.do" method="post"
+												enctype="multipart/form-data"
+												onsubmit="return confirm('정말 프로필을 변경하시겠습니까?')"
+												id="profileForm">
 												<div id="selectedImageContainer">
 													<c:if test="${empty mpdata.profileImg}">
-														<img id="selectedImage" src="images/default.png"alt="images/default.png">
+														<img id="selectedImage" src="images/default.png"
+															alt="images/default.png">
 													</c:if>
 													<c:if test="${not empty mpdata.profileImg}">
-														<img id="selectedImage" src="images/profileImg/${mpdata.profileImg}"alt="images/default.png">
+														<img id="selectedImage"
+															src="images/profileImg/${mpdata.profileImg}"
+															alt="images/default.png">
 													</c:if>
 												</div>
-												<label for="profileImg" class="file-label"> 
-													<span class="file-icon">📁</span> 파일 선택 
-													<input name="profileImgUpload" id="profileImg" type="file" class="file-input">
-												</label>
-												<input type="hidden" name="profileNum" value="${ mpdata.profileNum }">
+												<label for="profileImg" class="file-label"> <span
+													class="file-icon">📁</span> 파일 선택 <input
+													name="profileImgUpload" id="profileImg" type="file"
+													class="file-input">
+												</label> <input type="hidden" name="profileNum"
+													value="${ mpdata.profileNum }">
 												<button type="submit">수정</button>
 											</form>
 										</div>
@@ -445,12 +458,16 @@ textarea.fixed-width {
 
 									<div id="updateShortIntroModal" class="modal">
 										<div class="modal-content">
-											<form action="updateShortIntro.do" method="post" onsubmit="return confirm('정말 한줄 소개글을 변경하시겠습니까?')">
+											<form action="updateShortIntro.do" method="post"
+												onsubmit="return confirm('정말 한줄 소개글을 변경하시겠습니까?')">
 												<span class="close">&times;</span> <label
 													style="font-size: 25px;">한줄 소개글 변경</label>
-												<textarea style="margin-top: 10px; resize: vertical; width: 458px;" name="shortIntro">${mpdata.shortIntro}</textarea>
-												<input type="hidden" name="profileNum" value="${ mpdata.profileNum }">
-												<button style="width:100%" type="submit">확인</button>
+												<textarea
+													style="margin-top: 10px; resize: vertical; width: 458px;"
+													name="shortIntro">${mpdata.shortIntro}</textarea>
+												<input type="hidden" name="profileNum"
+													value="${ mpdata.profileNum }">
+												<button style="width: 100%" type="submit">확인</button>
 											</form>
 										</div>
 									</div>
@@ -458,20 +475,25 @@ textarea.fixed-width {
 									<input id="updateShortIntroBtn"
 										style="display: fix; margin-left: 82.5%;" type="submit"
 										value="수정">
-									<textarea class="fixed-width" style="margin-top: 10px;" readonly>${mpdata.shortIntro}</textarea>
-									
+									<textarea class="fixed-width" style="margin-top: 10px;"
+										readonly>${mpdata.shortIntro}</textarea>
+
 								</section>
 								<section id="mypageintroduction">
 									<h2 style="position: absolute; color: #bead7c;">소개글</h2>
 
 									<div id="updateIntroModal" class="modal">
 										<div class="modal-content">
-											<form action="updateIntro.do" method="post" onsubmit="return confirm('정말 소개글을 변경하시겠습니까?')">
+											<form action="updateIntro.do" method="post"
+												onsubmit="return confirm('정말 소개글을 변경하시겠습니까?')">
 												<span class="close">&times;</span> <label
 													style="font-size: 25px;">소개글 변경</label>
-												<textarea style="margin-top: 10px; resize: vertical; width: 458px;" name="intro">${mpdata.intro}</textarea>
-												<input type="hidden" name="profileNum" value="${ mpdata.profileNum }">
-												<button style="width:100%" type="submit">확인</button>
+												<textarea
+													style="margin-top: 10px; resize: vertical; width: 458px;"
+													name="intro">${mpdata.intro}</textarea>
+												<input type="hidden" name="profileNum"
+													value="${ mpdata.profileNum }">
+												<button style="width: 100%" type="submit">확인</button>
 											</form>
 										</div>
 									</div>
@@ -479,8 +501,9 @@ textarea.fixed-width {
 									<input id="updateIntroBtn"
 										style="display: fix; margin-left: 82.5%;" type="submit"
 										value="수정">
-									<textarea class="fixed-width" style="margin-top: 10px;" readonly>${mpdata.intro}</textarea>
-									
+									<textarea class="fixed-width" style="margin-top: 10px;"
+										readonly>${mpdata.intro}</textarea>
+
 								</section>
 							</article>
 						</div>

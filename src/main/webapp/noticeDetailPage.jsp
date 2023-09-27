@@ -10,6 +10,8 @@
 -->
 <html>
 <style>
+
+
 i {
 	cursor: pointer;
 }
@@ -51,73 +53,7 @@ i {
 			<div class="container">
 				<div class="row">
 					<div class="col-3 col-12-medium">
-						<div class="sidebar">
-
-							<!-- Sidebar -->
-
-							<!-- Recent Posts -->
-							<section>
-								<h2 class="major">
-									<span>Recent Posts</span>
-								</h2>
-								<ul class="divided">
-									<li>
-										<article class="box post-summary">
-											<h3>
-												<a href="#">A Subheading</a>
-											</h3>
-											<ul class="meta">
-												<li class="icon fa-clock">6 hours ago</li>
-												<li class="icon fa-comments"><a href="#">34</a></li>
-											</ul>
-										</article>
-									</li>
-									<li>
-										<article class="box post-summary">
-											<h3>
-												<a href="#">Another Subheading</a>
-											</h3>
-											<ul class="meta">
-												<li class="icon fa-clock">9 hours ago</li>
-												<li class="icon fa-comments"><a href="#">27</a></li>
-											</ul>
-										</article>
-									</li>
-									<li>
-										<article class="box post-summary">
-											<h3>
-												<a href="#">And Another</a>
-											</h3>
-											<ul class="meta">
-												<li class="icon fa-clock">Yesterday</li>
-												<li class="icon fa-comments"><a href="#">184</a></li>
-											</ul>
-										</article>
-									</li>
-								</ul>
-								<a href="#" class="button alt">Archives</a>
-							</section>
-
-							<!-- Something -->
-							<section>
-								<h2 class="major">
-									<span>Ipsum Dolore</span>
-								</h2>
-								<a href="#" class="image featured"><img src="images/pic03.jpg" alt="" /></a>
-								<p>Donec sagittis massa et leo semper scele risque metus faucibus. Morbi congue mattis mi. Phasellus sed nisl vitae risus tristique volutpat. Cras rutrum sed commodo luctus blandit.</p>
-								<a href="#" class="button alt">Learn more</a>
-							</section>
-
-							<!-- Something -->
-							<section>
-								<h2 class="major">
-									<span>Magna Feugiat</span>
-								</h2>
-								<p>Rhoncus dui quis euismod. Maecenas lorem tellus, congue et condimentum ac, ullamcorper non sapien. Donec sagittis massa et leo semper scele risque metus faucibus. Morbi congue mattis mi. Phasellus sed nisl vitae risus tristique volutpat. Cras rutrum sed commodo luctus blandit.</p>
-								<a href="#" class="button alt">Learn more</a>
-							</section>
-
-						</div>
+						<NPNC:sidebar/>
 					</div>
 					<div class="col-9 col-12-medium imp-medium">
 						<div class="content">
@@ -129,8 +65,21 @@ i {
 										<i id="boardButton" class="icon solid fa-bars"></i>
 									</c:if>
 									<ul id="menuList">
-										<li><b><a href="updateBoardPage.do?boardNum=${bdata.boardNum}" style="text-decoration: none; color: #6b7770;">수정</a></b></li>
-										<li><b><a href="deleteBoard.do?boardNum=${bdata.boardNum}" style="text-decoration: none; color: #6b7770;">삭제</a></b></li>
+									<c:if test="${ role ne 2}">
+											<li><form action="updateNoticePage.do" method="post">
+												<input type="hidden" name="boardNum" value="${bdata.boardNum}" />
+												<button type="submit" style="background: none; border: none; text-decoration: none; color: #6b7770;">
+													수정</button>
+											</form></li>
+										</c:if>
+										
+										<li>
+										<form action="deleteNotice.do" method="post">
+											<input type="hidden" name="boardNum" value="${bdata.boardNum}" />
+											<button type="submit" style="background: none; border: none; text-decoration: none; color: #6b7770;">
+												삭제</button>
+										</form>
+										</li>
 									</ul>
 									<header>
 										<p id="boardTitle">${bdata.title}</p>
@@ -161,8 +110,9 @@ i {
 								<!-- 댓글 작성 -->
 								<c:if test="${not empty memberID}">
 									<section id="insertCommentBox">
-										<form id="insertComment" action="insertComment.do">
-											<input type="hidden" name="boardNum" value="${bdata.boardNum}"> <input type="text" name="comments" placeholder="댓글 작성 내용" required> <input style="width: 80px;" type="submit" value="작성">
+										<form id="insertComment" action="insertComment.do" method="POST">
+											<input type="hidden" name="boardNum" value="${bdata.boardNum}">
+											<input type="text" name="comments" placeholder="댓글 작성 내용" required> <input style="width: 80px;" type="submit" value="작성">
 										</form>
 									</section>
 								</c:if>

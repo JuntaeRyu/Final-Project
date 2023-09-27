@@ -37,7 +37,7 @@ public class NoticeController {
 	@Autowired
 	private RecommendService recommendService;
 
-	@RequestMapping(value = "/noticeListPage.do", method = RequestMethod.GET)
+	@RequestMapping(value = "/noticeListPage.do")
 	public String notcieListPage(BoardVO  bVO, PageVO pageVO, Model model) {
 		System.out.println("로그: Notice: noticeListPage() ");
 
@@ -77,7 +77,7 @@ public class NoticeController {
 		return "noticeListPage.jsp";
 	}
 
-	@RequestMapping(value = "/noticeDetailPage.do", method = RequestMethod.GET)
+	@RequestMapping(value = "/noticeDetailPage.do")
 	public String noticeDetailPage(BoardVO bVO, CommentsVO cVO, RecommendVO rcVO, ReplyVO rVO, HttpSession session, HttpServletRequest request) {
 		System.out.println("로그: Notice: noticeDetailPage() ");
 
@@ -133,14 +133,22 @@ public class NoticeController {
 		}
 	}
 
-	@RequestMapping(value = "/insertNoticePage.do", method = RequestMethod.GET)
-	public String insertNoticePage() {
+	@RequestMapping(value = "/insertNoticePage.do")
+	public String insertNoticePage(HttpSession session, Model model) {
 		System.out.println("로그: Notice: insertNoticePage() ");
 
+		if((Integer)session.getAttribute("role") != 2) {
+			model.addAttribute("title", "잘못된 요청입니다.." );
+			model.addAttribute("text", "다시한번 확인해주세요.." );
+			model.addAttribute("icon", "warning" );
+
+			return "goback.jsp";
+		}
+		
 		return "redirect:insertNoticePage.jsp";
 	}
 
-	@RequestMapping(value = "/insertNotice.do")
+	@RequestMapping(value = "/insertNotice.do", method = RequestMethod.POST)
 	public String insertNotice(BoardVO bVO, HttpSession session, Model model) {
 		System.out.println("로그: Notice: insertNotice() ");
 
@@ -160,15 +168,23 @@ public class NoticeController {
 	}
 
 	@RequestMapping(value = "/updateNoticePage.do", method = RequestMethod.POST)
-	public String updateNoticePage(BoardVO bVO, Model model) {
+	public String updateNoticePage(BoardVO bVO, HttpSession session, Model model) {
 		System.out.println("로그: Notice: updateNoticePage() ");
 
+		if((Integer)session.getAttribute("role") != 2) {
+			model.addAttribute("title", "잘못된 요청입니다.." );
+			model.addAttribute("text", "다시한번 확인해주세요.." );
+			model.addAttribute("icon", "warning" );
+
+			return "goback.jsp";
+		}
+		
 		bVO = boardService.selectOne(bVO);
 
 		if (bVO != null) {
 			model.addAttribute("bdata", bVO);
 
-			return "redirect:updateNoticePage.jsp";
+			return "updateNoticePage.jsp";
 		}
 		else {
 			model.addAttribute("title", "요청실패.." );
@@ -189,9 +205,7 @@ public class NoticeController {
 		boolean flag = boardService.update(bVO);
 
 		if (flag) {
-			model.addAttribute("boardNum", bVO.getBoardNum());
-
-			return "noticeDetailPage.do";
+			return "redirect:noticeDetailPage.do?boardNum"+bVO.getBoardNum();
 		} else {
 			model.addAttribute("title", "공지사항 수정 실패..");
 			model.addAttribute("text", "다시한번 확인해주세요..");

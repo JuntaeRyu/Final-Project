@@ -32,7 +32,7 @@ public class MainController {
 	@Autowired
 	private AdvertisementService advertisementService;
 
-	@RequestMapping(value = "/main.do", method = RequestMethod.GET)
+	@RequestMapping(value = "/main.do")
 	public String main(MemberProfileVO mpVO, BoardVO bVO,CommentsVO cVO, Random random, Model model) {
 		System.out.println("로그: MainController: main() ");
 
@@ -63,7 +63,6 @@ public class MainController {
 		model.addAttribute("mempdatas", mpdatas);
 		model.addAttribute("firstBdata", bVO);
 		model.addAttribute("bdatas", bdatas);
-		
 		model.addAttribute("adatas", advertisementService.selectAll(null));
 
 		return "main.jsp";

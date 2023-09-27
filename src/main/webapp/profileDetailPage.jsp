@@ -9,6 +9,23 @@
 -->
 <html>
 <style>
+#anotherTitle {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin: 0.5em 0;
+}
+
+#topContent {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin: 0.5em 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 3; /* 여기서 숫자를 조절하여 표시할 줄 수를 지정할 수 있습니다 */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
 i {
 	cursor: pointer;
 }
@@ -331,73 +348,7 @@ label {
 			<div class="container">
 				<div class="row">
 					<div class="col-3 col-12-medium">
-						<div class="sidebar">
-
-							<!-- Sidebar -->
-
-							<!-- Recent Posts -->
-							<section>
-								<h2 class="major">
-									<span>Recent Posts</span>
-								</h2>
-								<ul class="divided">
-									<li>
-										<article class="box post-summary">
-											<h3>
-												<a href="#">A Subheading</a>
-											</h3>
-											<ul class="meta">
-												<li class="icon fa-clock">6 hours ago</li>
-												<li class="icon fa-comments"><a href="#">34</a></li>
-											</ul>
-										</article>
-									</li>
-									<li>
-										<article class="box post-summary">
-											<h3>
-												<a href="#">Another Subheading</a>
-											</h3>
-											<ul class="meta">
-												<li class="icon fa-clock">9 hours ago</li>
-												<li class="icon fa-comments"><a href="#">27</a></li>
-											</ul>
-										</article>
-									</li>
-									<li>
-										<article class="box post-summary">
-											<h3>
-												<a href="#">And Another</a>
-											</h3>
-											<ul class="meta">
-												<li class="icon fa-clock">Yesterday</li>
-												<li class="icon fa-comments"><a href="#">184</a></li>
-											</ul>
-										</article>
-									</li>
-								</ul>
-								<a href="#" class="button alt">Archives</a>
-							</section>
-
-							<!-- Something -->
-							<section>
-								<h2 class="major">
-									<span>Ipsum Dolore</span>
-								</h2>
-								<a href="#" class="image featured"><img src="images/pic03.jpg" alt="" /></a>
-								<p>Donec sagittis massa et leo semper scele risque metus faucibus. Morbi congue mattis mi. Phasellus sed nisl vitae risus tristique volutpat. Cras rutrum sed commodo luctus blandit.</p>
-								<a href="#" class="button alt">Learn more</a>
-							</section>
-
-							<!-- Something -->
-							<section>
-								<h2 class="major">
-									<span>Magna Feugiat</span>
-								</h2>
-								<p>Rhoncus dui quis euismod. Maecenas lorem tellus, congue et condimentum ac, ullamcorper non sapien. Donec sagittis massa et leo semper scele risque metus faucibus. Morbi congue mattis mi. Phasellus sed nisl vitae risus tristique volutpat. Cras rutrum sed commodo luctus blandit.</p>
-								<a href="#" class="button alt">Learn more</a>
-							</section>
-
-						</div>
+						<NPNC:sidebar/>
 					</div>
 
 					<div class="col-9 col-12-medium imp-medium">
@@ -522,7 +473,7 @@ label {
       $("#rc").on("click", function(){
          $.ajax({
             url: 'profileRecommend.do?rcresult=' + recommend + '&profileNum=' + parseInt(${mpdata.profileNum}),
-            type: 'GET',
+            type: 'POST',
             success: function(rcresult){
                console.log('rcresult [' + rcresult + ']');
                if (rcresult == 1) {

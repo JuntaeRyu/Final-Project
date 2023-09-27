@@ -137,31 +137,31 @@ button {
 
 				<!-- 라디오 버튼 -->
 				<label for="contactMethod">찾기 방법 선택: </label>
-				<input type="radio" id="phoneRadio" name="contactMethod" value="phone" onclick="showMidPhoneInput()" checked> 전화번호 
-				<input type="radio" id="emailRadio" name="contactMethod" value="email" onclick="showMidEmailInput()"> 이메일
+				<input type="radio" class="phoneRadio" name="contactMethod" value="phone" onclick="showMidPhoneInput()" checked> 전화번호 
+				<input type="radio" class="emailRadio" name="contactMethod" value="email" onclick="showMidEmailInput()"> 이메일
 
 				<!-- 핸드폰 번호 입력란 -->
 				<div id="phoneMidInputContainer" style="display: block;">
-					<label for="phoneNum">핸드폰 번호 확인</label> <input type="text" id="midPhoneInput" class="checkInfo" placeholder="핸드폰 번호를 입력해주세요">
+					<label for="phoneNum">핸드폰 번호 확인</label> <input type="text" id="midPhoneInput" class="checkInfo" placeholder="핸드폰 번호를 입력해주세요" required>
 					<div class="verification-container">
-						<input id="midPhoneNumVerificationInput" type="text" class="checkInfo" placeholder="인증번호 입력" disabled>
+						<input id="midPhoneNumVerificationInput" type="text" class="checkInfo disabled" placeholder="인증번호 입력" disabled>
 						<button style="width: 35%; height: auto; margin-top: 0px; padding: 0px;" onclick="midPhoneNumVerificationNumSend(event)">인증번호 받기</button>
 					</div>
 				</div>
 				<!-- 이메일 입력란 -->
 				<div id="emailMidInputContainer" style="display: none;">
-					<label for="email">이메일 확인</label> <input type="text" id="midEmailInput" class="checkInfo" placeholder="이메일을 입력해주세요">
+					<label for="email">이메일 확인</label> <input type="text" id="midEmailInput" class="checkInfo" placeholder="이메일을 입력해주세요" required>
 					<div class="verification-container">
-						<input id="midEmailVerificationInput" type="text" class="checkInfo" placeholder="인증번호 입력" disabled>
+						<input id="midEmailVerificationInput" type="text" class="checkInfo disabled" placeholder="인증번호 입력" disabled>
 						<button style="width: 35%; height: auto; margin-top: 0px; padding: 0px;" onclick="midEmailVerificationNumSend(event)">인증번호 받기</button>
 					</div>
 				</div>
 
-
-				<button onclick="findMidClickbtn()">아이디 찾기</button>
+				<button onclick="findMidClickbtn(event)">아이디 찾기</button>
 			</form>
 		</div>
 	</div>
+	
 	<!-- 비밀번호 찾기 확인 모달 -->
 	<div id="passwordCheckInfoModal" class="modal">
 		<div class="modal-content">
@@ -171,30 +171,55 @@ button {
 
 				<!-- 라디오 버튼 -->
 				<label for="contactMethod">찾기 방법 선택: </label>
-				<input type="radio" id="phoneRadio" name="contactMethod" value="phone" onclick="showPasswordPhoneInput()" checked> 전화번호
-				<input type="radio" id="emailRadio" name="contactMethod" value="email" onclick="showPasswordEmailInput()"> 이메일
+				<input type="radio" class="phoneRadio" name="contactMethod" value="phone" onclick="showPasswordPhoneInput()" checked> 전화번호
+				<input type="radio" class="emailRadio" name="contactMethod" value="email" onclick="showPasswordEmailInput()"> 이메일
 
 				<!-- 이메일 입력란 -->
 				<div id="emailPasswordInputContainer" style="display: none;">
-					<label for="memberID">아이디 확인</label> <input type="text" class="checkInfo" placeholder="아이디를 입력해주세요" required>
+					<label for="memberID">아이디 확인</label> <input type="text" class="checkInfo" id="emailPWInputID" placeholder="아이디를 입력해주세요" required>
 					<label for="email">이메일 확인</label> <input type="text" id="passwordEmailInput" class="checkInfo" placeholder="이메일을 입력해주세요">
 					<div class="verification-container">
-						<input id="passwordEmailVerificationInput" type="text" class="checkInfo" placeholder="인증번호 입력" disabled>
+						<input id="passwordEmailVerificationInput" type="text" class="checkInfo disabled" placeholder="인증번호 입력" disabled>
 						<button style="width: 35%; height: auto; margin-top: 0px; padding: 0px;" onclick="passwordEmailVerificationNumSend(event)">인증번호 받기</button>
 					</div>
 				</div>
 
 				<!-- 핸드폰 번호 입력란 -->
 				<div id="phonePasswordInputContainer" style="display: block;">
-					<label for="memberID">아이디 확인</label> <input type="text" class="checkInfo" placeholder="아이디를 입력해주세요" required>
+					<label for="memberID">아이디 확인</label> <input type="text" class="checkInfo" id="phonePWInputID" placeholder="아이디를 입력해주세요" required>
 					<label for="phoneNum">핸드폰 번호 확인</label> <input type="text" id="passwordPhoneInput" class="checkInfo" placeholder="핸드폰 번호를 입력해주세요">
 					<div class="verification-container">
-						<input id="passwordPhoneNumVerificationInput" type="text" class="checkInfo" placeholder="인증번호 입력" disabled>
+						<input id="passwordPhoneNumVerificationInput" type="text" class="checkInfo disabled" placeholder="인증번호 입력" disabled>
 						<button style="width: 35%; height: auto; margin-top: 0px; padding: 0px;" onclick="passwordPhoneNumVerificationNumSend(event)">인증번호 받기</button>
 					</div>
 				</div>
 
-				<button onclick="clickbtn()">비밀번호 찾기</button>
+				<button onclick="findMpwClickbtn(event)">비밀번호 찾기</button>
+			</form>
+		</div>
+	</div>
+	
+	<!-- 아이디 보여주는 모달 -->
+	<div id="showIDModal"class="modal">
+		<div class="modal-content">
+			<form>
+				<h3 style="margin: 0px; text-align: center;">아이디</h3>
+				<input style="width: 100%; text-align: center;" type="text" id="showID" class="checkInfo" placeholder="아이디 확인용 모달입니다" readonly>
+				<button onclick="closeShowIDModal(event)" >확인</button>
+			</form>
+			
+			<button onclick="showModalUpadtePW()" >비밀번호 재설정</button>
+		</div>
+	</div>
+
+	<!-- 비밀번호 변경하는 모달 -->
+	<div id="updatePWModal"class="modal">
+		<div class="modal-content">
+			<form>
+				<h3 style="margin: 0px; text-align: center;">비밀번호 변경</h3>
+				<input type="hidden" id="memberID" class="checkInfo" required>
+				<input style="width: 100%" type="text" id="inputPW" class="checkInfo" placeholder="변경할 비밀번호를 입력해주세요" required>
+				<button onclick="updatePW(event)" >확인</button>
 			</form>
 		</div>
 	</div>
@@ -382,16 +407,17 @@ button {
     
     ///////////////// 아이디
     /////// 핸드폰 번호로 아이디 찾기
-    let midPhoneCheckNum = null;  // 핸드폰 인증번호를 저장하기위한 공간
+    let PhoneCheckNum = null;  // 핸드폰 인증번호를 저장하기위한 공간
     // 핸드폰번호로 인증번호 받기
     function midPhoneNumVerificationNumSend(event) {
-    	var midPhoneNum = $("#midPhoneInput").val();
+		var params = { phoneNum : $("#midPhoneInput").val() };
     	$.ajax({
-            url: 'findIDPhoneCheck.do?phoneNum=' + midPhoneNum,
+            url: 'findIDPhoneCheck.do',
             type: 'POST',
+            data: params,
             success: function(randomNumber){
-				midPhoneCheckNum = randomNumber
-				console.log('midPhoneCheckNum [' + midPhoneCheckNum + ']');
+            	PhoneCheckNum = randomNumber;
+				console.log('PhoneCheckNum [' + PhoneCheckNum + ']');
 				var midPhoneNumVerificationInput = document.getElementById('midPhoneNumVerificationInput');
 				midPhoneNumVerificationInput.removeAttribute('disabled');
             },
@@ -403,16 +429,17 @@ button {
     }
     
     /////// 이메일로 아이디 찾기
-    let midEmailCheckNum = null;  // 이메일 인증번호를 저장하기위한 공간
+    let EmailCheckNum = null;  // 이메일 인증번호를 저장하기위한 공간
     // 이메일로 인증번호 받기
     function midEmailVerificationNumSend(event) {
-    	var midEmail = $("#midEmailInput").val();
+    	var params = { email : $("#midEmailInput").val() }; 
     	$.ajax({
-            url: 'findIDEmailCheck.do?email=' + midEmail,
+            url: 'findIDEmailCheck.do',
             type: 'POST',
+            data: params,
             success: function(randomNumber){
-            	midEmailCheckNum = randomNumber
-				console.log('midEmailCheckNum [' + midEmailCheckNum + ']');
+            	EmailCheckNum = randomNumber;
+				console.log('EmailCheckNum [' + EmailCheckNum + ']');
             	var midEmailVerificationInput = document.getElementById('midEmailVerificationInput');
         		midEmailVerificationInput.removeAttribute('disabled');
             },
@@ -423,33 +450,87 @@ button {
     	event.preventDefault();
     }
     
-    // 아이디 찾기 버튼 눌렀을때 
-    function findMidClickbtn(){
+    // 아이디 찾기 버튼 눌렀을때
+    function findMidClickbtn(event){
     	var midPhoneNumVerificationInput = $("#midPhoneNumVerificationInput").val();
     	var midEmailVerificationInput = $("#midEmailVerificationInput").val();
-    	if (midPhoneCheckNum === midPhoneNumVerificationInput){
-    		
+    	if (PhoneCheckNum != null && PhoneCheckNum === midPhoneNumVerificationInput){
+    		var params = { phoneNum : $("#midPhoneInput").val() };
+            var url = 'searchIDPhone.do';
+            findMID(url, params);
     	}
-    	else if(midEmailCheckNum === midEmailVerificationInput){
-    		
+    	else if(EmailCheckNum != null && EmailCheckNum === midEmailVerificationInput){
+    		var params = { email : $("#midEmailInput").val() };
+            var url = 'searchIDEmail.do';
+            findMID(url, params);
+    	}
+    	else if (PhoneCheckNum == null && EmailCheckNum == null) {
+			alert("잘못된 접근입니다");
+			disabled();
     	}
     	else{
-    		
+			alert("인증번호가 일치하지 않습니다");
     	}
+    	event.preventDefault();
+    }
+
+    // 아이디 비동기로 찾아오는 기능
+    function findMID (url, params){
+    	$.ajax({
+            url: url,
+            type: 'POST',
+            data: params,
+            success: function(memberID){
+            	if (memberID == null) {
+            		alert("일치하는 아이디가 없습니다");
+            		clear();
+            		modalHide();
+            	}
+            	else {
+            		clear();
+            		modalHide();
+             		$('#showID').val(memberID);
+             		$('#showIDModal').css("display", "block");
+            	}
+            },
+            error: function(error){
+				alert("오류가 발생했습니다!");
+				clear();
+				modalHide();
+            }
+         });
+		disabled();
+    }
+    
+    // 아이디 출력 모달 닫는 기능
+    function closeShowIDModal (event) {
+ 		clear();
+		disabled();
+		modalHide();
+ 		event.preventDefault();
+    }
+    
+    // 아이디 출력 후 비밀번호 재설정 할 경우
+    function showModalUpadtePW (){
+    	$("#memberID").val($('#showID').val());
+    	$('#showID').val("");
+    	modalHide();
+    	$('#updatePWModal').css("display", "block");
     }
     
     ////////////////// 비밀번호
     /////// 핸드폰 번호로 비밀번호 찾기
-    let passwordPhoneCheckNum = null;  // 핸드폰 인증번호를 저장하기위한 공간
     // 핸드폰으로 인증번호 받기
     function passwordPhoneNumVerificationNumSend(event) {
     	var passwordPhoneNum = $("#passwordPhoneInput").val();
+    	var params = { phoneNum : passwordPhoneNum };
     	$.ajax({
-    		url: 'findPWPhoneCheck.do?phoneNum=' + passwordPhoneNum,
+    		url: 'findPWPhoneCheck.do',
     		type: 'POST',
+    		data: params,
     		success:function(randomNumber){
-    			passwordPhoneCheckNum = randomNumber
-    			console.log('passwordPhoneCheckNum [' + passwordPhoneCheckNum + ']');
+    			PhoneCheckNum = randomNumber;
+    			console.log('PhoneCheckNum [' + PhoneCheckNum + ']');
 				var passwordPhoneNumVerificationInput = document.getElementById('passwordPhoneNumVerificationInput');
 				passwordPhoneNumVerificationInput.removeAttribute('disabled');
     		},
@@ -461,16 +542,17 @@ button {
     }
     
 	/////// 이메일로 비밀번호 찾기
-    let passwordEmailCheckNum = null;  // 이메일 인증번호를 저장하기위한 공간
     // 이메일로 인증번호 받기
     function passwordEmailVerificationNumSend(event) {
     	var passwordEmail = $("#passwordEmailInput").val();
+    	var params = { email: passwordEmail };
     	$.ajax({
-            url: 'findPWEmailCheck.do?email=' + passwordEmail,
+            url: 'findPWEmailCheck.do',
             type: 'POST',
+            data: params,
             success: function(randomNumber){
-            	passwordEmailCheckNum = randomNumber
-				console.log('passwordEmailCheckNum [' + passwordEmailCheckNum + ']');
+            	EmailCheckNum = randomNumber;
+				console.log('EmailCheckNum [' + EmailCheckNum + ']');
 				var passwordEmailVerificationInput = document.getElementById('passwordEmailVerificationInput');
 				passwordEmailVerificationInput.removeAttribute('disabled');
             },
@@ -480,6 +562,116 @@ button {
          });
     	event.preventDefault();
     }
+    
+	// 비밀번호 찾기 버튼 눌렀을때 
+    function findMpwClickbtn(event){
+    	var mpwPhoneNumVerificationInput = $("#passwordPhoneNumVerificationInput").val();
+    	var mpwEmailVerificationInput = $("#passwordEmailVerificationInput").val();
+    	if (PhoneCheckNum != null && PhoneCheckNum === mpwPhoneNumVerificationInput){
+    		disabled();
+    		var url = 'checkMemberPhoneNum.do';
+    		var params = {
+    				memberID : $('#phonePWInputID').val(),
+    				phoneNum : $('#passwordPhoneInput').val()
+    		};
+    		checkMember(url,params);
+    	}
+    	else if(EmailCheckNum != null && EmailCheckNum === mpwEmailVerificationInput){
+    		var url = 'checkMemberEmail.do';
+    		var params = {
+    				memberID : $('#emailPWInputID').val(),
+    				email : $('#passwordEmailInput').val()
+    		};
+    		checkMember(url,params);
+    	}
+    	else if (PhoneCheckNum == null && EmailCheckNum == null) {
+			alert("잘못된 접근입니다");
+			clear();
+    		modalHide();
+    		disabled();
+    	}
+    	else{
+			alert("인증번호가  일치하지 않습니다");
+    	}
+    	event.preventDefault();
+    }
+	
+	// 비밀번호 변경하기 전 계정 확인하는 기능
+	function checkMember (url, params) {
+		$.ajax({
+            url: url,
+            type: 'POST',
+            data: params,
+            success: function(memberID){
+            	if (memberID == null) {
+            		alert("일치하는 계정이 없습니다");
+            		clear();
+            		modalHide();
+            	}
+            	else {
+            		clear();
+            		modalHide();
+            		$("#memberID").val(memberID);
+             		$('#updatePWModal').css("display", "block");
+            	}
+            },
+            error: function(error){
+				alert("오류가 발생했습니다!");
+				clear();
+				modalHide();
+            }
+         });
+		disabled();
+	}
+	
+	// 비밀번호 변경 기능
+	function updatePW (event) {
+		if (PhoneCheckNum == null && EmailCheckNum == null) { // 둘다 비어있다면 인증을 받지 않았음
+			alert("잘못된 접근입니다");
+    	}
+		else {
+    		var params = {
+    			memberID: $("#memberID").val(),
+    			memberPW: $("#inputPW").val()
+    		};
+    	
+			$.ajax({
+        	    url: 'updateMemberPWLogin.do',
+        	    type: 'POST',
+        	    data: params,
+        	    success: function(check){
+        	    	if (check == null) {
+        	    		alert("변경 실패!");
+        	    	} else {
+        	    		alert("변경되었습니다!");
+        	    	}
+        	    },
+	    	    error: function(error){
+	    	    	alert("오류 발생!\n관리자에게 문의해주세요");
+	    	    }
+	        });
+		}
+		clear();
+		disabled();
+		modalHide();
+		event.preventDefault();
+	}
+	
+	// 입력값 비우는 기능
+	function clear() {
+		$('.checkInfo').val("");
+	}
+	
+	// 인증번호 다시 잠구는 기능
+	function disabled() {
+		$('.disabled').prop('disabled', true);
+	}
+	
+	// 모달창 숨기는 기능
+	function modalHide() {
+		$('.modal').css("display", "none");
+	}
+    
     </script>
 	<script src="assets/js/jquery.min.js"></script>
 	<script src="assets/js/jquery.dropotron.min.js"></script>

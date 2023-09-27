@@ -49,11 +49,11 @@ public class AdminController {
 		return map;
 	}
 	
-	@RequestMapping(value = "/adminPage.do", method = RequestMethod.GET)
+	@RequestMapping(value = "/adminPage.do")
 	public String admingPage(MemberVO mVO, HttpSession session, Model model) {
 		System.out.println("로그: Admin: admingPage() ");
 		
-		if((Integer)session.getAttribute("role") != 2) {
+		if((Integer)session.getAttribute("role") == null || (Integer)session.getAttribute("role") != 2) {
 			model.addAttribute("title", "잘못된 접근입니다.");
 			model.addAttribute("text", "다시 한번 확인해주세요.");
 			model.addAttribute("icon", "warning");
@@ -83,10 +83,18 @@ public class AdminController {
 
 	}
 
-	@RequestMapping(value = "/prohibitListPage.do", method = RequestMethod.GET)
-	public String prohibitListPage(BoardVO bVO, CommentsVO cVO, PageVO pageVO, Model model) {
+	@RequestMapping(value = "/prohibitListPage.do")
+	public String prohibitListPage(BoardVO bVO, CommentsVO cVO, PageVO pageVO, HttpSession session, Model model) {
 		System.out.println("로그: Mypage: prohibitListPage()");
 
+		if((Integer)session.getAttribute("role") == null || (Integer)session.getAttribute("role") != 2) {
+			model.addAttribute("title", "잘못된 접근입니다.");
+			model.addAttribute("text", "다시 한번 확인해주세요.");
+			model.addAttribute("icon", "warning");
+			
+			return "goback.jsp";
+		}
+		
 		if (pageVO.getCurrentPage() > 0) {
 			pageVO.setCurrentPage(pageVO.getCurrentPage());
 		} else {

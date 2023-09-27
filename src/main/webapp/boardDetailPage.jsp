@@ -11,23 +11,21 @@
 -->
 <html>
 <style>
-
 #anotherTitle {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    margin: 0.5em 0;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	margin: 0.5em 0;
 }
 
 #topContent {
-    white-space: pre;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    margin: 0.5em 0;
-    display: -webkit-box;
-    -webkit-line-clamp: 3; /* 여기서 숫자를 조절하여 표시할 줄 수를 지정할 수 있습니다 */
-    -webkit-box-orient: vertical;
-    overflow: hidden;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	margin: 0.5em 0;
+	display: -webkit-box;
+	-webkit-line-clamp: 3; /* 여기서 숫자를 조절하여 표시할 줄 수를 지정할 수 있습니다 */
+	-webkit-box-orient: vertical;
+	overflow: hidden;
 }
 
 i {
@@ -74,45 +72,7 @@ i {
 			<div class="container">
 				<div class="row">
 					<div class="col-3 col-12-medium">
-						<div class="sidebar">
-
-							<!-- Sidebar -->
-
-							<!-- Recent Posts -->
-							<section>
-								<h2 class="major">
-									<span>해당 게시물 작성자의 다른 게시물들</span>
-								</h2>
-								<ul class="divided">
-									<c:forEach items="${writerbdatas}" var="post">
-										<li>
-											<article class="box post-summary">
-												<h3 id="anotherTitle">
-													<a href="boardDetail.do?boardNum=${post.boardNum }">${post.title}</a>
-												</h3>
-												<ul class="meta">
-													<li class="icon fa-clock">${post.boardDate}</li>
-													<li class="icon fa-comments">${post.boardCommentsCnt}</li>
-												</ul>
-											</article>
-										</li>
-									</c:forEach>
-								</ul>
-								<a href="boardListPage.do" class="button alt">커뮤니터 보러가기</a>
-							</section>
-
-							<!-- Something -->
-							<section>
-								<h2 class="major">
-									<span>이 달의 게시물</span>
-								</h2>
-								<a href="boardDetail.do?boardNum=${topbdata.boardNum }" class="image featured"><img
-									src="images/boardImg/${topbdata.boardImg }" alt="" /></a>
-								<p id="topContent">${topbdata.content}</p>
-								<a href="boardListPage.do" class="button alt">커뮤니터 보러가기</a>
-							</section>
-
-						</div>
+						<NPNC:sidebar />
 					</div>
 					<div class="col-9 col-12-medium imp-medium">
 						<div class="content">
@@ -124,20 +84,20 @@ i {
 										<i id="boardButton" class="icon solid fa-bars"></i>
 									</c:if>
 									<ul id="menuList">
-										<c:if test="${ role ne 2}">
-											<li><form action="updateBoardPage.do" method="post">
-												<input type="hidden" name="boardNum" value="${bdata.boardNum}" />
-												<button type="submit" style="background: none; border: none; text-decoration: none; color: #6b7770;">
-													수정</button>
-											</form></li>
+										<c:if test="${role ne 2}">
+											<li>
+												<form action="updateBoardPage.do" method="post">
+													<input type="hidden" name="boardNum" value="${bdata.boardNum}" />
+													<button type="submit" style="background: none; border: none; text-decoration: none; color: #6b7770; padding: 0;">수정</button>
+												</form>
+											</li>
 										</c:if>
-										
+
 										<li>
-										<form action="deleteBoard.do" method="post">
-											<input type="hidden" name="boardNum" value="${bdata.boardNum}" />
-											<button type="submit" style="background: none; border: none; text-decoration: none; color: #6b7770;">
-												삭제</button>
-										</form>
+											<form action="deleteBoard.do" method="post">
+												<input type="hidden" name="boardNum" value="${bdata.boardNum}" />
+												<button type="submit" style="background: none; border: none; text-decoration: none; color: #6b7770; padding: 0;">삭제</button>
+											</form>
 										</li>
 									</ul>
 									<header>

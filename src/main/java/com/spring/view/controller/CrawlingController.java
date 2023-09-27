@@ -18,7 +18,7 @@ public class CrawlingController {
 	@Autowired
 	private AdvertisementService advertisementService;
 	
-	@RequestMapping(value = "/crawling.do", method = RequestMethod.GET)
+	@RequestMapping(value = "/crawling.do")
 	public String crawling (Model model) {
 		
 		List<AdvertisementVO> hdex = Crawling.crawlingHdex();
@@ -55,7 +55,7 @@ public class CrawlingController {
 		return "main.do";
 	}
 	
-	@RequestMapping(value = "/reset.do", method = RequestMethod.GET)
+	@RequestMapping(value = "/reset.do")
 	public String reset () {
 		
 		if (!advertisementService.reset(null)) {

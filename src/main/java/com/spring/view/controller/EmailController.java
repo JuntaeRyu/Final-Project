@@ -23,7 +23,7 @@ public class EmailController {
 	@Autowired
 	private JavaMailSender mailSender;
 
-	@RequestMapping(value = "/signupSuccess.do", method = RequestMethod.GET)
+	@RequestMapping(value = "/signupSuccess.do")
 	public String signupSuccess(HttpServletRequest request) {
 		System.out.println("로그: EmailController: signupSuccess() ");
 

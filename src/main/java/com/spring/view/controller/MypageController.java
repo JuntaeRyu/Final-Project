@@ -40,13 +40,21 @@ public class MypageController {
 
 	@Autowired
 	private CommentsService commentsService;
-	
+
 	@Autowired
 	private MatchingService matchingService;
 
-	@RequestMapping(value = "/mypage.do", method = RequestMethod.GET)
+	@RequestMapping(value = "/mypage.do")
 	public String mypage(MemberVO mVO, MemberProfileVO mpVO, HttpSession session, Model model) {
 		System.out.println("로그: Mypage: mypage()");
+
+		if((Integer)session.getAttribute("role") != 3) {
+			model.addAttribute("title", "요청실패..");
+			model.addAttribute("text", "다시한번 확인해주세요.." );
+			model.addAttribute("icon", "warning" );
+
+			return "goback.jsp";
+		}
 
 		mVO.setMemberID((String)session.getAttribute("memberID"));
 		mVO.setSearchCondition("duplicateID");
@@ -73,9 +81,17 @@ public class MypageController {
 		}
 	}
 
-	@RequestMapping(value = "/ownMatchPage.do", method = RequestMethod.GET)
+	@RequestMapping(value = "/ownMatchPage.do")
 	public String ownMatchPage(MatchingVO mcVO, HttpSession session, Model model) {
 		System.out.println("로그: Mypage: ownMatchPage()");
+
+		if((Integer)session.getAttribute("role") != 3) {
+			model.addAttribute("title", "요청실패..");
+			model.addAttribute("text", "다시한번 확인해주세요.." );
+			model.addAttribute("icon", "warning" );
+
+			return "goback.jsp";
+		}
 
 		//////////////////////////////////// 현재 로그인한 회원이 보낸거
 		mcVO.setSenderID((String)session.getAttribute("memberID"));
@@ -95,9 +111,17 @@ public class MypageController {
 		return "ownMatchPage.jsp";
 	}
 
-	@RequestMapping(value = "/ownBoardListPage.do", method = RequestMethod.GET)
+	@RequestMapping(value = "/ownBoardListPage.do")
 	public String ownBoardListPage(BoardVO bVO, CommentsVO cVO, HttpSession session, Model model) {
 		System.out.println("로그: Mypage: ownBaordListPage() ");
+
+		if((Integer)session.getAttribute("role") != 3) {
+			model.addAttribute("title", "요청실패..");
+			model.addAttribute("text", "다시한번 확인해주세요.." );
+			model.addAttribute("icon", "warning" );
+
+			return "goback.jsp";
+		}
 
 		bVO.setMemberID((String)session.getAttribute("memberID"));
 		bVO.setSearchCondition("ownBoard");
@@ -121,7 +145,7 @@ public class MypageController {
 	public String deleteOwnBoardList(@RequestParam("number") List<String> boardNums, BoardVO bVO, CommentsVO cVO, 
 			HttpSession session, Model model) {
 		System.out.println("로그: Mypage: deleteOwnBoard() ");
-		
+
 		System.out.println("boardNums: " + boardNums);
 
 		bVO.setMemberID((String)session.getAttribute("memberID"));
@@ -142,12 +166,20 @@ public class MypageController {
 			}
 		}
 
-		return "ownBoardListPage.do";
+		return "redirect:ownBoardListPage.do";
 	}
 
-	@RequestMapping(value = "/updateProfilePage.do", method = RequestMethod.GET)
+	@RequestMapping(value = "/updateProfilePage.do")
 	public String updateProfilePage(MemberVO mVO, MemberProfileVO mpVO, HttpSession session, Model model) {
 		System.out.println("로그: Mypage: updateProfilePage()");
+
+		if((Integer)session.getAttribute("role") != 3) {
+			model.addAttribute("title", "요청실패..");
+			model.addAttribute("text", "다시한번 확인해주세요.." );
+			model.addAttribute("icon", "warning" );
+
+			return "goback.jsp";
+		}
 
 		mVO.setMemberID((String)session.getAttribute("memberID"));
 		mVO.setSearchCondition("duplicateID");
@@ -159,10 +191,17 @@ public class MypageController {
 
 		mpVO = memberProfileService.selectOne(mpVO);
 
-		if(mpVO != null & mVO != null) {
-			model.addAttribute("mpdata", mpVO);
-			model.addAttribute("mdata", mVO);
+		if(mVO == null || mpVO ==null) {
+			model.addAttribute("title", "요청실패..");
+			model.addAttribute("text", "다시한번 확인해주세요.." );
+			model.addAttribute("icon", "warning" );
+
+			return "goback.jsp";
 		}
+
+		model.addAttribute("mpdata", mpVO);
+		model.addAttribute("mdata", mVO);
+		
 		return "updateProfilePage.jsp";
 	}
 
@@ -259,10 +298,18 @@ public class MypageController {
 		}
 	}
 
-	@RequestMapping(value = "/updateInfoPage.do", method = RequestMethod.GET)
+	@RequestMapping(value = "/updateInfoPage.do")
 	public String updateInfoPage(MemberVO mVO, HttpSession session, Model model) {
 		System.out.println("로그: Mypage: updateInfoPage()");
 
+		if((Integer)session.getAttribute("role") != 3) {
+			model.addAttribute("title", "잘못된 요청입니다..");
+			model.addAttribute("text", "다시 한 번 확인해주세요..");
+			model.addAttribute("icon", "warning");
+
+			return "goback.jsp";
+		}
+		
 		mVO.setMemberID((String)session.getAttribute("memberID"));
 		mVO.setSearchCondition("duplicateID");
 
@@ -374,5 +421,4 @@ public class MypageController {
 		}
 
 	}
-
 }

@@ -33,11 +33,9 @@ public class CommentController {
 		boolean flag = commentsService.insert(cVO);
 
 		if(flag) {
-			model.addAttribute("boardNum", cVO.getBoardNum());
-//			session.setAttribute("boardNum", cVO.getBoardNum());
-			
-			return "boardDetailPage.do";
-		} else {
+			return "redirect:boardDetailPage.do?boardNum="+cVO.getBoardNum();
+		}
+		else {
 			model.addAttribute("title", "댓글작성실패.." );
 			model.addAttribute("text", "다시한번 확인해주세요.." );
 			model.addAttribute("icon", "warning" );
@@ -55,12 +53,8 @@ public class CommentController {
 
 		boolean flag = commentsService.update(cVO);
 
-		cVO = commentsService.selectOne(cVO);
-
 		if(flag) {
-			model.addAttribute("boardNum", cVO.getBoardNum());
-			
-			return "boardDetailPage.do";
+			return "redirect:boardDetailPage.do?boardNum="+cVO.getBoardNum();
 		}
 		else {
 			model.addAttribute("title", "댓글 수정 실패..");
@@ -87,27 +81,19 @@ public class CommentController {
 			commentsService.delete(cVO);
 		}
 
-		model.addAttribute("boardNum", cVO.getBoardNum());
-		
-		return "boardDetailPage.do";
+		return "redirect:boardDetailPage.do?boardNum="+cVO.getBoardNum();
 	}
 
 	@RequestMapping(value = "/insertReply.do", method = RequestMethod.POST)
-	public String insertReply(ReplyVO rVO, HttpSession session, HttpServletRequest request, Model model) {
+	public String insertReply(CommentsVO cVO, ReplyVO rVO, HttpSession session, HttpServletRequest request, Model model) {
 		System.out.println("로그: Comment: insertReply() ");
 
 		rVO.setMemberID((String)session.getAttribute("memberID"));
 		
 		boolean flag = replyService.insert(rVO);
-
-		String boardNum = request.getParameter("boardNum");
 		
-		System.out.println("boardNum: " + request.getParameter("boardNum"));
-
 		if (flag) {
-			model.addAttribute("boardNum", boardNum);
-			
-			return "boardDetailPage.do";
+			return "redirect:boardDetailPage.do?boardNum="+cVO.getBoardNum();
 		} 
 		else {
 			request.setAttribute("title", "대댓글 작성실패.." );
@@ -119,23 +105,23 @@ public class CommentController {
 	}
 
 	@RequestMapping(value = "/updateReply.do", method = RequestMethod.POST)
-	public String updateReply(CommentsVO cVO, ReplyVO rVO, Model model) {
+	public String updateReply(CommentsVO cVO, ReplyVO rVO, Model model, HttpServletRequest request) {
 		System.out.println("로그: Comment: updateReply() ");
 
         rVO.setSearchCondition("updateReply");
 
         boolean flag = replyService.update(rVO);
-
+        
         if (flag) {
-            rVO = replyService.selectOne(rVO);
             
-            cVO.setCommentsNum(rVO.getCommentsNum());
             
-            cVO = commentsService.selectOne(cVO);
+//            rVO = replyService.selectOne(rVO);
+//            cVO.setCommentsNum(rVO.getCommentsNum());
+//            cVO = commentsService.selectOne(cVO);
+//            return "redirect:boardDetailPage.do?boardNum="+cVO.getBoardNum();
             
-            model.addAttribute("boardNum", cVO.getBoardNum());
-
-            return "boardDetailPage.do";
+            return "redirect:boardDetailPage.do?boardNum="+cVO.getBoardNum();
+            
         } else {
         	model.addAttribute("title", "대댓글 수정실패.." );
 			model.addAttribute("text", "다시한번 확인해주세요.." );
@@ -146,15 +132,13 @@ public class CommentController {
 	}
 
 	@RequestMapping(value = "/deleteReply.do", method = RequestMethod.POST)
-	public String deleteReply(ReplyVO rVO, HttpServletRequest request, Model model) {
+	public String deleteReply(CommentsVO cVO, ReplyVO rVO, HttpServletRequest request, Model model) {
 		System.out.println("로그: Comment: deleteReply() ");
         
         boolean flag = replyService.delete(rVO);
         
         if (flag) {
-        	model.addAttribute("boardNum", Integer.parseInt(request.getParameter("boardNum")));
-        	
-            return "boardDetailPage.do";
+            return "redirect:boardDetailPage.do?boardNum="+cVO.getBoardNum();
         }
         else {
             request.setAttribute("title", "대댓글 삭제실패..");
