@@ -20,6 +20,8 @@ import com.spring.biz.comments.CommentsService;
 import com.spring.biz.comments.CommentsVO;
 import com.spring.biz.member.MemberService;
 import com.spring.biz.member.MemberVO;
+import com.spring.biz.memberProfile.MemberProfileService;
+import com.spring.biz.memberProfile.MemberProfileVO;
 import com.spring.biz.page.PageVO;
 import com.spring.biz.warn.WarnService;
 import com.spring.biz.warn.WarnVO;
@@ -38,6 +40,9 @@ public class AdminController {
 	
 	@Autowired
 	private WarnService warnService;
+	
+	@Autowired
+	private MemberProfileService memberProfileService;
 
 	@ModelAttribute("searchMap")
 	public Map<String,String> searchMap(){
@@ -85,7 +90,7 @@ public class AdminController {
 
 	@RequestMapping(value = "/prohibitListPage.do")
 	public String prohibitListPage(BoardVO bVO, CommentsVO cVO, PageVO pageVO, HttpSession session, Model model) {
-		System.out.println("로그: Mypage: prohibitListPage()");
+		System.out.println("로그: Admin: prohibitListPage()");
 
 		if((Integer)session.getAttribute("role") == null || (Integer)session.getAttribute("role") != 2) {
 			model.addAttribute("title", "잘못된 접근입니다.");
@@ -130,7 +135,7 @@ public class AdminController {
 	
 	@RequestMapping(value = "/deleteProhibitList.do", method = RequestMethod.POST)
 	public String deleteProhibitList(@RequestParam("number") List<String> boardNums, BoardVO bVO, WarnVO wVO) {
-		System.out.println("로그: Mypage: deleteProhibitList() ");
+		System.out.println("로그: Admin: deleteProhibitList() ");
 		
 		bVO.setSearchCondition("prohibitBoard");
 
@@ -160,7 +165,53 @@ public class AdminController {
 		}
 		
 		return "redirect:prohibitListPage.do";
+	}
+	
+	@RequestMapping(value = "/prohibitMemberListPage.do")
+	public String prohibitMemberListPage(MemberProfileVO mpVO, Model model) {
+		System.out.println("로그: Admin: prohibitMemberListPage() ");
 		
+		mpVO.setSearchCondition("prohibitProfile");
+		
+		List<MemberProfileVO> mpdatas = memberProfileService.selectAll(mpVO);
+
+		model.addAttribute("mpdatas", mpdatas);
+		
+		return "prohibitMemberListPage.jsp";
+	}
+	
+	@RequestMapping(value = "/deleteMemberProhibitList.do", method = RequestMethod.POST)
+	public String deleteMemberProhibitList(@RequestParam("number") List<String> profileNums, MemberProfileVO mpVO, WarnVO wVO) {
+		System.out.println("로그: Admin: deleteMemberProhibitList() ");
+		
+		mpVO.setSearchCondition("prohibitProfile");
+
+		List<MemberProfileVO> phmdatas = memberProfileService.selectAll(mpVO);
+		
+		for(int i = 0; i < phmdatas.size(); i++) {
+			for (String profileNum : profileNums) {
+				if(phmdatas.get(i).getProfileNum() == Integer.parseInt(profileNum)) {
+
+					mpVO = phmdatas.get(i);
+
+					mpVO.setSearchCondition("profileReset");
+
+					memberProfileService.update(mpVO);
+					
+					wVO.setSearchCondition("profileWarn");
+					wVO.setMemberID(mpVO.getMemberID());
+					
+					boolean flag = warnService.insert(wVO);
+					
+					if(!flag) {
+						System.out.println("adminController deleteMemberProhibitList 경고누적 실패");
+					}
+					
+				}
+			}
+		}
+		
+		return "redirect:prohibitMemberListPage.do";
 	}
 
 }

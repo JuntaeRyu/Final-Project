@@ -87,16 +87,20 @@ i {
 										<c:if test="${role ne 2}">
 											<li>
 												<form action="updateBoardPage.do" method="post">
-													<input type="hidden" name="boardNum" value="${bdata.boardNum}" />
-													<button type="submit" style="background: none; border: none; text-decoration: none; color: #6b7770; padding: 0;">수정</button>
+													<input type="hidden" name="boardNum"
+														value="${bdata.boardNum}" />
+													<button type="submit"
+														style="background: none; border: none; text-decoration: none; color: #6b7770; padding: 0;">수정</button>
 												</form>
 											</li>
 										</c:if>
 
 										<li>
 											<form action="deleteBoard.do" method="post">
-												<input type="hidden" name="boardNum" value="${bdata.boardNum}" />
-												<button type="submit" style="background: none; border: none; text-decoration: none; color: #6b7770; padding: 0;">삭제</button>
+												<input type="hidden" name="boardNum"
+													value="${bdata.boardNum}" />
+												<button type="submit"
+													style="background: none; border: none; text-decoration: none; color: #6b7770; padding: 0;">삭제</button>
 											</form>
 										</li>
 									</ul>
@@ -153,8 +157,35 @@ i {
 											<ul class="meta" style="text-align: left;">
 												<li class="icon solid fa-user">${cdata.nickName}</li>
 												<li class="icon fa-clock">${cdata.commentsDate}</li>
+												<c:if test="${memberID eq cdata.memberID || role eq 2}">
+												<i class="icon solid fa-bars commentsButton"></i>
+												</c:if>
 											</ul>
-											<h1>${cdata.comments}</h1>
+											<ul class="commentsMenuList">
+												<c:if test="${role ne 2}">
+													<li>
+														<form action="updateComment.do" method="post">
+														<input type="hidden" name="boardNum"
+															value="${bdata.boardNum}">
+															<input type="hidden" name="commentsNum"
+																value="${cdata.commentsNum}" />
+															<button type="submit"
+																style="background: none; border: none; text-decoration: none; color: #6b7770; padding: 0;">수정</button>
+														</form>
+													</li>
+												</c:if>
+
+												<li>
+													<form action="deleteComment.do" method="post">
+													<input type="hidden" name="boardNum"
+															value="${bdata.boardNum}">
+														<input type="hidden" name="commentsNum"
+															value="${cdata.commentsNum}" />
+														<button type="submit"
+															style="background: none; border: none; text-decoration: none; color: #6b7770; padding: 0;">삭제</button>
+													</form>
+												</li>
+											</ul>
 											<ul class="meta">
 												<c:if test="${cdata.check eq '0' }">
 													<li><i class="icon solid fa-ban comments"
@@ -169,6 +200,12 @@ i {
 														title="신고"></i></li>
 												</c:if>
 											</ul>
+											<c:if test="${cdata.comments eq null}">
+											<h1>삭제된 댓글입니다.</h1>
+											</c:if>
+											<c:if test="${cdata.comments ne null}">
+											<h1>${cdata.comments}</h1>
+											</c:if>
 
 											<!-- 대댓글 -->
 											<c:forEach var="rdata" items="${rdatas}">
@@ -424,6 +461,30 @@ i {
 	   });
 	}
 
+	const commentsButtons = document.getElementsByClassName('commentsButton');
+   const commentsMenuList = document.getElementsByClassName('commentsMenuList');
+   const ban = document.getElementsByClassName('icon solid fa-ban comments');
+   
+   let commentsMenuVisible = false;
+   
+   
+   if (commentsButtons.length > 0 && commentsMenuList.length > 0) {
+	   for (let i = 0; i < commentsButtons.length; i++) {
+	     commentsButtons[i].addEventListener('click', () => {
+	       commentsMenuVisible = !commentsMenuVisible;
+
+	       if (commentsMenuVisible) {
+	         commentsMenuList[i].style.display = 'block';
+	         ban[i].style.display='none';
+	       } else {
+	         commentsMenuList[i].style.display = 'none';
+	         ban[i].style.display='block';
+	       }
+	     });
+	     
+	     
+	   }
+	 }
 	document.addEventListener("DOMContentLoaded", function() {
 	    const insertReplyBtns = document.querySelectorAll('.insertReplyBtn');
 

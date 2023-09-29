@@ -50,7 +50,7 @@ public class MemberProfileDAO2 implements InterfaceMemberProfileDAO{
 	// 회원프로필 이미지 변경
 	private final String sql_UPDATE_PROFILEIMG = "UPDATE MEMBERPROFILE SET PROFILEIMG=? WHERE PROFILENUM=?";
 	// 회원프로필 초기화
-	private final String sql_UPDATE_PROFILERESET = "UPDATE MEMBERPROFILE SET PROFILEIMG=?,SHORTIMG=?,INTRO=?,PROFILEIMG=?,PROHIBITCNT=0 WHERE PROFILENUM=?";
+	private final String sql_UPDATE_PROFILERESET = "UPDATE MEMBERPROFILE SET PROFILEIMG=NULL,SHORTINTRO=NULL,INTRO=NULL,PROHIBITCNT=0,RECOMMENDCNT=0 WHERE PROFILENUM=?";
 	//	private final String sql_DELETE = "DELETE FROM MEMBER WHERE MEMBERID=?";
 	// JDBC(자바 데이터베이스 커넥트) 도구
 	// 중복검사에 쿼리문 굳이 다필요한지 확인

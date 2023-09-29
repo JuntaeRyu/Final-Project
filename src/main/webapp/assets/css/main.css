@@ -2189,6 +2189,7 @@ ul.meta li:before {
 	padding-left: 0.5em;
 }
 
+
 #menuList {
 	float: right;
 	display: none;
@@ -2197,9 +2198,34 @@ ul.meta li:before {
 	margin-bottom: 1px;
 	display: none;
 	padding-left: 1.7em;
+	border-radius: 7px;
 }
 
 #menuList li {
+	padding-left: 0em;
+	padding-right: 10px;
+}
+
+.commentsButton {
+	float: right;
+	padding-left: 0.5em;
+}
+
+.commentsMenuList {
+	float: right;
+	display: none;
+	z-index: 1;
+	background-color: #e5f5d7;
+	margin-bottom: 1px;
+	display: none;
+	padding-left: 1.7em;
+	top: -30px;
+	right: 40px;
+	position: relative;
+	border-radius: 7px;
+}
+
+.commentsMenuList li {
 	padding-left: 0em;
 	padding-right: 10px;
 }

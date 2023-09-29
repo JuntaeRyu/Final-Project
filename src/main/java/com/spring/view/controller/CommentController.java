@@ -1,5 +1,7 @@
 package com.spring.view.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -70,9 +72,13 @@ public class CommentController {
 	public String deleteComment(CommentsVO cVO, ReplyVO rVO, Model model) {
 		System.out.println("로그: Comment: deleteComment() ");
 
+		System.out.println("rVO의 commentsNum"+rVO.getCommentsNum());
 		rVO.setSearchCondition("commentsReplyNum");
-
-		if (replyService.selectAll(rVO) != null) {
+		
+		List<ReplyVO> rdatas=replyService.selectAll(rVO);
+		System.out.println("rdatas"+rdatas);
+		
+		if (!(rdatas.isEmpty())) {
 			cVO.setSearchCondition("updateComments");
 			cVO.setComments(null);
 

@@ -13,7 +13,7 @@ public class BoardVO {
     private String boardDate;	 	// 게시글 작성일
     private String boardImg;	 	// 게시글 이미지
     private int viewCnt;			// 게시글 조회수
-    
+
     // 서치 컨디션 (검색 조건)
     private String searchCondition;	// 서치컨디션
     private String nickName; 		// 작성자 닉네임
