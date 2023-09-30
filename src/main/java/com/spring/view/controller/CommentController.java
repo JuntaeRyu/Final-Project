@@ -119,15 +119,8 @@ public class CommentController {
         boolean flag = replyService.update(rVO);
         
         if (flag) {
-            
-            
-//            rVO = replyService.selectOne(rVO);
-//            cVO.setCommentsNum(rVO.getCommentsNum());
-//            cVO = commentsService.selectOne(cVO);
-//            return "redirect:boardDetailPage.do?boardNum="+cVO.getBoardNum();
-            
+        	// 그냥 서치컨디션으로 reply에 boardNum을 넣는게 어때요?
             return "redirect:boardDetailPage.do?boardNum="+cVO.getBoardNum();
-            
         } else {
         	model.addAttribute("title", "대댓글 수정실패.." );
 			model.addAttribute("text", "다시한번 확인해주세요.." );
@@ -141,9 +134,11 @@ public class CommentController {
 	public String deleteReply(CommentsVO cVO, ReplyVO rVO, HttpServletRequest request, Model model) {
 		System.out.println("로그: Comment: deleteReply() ");
         
+		rVO.setSearchCondition("replyNum");
         boolean flag = replyService.delete(rVO);
         
         if (flag) {
+        	// 그냥 서치컨디션으로 reply에 boardNum을 넣는게 어때요?
             return "redirect:boardDetailPage.do?boardNum="+cVO.getBoardNum();
         }
         else {

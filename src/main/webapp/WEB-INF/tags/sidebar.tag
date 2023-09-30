@@ -13,7 +13,7 @@
 									<span>해당 게시물 작성자의 다른 게시물들</span>
 								</h2>
 								<ul class="divided">
-									<c:if test="${not empty writerbatas}">
+									<c:if test="${not empty writerbdatas}">
 									<c:forEach items="${writerbdatas}" var="post">
 										<li>
 											<article class="box post-summary">
@@ -28,7 +28,7 @@
 										</li>
 									</c:forEach>
 									</c:if>
-									<c:if test="${empty writerbatas}">
+									<c:if test="${empty writerbdatas}">
 										<li>
 										해당 회원에 작성된 글이 없습니다.
 										</li>

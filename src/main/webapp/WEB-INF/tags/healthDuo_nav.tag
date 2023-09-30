@@ -28,7 +28,7 @@
 						<ul>
 							<li><a href="matchingPage.do">전체회원</a></li>
 							<c:if test="${role eq 2}">
-								<li><a href="memberListPage.do">회원관리</a></li>
+								<li><a href="prohibitMemberListPage.do">회원관리</a></li>
 							</c:if>
 						</ul></li>
 				</nav>

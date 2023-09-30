@@ -264,9 +264,9 @@ public class BoardController {
 			////////////// 사이드바 - 해당게시물 작성자의 또다른 글 3개 ///////////////////
 			bVO.setSearchCondition("writerBoard");
 			
-			List<BoardVO> writerBoards = boardService.selectAll(bVO);
+			List<BoardVO> writerbdatas = boardService.selectAll(bVO);
 			
-			request.setAttribute("writerbdatas", writerBoards);
+			request.setAttribute("writerbdatas", writerbdatas);
 			///////////////////////////////////////
 			
 			bVO.setSearchCondition("viewCnt");

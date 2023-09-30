@@ -2219,13 +2219,35 @@ ul.meta li:before {
 	margin-bottom: 1px;
 	display: none;
 	padding-left: 1.7em;
-	top: -30px;
-	right: 40px;
+	top: -35px;
+	right: 41px;
 	position: relative;
 	border-radius: 7px;
 }
 
 .commentsMenuList li {
+	padding-left: 0em;
+	padding-right: 10px;
+}
+
+.replyButton {
+	float: right;
+}
+
+.replyMenuList {
+	float: right;
+	display: none;
+	z-index: 1;
+	background-color: #cceab2;
+	margin-bottom: 1px;
+	display: none;
+	padding-left: 1.7em;
+	right: 5px;
+	position: relative;
+	border-radius: 7px;
+}
+
+.replyMenuList li {
 	padding-left: 0em;
 	padding-right: 10px;
 }

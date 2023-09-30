@@ -12,6 +12,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.spring.biz.board.BoardService;
+import com.spring.biz.board.BoardVO;
 import com.spring.biz.matching.MatchingService;
 import com.spring.biz.matching.MatchingVO;
 import com.spring.biz.memberProfile.MemberProfileService;
@@ -35,6 +37,9 @@ public class MatchingController {
 
 	@Autowired
 	private MatchingService matchingService;
+	
+	@Autowired
+	private BoardService boardService;
 
 	@RequestMapping(value = "/matchingPage.do")
 	public String matchingPage(MemberProfileVO mpVO, Random random, Model model) {
@@ -50,7 +55,7 @@ public class MatchingController {
 	}
 
 	@RequestMapping(value = "/profileDetailPage.do")
-	public String profileListPage(MemberProfileVO mpVO, RecommendVO rcVO, ProhibitVO pVO, 
+	public String profileListPage(BoardVO bVO, MemberProfileVO mpVO, RecommendVO rcVO, ProhibitVO pVO, 
 			HttpSession session, HttpServletRequest request, Model model) {
 		System.out.println("로그: Matching: profileDetailPage() ");
 		
@@ -90,6 +95,22 @@ public class MatchingController {
 			request.setAttribute("prohibit", 0);
 		}
 
+		//////////// 사이드바 - 해당 프로필회원의 게시물 뽑아오기 //////////////
+		bVO.setSearchCondition("writerBoard");
+		bVO.setMemberID(mpVO.getMemberID());
+		
+		List<BoardVO> writerbdatas = boardService.selectAll(bVO);
+		
+		model.addAttribute("writerbdatas", writerbdatas);
+		//////////////////////////////////////////////////////
+		/////////// 사이드바 - 이 달의 1등 게시물 //////////////////
+		bVO.setSearchCondition("topBoard");
+		
+		bVO = boardService.selectOne(bVO);
+		
+		model.addAttribute("topbdata", bVO);
+		/////////////////////////////////////////////////////
+		
 		model.addAttribute("mpdata", mpVO);
 
 		return "profileDetailPage.jsp";

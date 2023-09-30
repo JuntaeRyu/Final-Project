@@ -215,7 +215,7 @@ public class MypageController {
 
 			mpVO.setProfileImg(profileImgUpload.getOriginalFilename());
 
-			profileImgUpload.transferTo(new File("C:\\KANG\\stsworkspace\\healthDuo\\src\\main\\webapp\\images\\profileImg\\"+ mpVO.getProfileImg()));
+			profileImgUpload.transferTo(new File("D:\\RYU\\sts\\healthhaeDUO\\src\\main\\webapp\\images\\profileImg\\"+ mpVO.getProfileImg()));
 		}
 		else {
 			mpVO.setSearchCondition("memberProfile");
