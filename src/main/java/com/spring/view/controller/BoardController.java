@@ -10,6 +10,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -46,7 +47,7 @@ public class BoardController {
 
 
 	@RequestMapping(value = "/boardListPage.do")
-	public String boardListPage(BoardVO bVO, CommentsVO cVO, PageVO pageVO, Model model) {
+	public String boardListPage(@ModelAttribute("data")BoardVO bVO, CommentsVO cVO, PageVO pageVO, Model model) {
 		System.out.println("로그: Board: boardListPage() ");
 
 		if (pageVO.getCurrentPage() > 0) {

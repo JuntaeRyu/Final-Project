@@ -89,7 +89,7 @@ public class ReplyDAO2 implements InterfaceReplyDAO{
 
 		// SQL 쿼리문 입력
 
-		if (rVO.getSearchCondition().equals("updateReply")) {
+		if (rVO.getSearchCondition()==null) {
 			System.out.println("replyDAO2 update 서치컨디션 null");
 		}
 		else if (rVO.getSearchCondition().equals("updateReply")) {

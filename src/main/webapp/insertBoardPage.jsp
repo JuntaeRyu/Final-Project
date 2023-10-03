@@ -28,7 +28,7 @@
 
 		<!-- Nav -->
 		<NPNC:healthDuo_nav />
-		
+
 		<!-- Main -->
 		<section id="main">
 			<div class="container">
@@ -106,7 +106,7 @@
 	<!-- Scripts -->
 	<script>
 		ClassicEditor.create(document.querySelector('#editor'), {
-		  toolbar: ['heading', '|', 'bold', 'italic'],
+		  toolbar: ['heading', '|', 'bold', 'italic', 'imageUpload'],
 		  language: 'ko',
 		});
 	</script>

@@ -126,11 +126,52 @@ i {
 											<ul class="meta" style="text-align: left;">
 												<li class="icon solid fa-user">${cdata.nickName}</li>
 												<li class="icon fa-clock">${cdata.commentsDate }</li>
+												<c:if test="${memberID eq cdata.memberID || role eq 2}">
+													<i class="icon solid fa-bars commentsButton"></i>
+												</c:if>
 											</ul>
-											<h1>${cdata.comments}</h1>
+											<ul class="commentsMenuList">
+												<c:if test="${role ne 2}">
+													<li>
+														<form action="updateComment.do" method="post">
+															<input type="hidden" name="boardNum"
+																value="${bdata.boardNum}"> <input type="hidden"
+																name="commentsNum" value="${cdata.commentsNum}" />
+															<button type="submit"
+																style="background: none; border: none; text-decoration: none; color: #6b7770; padding: 0;">수정</button>
+														</form>
+													</li>
+												</c:if>
+
+												<li>
+													<form action="deleteComment.do" method="post">
+														<input type="hidden" name="boardNum"
+															value="${bdata.boardNum}"> <input type="hidden"
+															name="commentsNum" value="${cdata.commentsNum}" />
+														<button type="submit"
+															style="background: none; border: none; text-decoration: none; color: #6b7770; padding: 0;">삭제</button>
+													</form>
+												</li>
+											</ul>
+											<c:if test="${cdata.comments eq null}">
+												<h1>삭제된 댓글입니다.</h1>
+											</c:if>
+											<c:if test="${cdata.comments ne null}">
+												<h1>${cdata.comments}</h1>
+											</c:if>
 											<ul class="meta">
-												<li class="icon fa-heart">댓글 추천수 변수 없음</li>
-												<li class="icon solid fa-ban">${cdata.prohibitCnt}</li>
+												<c:if test="${cdata.check eq '0' }">
+													<li><i class="icon solid fa-ban comments"
+														style="color: #c2bcbc"
+														onclick="javascript:funcComments('${cdata.commentsNum}' , '${cdata.check}', this)"
+														title="신고"></i></li>
+												</c:if>
+												<c:if test="${cdata.check eq '1' }">
+													<li><i class="icon solid fa-ban comments"
+														style="color: #f58300;"
+														onclick="javascript:funcComments('${cdata.commentsNum}' , '${cdata.check}', this)"
+														title="신고"></i></li>
+												</c:if>
 											</ul>
 
 											<!-- 대댓글 -->
@@ -138,10 +179,53 @@ i {
 												<c:if test="${cdata.commentsNum eq rdata.commentsNum}">
 													<p id="replyIcon" class="icon solid fa-reply"></p>
 													<section id="replyBox">
-														<h1>${rdata.reply}</h1>
 														<ul class="meta">
-															<li class="icon solid fa-user">${rdata.nickName}</li>
-															<li class="icon fa-clock">${rdata.replyDate}</li>
+															<c:if test="${memberID eq rdata.memberID || role eq 2}">
+																<i class="icon solid fa-bars replyButton"></i>
+															</c:if>
+														</ul>
+														<ul class="replyMenuList">
+															<c:if test="${role ne 2}">
+																<li>
+																	<form action="updateReply.do" method="post">
+																		<input type="hidden" name="boardNum"
+																			value="${bdata.boardNum}"> <input
+																			type="hidden" name="replyNum"
+																			value="${rdata.replyNum}">
+																		<button type="submit"
+																			style="background: none; border: none; text-decoration: none; color: #6b7770; padding: 0;">수정</button>
+																	</form>
+																</li>
+															</c:if>
+
+															<li>
+																<form action="deleteReply.do" method="post">
+																	<input type="hidden" name="boardNum"
+																		value="${bdata.boardNum}"> <input
+																		type="hidden" name="replyNum"
+																		value="${rdata.replyNum}">
+																	<button type="submit"
+																		style="background: none; border: none; text-decoration: none; color: #6b7770; padding: 0;">삭제</button>
+																</form>
+															</li>
+														</ul>
+														<h1>${rdata.reply}</h1>
+														<ul class="meta" style="text-align: right">
+															<li class="icon solid fa-user" style="float: left;">${rdata.nickName}</li>
+															<li class="icon fa-clock" style="float: left;">${rdata.replyDate}</li>
+
+															<c:if test="${rdata.check eq '0'}">
+																<li><i class="icon solid fa-ban reply"
+																	style="color: #c2bcbc;"
+																	onclick="javascript:funcReply('${rdata.replyNum}', '${rdata.check}', this)"
+																	title="신고"></i></li>
+															</c:if>
+															<c:if test="${rdata.check eq '1'}">
+																<li><i class="icon solid fa-ban reply"
+																	style="color: #f58300;"
+																	onclick="javascript:funcReply('${rdata.replyNum}', '${rdata.check}', this)"
+																	title="신고"></i></li>
+															</c:if>
 														</ul>
 													</section>
 												</c:if>
@@ -283,6 +367,53 @@ i {
 	     }
 	   });
 	}
+	const commentsButtons = document.getElementsByClassName('commentsButton');
+	   const commentsMenuList = document.getElementsByClassName('commentsMenuList');
+	   const commentsBan = document.getElementsByClassName('icon solid fa-ban comments');
+	   
+	   let commentsMenuVisible = false;
+	   
+	   
+	   if (commentsButtons.length > 0 && commentsMenuList.length > 0) {
+		   for (let i = 0; i < commentsButtons.length; i++) {
+		     commentsButtons[i].addEventListener('click', () => {
+		       commentsMenuVisible = !commentsMenuVisible;
+
+		       if (commentsMenuVisible) {
+		         commentsMenuList[i].style.display = 'block';
+		         commentsBan[i].style.display='none';
+		       } else {
+		         commentsMenuList[i].style.display = 'none';
+		         commentsBan[i].style.display='block';
+		       }
+		     });
+		   }
+	   }
+		     
+		const replyButtons = document.getElementsByClassName('replyButton');
+	   const replyMenuList = document.getElementsByClassName('replyMenuList');
+	   const replyBan = document.getElementsByClassName('icon solid fa-ban reply');
+	   
+	   let replyMenuVisible = false;
+	   
+	   
+	   if (replyButtons.length > 0 && replyMenuList.length > 0) {
+		   for (let i = 0; i < replyButtons.length; i++) {
+		     replyButtons[i].addEventListener('click', () => {
+		       replyMenuVisible = !replyMenuVisible;
+
+		       if (replyMenuVisible) {
+		         replyMenuList[i].style.display = 'block';
+		         replyBan[i].style.display='none';
+		       } else {
+		         replyMenuList[i].style.display = 'none';
+		         replyBan[i].style.display='block';
+		       }
+		     });
+		     
+		     
+		   }
+		 }
    
    document.addEventListener("DOMContentLoaded", function() {
 	    const insertReplyBtns = document.querySelectorAll('.insertReplyBtn');

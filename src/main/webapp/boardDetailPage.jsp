@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="NPNC"%>
@@ -45,14 +44,11 @@ i {
 <title>HealthDuo</title>
 <meta charset="utf-8" />
 <!-- <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" /> -->
-<link rel="icon" href="assets/css/images/favicon.ico"
-	type="image/x-icon" />
+<link rel="icon" href="assets/css/images/favicon.ico" type="image/x-icon" />
 <link rel="stylesheet" href="assets/css/main.css" />
 </head>
 <body class="is-preload">
-	<script src="https://code.jquery.com/jquery-3.7.0.min.js"
-		integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g="
-		crossorigin="anonymous"></script>
+	<script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
 	<div id="page-wrapper">
 
 		<!-- Header -->
@@ -87,32 +83,26 @@ i {
 										<c:if test="${role ne 2}">
 											<li>
 												<form action="updateBoardPage.do" method="post">
-													<input type="hidden" name="boardNum"
-														value="${bdata.boardNum}" />
-													<button type="submit"
-														style="background: none; border: none; text-decoration: none; color: #6b7770; padding: 0;">수정</button>
+													<input type="hidden" name="boardNum" value="${bdata.boardNum}" />
+													<button type="submit" style="background: none; border: none; text-decoration: none; color: #6b7770; padding: 0;">수정</button>
 												</form>
 											</li>
 										</c:if>
 
 										<li>
 											<form action="deleteBoard.do" method="post">
-												<input type="hidden" name="boardNum"
-													value="${bdata.boardNum}" />
-												<button type="submit"
-													style="background: none; border: none; text-decoration: none; color: #6b7770; padding: 0;">삭제</button>
+												<input type="hidden" name="boardNum" value="${bdata.boardNum}" />
+												<button type="submit" style="background: none; border: none; text-decoration: none; color: #6b7770; padding: 0;">삭제</button>
 											</form>
 										</li>
 									</ul>
 									<header>
 										<p id="boardTitle">${bdata.title}</p>
 										<ul class="meta">
-											<li class="icon solid fa-user"><a
-												href="profileDetailPage.do?memberID=${bdata.memberID}">${bdata.nickName}</a></li>
+											<li class="icon solid fa-user"><a href="profileDetailPage.do?memberID=${bdata.memberID}">${bdata.nickName}</a></li>
 											<li class="icon fa-clock">${bdata.boardDate}</li>
 											<c:if test="${not empty memberID}">
-												<li><i id="rc" class="icon fa-heart"
-													style="color: #f22202;" title="추천"></i>
+												<li><i id="rc" class="icon fa-heart" style="color: #f22202;" title="추천"></i>
 													<p class="cnt" style="display: inline-block;">${bdata.recommendCnt}</p></li>
 												<li><i id="ph" class="icon solid fa-ban" title="신고"></i></li>
 											</c:if>
@@ -137,12 +127,8 @@ i {
 								<!-- 댓글 작성 -->
 								<c:if test="${not empty memberID}">
 									<section id="insertCommentBox">
-										<form id="insertComment" action="insertComment.do"
-											method="POST">
-											<input type="hidden" name="boardNum"
-												value="${bdata.boardNum}"> <input type="text"
-												name="comments" placeholder="댓글 작성 내용" required> <input
-												style="width: 80px;" type="submit" value="작성">
+										<form id="insertComment" action="insertComment.do" method="POST">
+											<input type="hidden" name="boardNum" value="${bdata.boardNum}"> <input type="text" name="comments" placeholder="댓글 작성 내용" required> <input style="width: 80px;" type="submit" value="작성">
 										</form>
 									</section>
 								</c:if>
@@ -164,38 +150,25 @@ i {
 											<ul class="commentsMenuList">
 												<c:if test="${role ne 2}">
 													<li>
-														<form action="updateComment.do" method="post">
-															<input type="hidden" name="boardNum"
-																value="${bdata.boardNum}"> <input type="hidden"
-																name="commentsNum" value="${cdata.commentsNum}" />
-															<button type="submit"
-																style="background: none; border: none; text-decoration: none; color: #6b7770; padding: 0;">수정</button>
-														</form>
+														<!-- 수정 버튼의 type을 "button"으로 변경하고 onclick 이벤트 추가 -->
+														<button type="button" style="background: none; border: none; text-decoration: none; color: #6b7770; padding: 0;" onclick="updateComments('${cdata.commentsNum}')">수정</button>
 													</li>
 												</c:if>
 
 												<li>
 													<form action="deleteComment.do" method="post">
-														<input type="hidden" name="boardNum"
-															value="${bdata.boardNum}"> <input type="hidden"
-															name="commentsNum" value="${cdata.commentsNum}" />
-														<button type="submit"
-															style="background: none; border: none; text-decoration: none; color: #6b7770; padding: 0;">삭제</button>
+														<input type="hidden" name="boardNum" value="${bdata.boardNum}"> <input type="hidden" name="commentsNum" value="${cdata.commentsNum}" />
+														<button type="submit" style="background: none; border: none; text-decoration: none; color: #6b7770; padding: 0;">삭제</button>
 													</form>
 												</li>
 											</ul>
+
 											<ul class="meta">
 												<c:if test="${cdata.check eq '0' }">
-													<li><i class="icon solid fa-ban comments"
-														style="color: #c2bcbc"
-														onclick="javascript:funcComments('${cdata.commentsNum}' , '${cdata.check}', this)"
-														title="신고"></i></li>
+													<li><i class="icon solid fa-ban comments" style="color: #c2bcbc" onclick="javascript:funcComments('${cdata.commentsNum}' , '${cdata.check}', this)" title="신고"></i></li>
 												</c:if>
 												<c:if test="${cdata.check eq '1' }">
-													<li><i class="icon solid fa-ban comments"
-														style="color: #f58300;"
-														onclick="javascript:funcComments('${cdata.commentsNum}' , '${cdata.check}', this)"
-														title="신고"></i></li>
+													<li><i class="icon solid fa-ban comments" style="color: #f58300;" onclick="javascript:funcComments('${cdata.commentsNum}' , '${cdata.check}', this)" title="신고"></i></li>
 												</c:if>
 											</ul>
 											<c:if test="${cdata.comments eq null}">
@@ -218,25 +191,14 @@ i {
 														<ul class="replyMenuList">
 															<c:if test="${role ne 2}">
 																<li>
-																	<form action="updateReply.do" method="post">
-																		<input type="hidden" name="boardNum"
-																			value="${bdata.boardNum}"> <input
-																			type="hidden" name="replyNum"
-																			value="${rdata.replyNum}">
-																		<button type="submit"
-																			style="background: none; border: none; text-decoration: none; color: #6b7770; padding: 0;">수정</button>
-																	</form>
+																	<button type="button" style="background: none; border: none; text-decoration: none; color: #6b7770; padding: 0;" onclick="updateReply('${rdata.replyNum}')">수정</button>
 																</li>
 															</c:if>
 
 															<li>
 																<form action="deleteReply.do" method="post">
-																	<input type="hidden" name="boardNum"
-																		value="${bdata.boardNum}"> <input
-																		type="hidden" name="replyNum"
-																		value="${rdata.replyNum}">
-																	<button type="submit"
-																		style="background: none; border: none; text-decoration: none; color: #6b7770; padding: 0;">삭제</button>
+																	<input type="hidden" name="boardNum" value="${bdata.boardNum}"> <input type="hidden" name="replyNum" value="${rdata.replyNum}">
+																	<button type="submit" style="background: none; border: none; text-decoration: none; color: #6b7770; padding: 0;">삭제</button>
 																</form>
 															</li>
 														</ul>
@@ -247,16 +209,10 @@ i {
 															<li class="icon fa-clock" style="float: left;">${rdata.replyDate}</li>
 
 															<c:if test="${rdata.check eq '0'}">
-																<li><i class="icon solid fa-ban reply"
-																	style="color: #c2bcbc;"
-																	onclick="javascript:funcReply('${rdata.replyNum}', '${rdata.check}', this)"
-																	title="신고"></i></li>
+																<li><i class="icon solid fa-ban reply" style="color: #c2bcbc;" onclick="javascript:funcReply('${rdata.replyNum}', '${rdata.check}', this)" title="신고"></i></li>
 															</c:if>
 															<c:if test="${rdata.check eq '1'}">
-																<li><i class="icon solid fa-ban reply"
-																	style="color: #f58300;"
-																	onclick="javascript:funcReply('${rdata.replyNum}', '${rdata.check}', this)"
-																	title="신고"></i></li>
+																<li><i class="icon solid fa-ban reply" style="color: #f58300;" onclick="javascript:funcReply('${rdata.replyNum}', '${rdata.check}', this)" title="신고"></i></li>
 															</c:if>
 														</ul>
 													</section>
@@ -267,23 +223,15 @@ i {
 												<c:if test="${not empty memberID}">
 													<button class="insertReplyBtn">대댓글 작성</button>
 												</c:if>
-												<section id="replyInsertBox" class="insertReply"
-													style="display: none;">
-													<form id="replyInsert" action="insertReply.do"
-														method="POST">
-														<input type="hidden" name="boardNum"
-															value="${cdata.boardNum}"> <input type="hidden"
-															name="commentsNum" value="${cdata.commentsNum}">
-														<input type="text" name="reply" placeholder="대댓글 작성 내용"
-															required> <input style="width: 80px;"
-															type="submit" value="작성">
+												<section id="replyInsertBox" class="insertReply" style="display: none;">
+													<form id="replyInsert" action="insertReply.do" method="POST">
+														<input type="hidden" name="boardNum" value="${cdata.boardNum}"> <input type="hidden" name="commentsNum" value="${cdata.commentsNum}"> <input type="text" name="reply" placeholder="대댓글 작성 내용" required> <input style="width: 80px;" type="submit" value="작성">
 													</form>
 												</section>
 											</div>
 											<!-- 대댓글 여기까지 -->
 
-											<hr
-												style="border: 0; border-top: solid 1px #a7b5ac; margin: 1em 0.5em 1em 0;">
+											<hr style="border: 0; border-top: solid 1px #a7b5ac; margin: 1em 0.5em 1em 0;">
 											<!-- 댓글 여기까지 -->
 										</c:forEach>
 									</c:if>
@@ -297,8 +245,7 @@ i {
 				</div>
 			</div>
 		</section>
-		<button id="scrollToTop" onclick="scrollToTop()"
-			class="icon solid fa-chevron-up"></button>
+		<button id="scrollToTop" onclick="scrollToTop()" class="icon solid fa-chevron-up"></button>
 		<!-- Footer -->
 		<footer id="footer">
 			<div class="container">
@@ -311,13 +258,7 @@ i {
 								<span>What's this about?</span>
 							</h2>
 							<p>
-								This is <strong>TXT</strong>, yet another free responsive site
-								template designed by <a href="http://twitter.com/ajlkn">AJ</a>
-								for <a href="http://html5up.net">HTML5 UP</a>. It's released
-								under the <a href="http://html5up.net/license/">Creative
-									Commons Attribution</a> license so feel free to use it for whatever
-								you're working on (personal or commercial), just be sure to give
-								us credit for the design. That's basically it :)
+								This is <strong>TXT</strong>, yet another free responsive site template designed by <a href="http://twitter.com/ajlkn">AJ</a> for <a href="http://html5up.net">HTML5 UP</a>. It's released under the <a href="http://html5up.net/license/">Creative Commons Attribution</a> license so feel free to use it for whatever you're working on (personal or commercial), just be sure to give us credit for the design. That's basically it :)
 							</p>
 						</section>
 
@@ -330,16 +271,11 @@ i {
 								<span>Get in touch</span>
 							</h2>
 							<ul class="contact">
-								<li><a class="icon brands fa-facebook-f" href="#"><span
-										class="label">Facebook</span></a></li>
-								<li><a class="icon brands fa-twitter" href="#"><span
-										class="label">Twitter</span></a></li>
-								<li><a class="icon brands fa-instagram" href="#"><span
-										class="label">Instagram</span></a></li>
-								<li><a class="icon brands fa-dribbble" href="#"><span
-										class="label">Dribbble</span></a></li>
-								<li><a class="icon brands fa-linkedin-in" href="#"><span
-										class="label">LinkedIn</span></a></li>
+								<li><a class="icon brands fa-facebook-f" href="#"><span class="label">Facebook</span></a></li>
+								<li><a class="icon brands fa-twitter" href="#"><span class="label">Twitter</span></a></li>
+								<li><a class="icon brands fa-instagram" href="#"><span class="label">Instagram</span></a></li>
+								<li><a class="icon brands fa-dribbble" href="#"><span class="label">Dribbble</span></a></li>
+								<li><a class="icon brands fa-linkedin-in" href="#"><span class="label">LinkedIn</span></a></li>
 							</ul>
 						</section>
 
@@ -411,6 +347,86 @@ i {
 	</script>
 
 	<script type="text/javascript">
+	 function updateComments(commentsNum) {
+         Swal.fire({
+             title: '댓글 수정',
+             html: '<textarea id="commentText" class="swal2-textarea"></textarea>',
+             showCancelButton: true,
+             confirmButtonText: '확인',
+             cancelButtonText: '취소',
+             preConfirm: () => {
+                 const commentText = document.getElementById('commentText').value;
+                 // 데이터를 서버로 보내고 POST 요청 보냄
+                 postCommentsData(commentText, commentsNum);
+             }
+         });
+     }
+
+     // POST 요청을 보내는 함수
+     function postCommentsData(commentText, commentsNum) {
+         $.ajax({
+             type: 'POST',
+             url: 'updateComment.do',
+             data: {
+                 comments: commentText,
+                 boardNum: '${bdata.boardNum}',
+                 commentsNum: commentsNum
+             },
+             success: function(response) {
+                 // 성공적으로 서버 응답을 받았을 때 실행할 코드
+                 console.log(response);
+                 // 원하는 후속 작업 수행
+                 alert('댓글 수정 완료');
+                 location.reload();
+             },
+             error: function(xhr, status, error) {
+                 // Ajax 오류 처리
+                 console.error(error);
+             }
+         });
+     }
+     
+	 function updateReply(replyNum) {
+         Swal.fire({
+             title: '대댓글 수정',
+             html: '<textarea id="replyText" class="swal2-textarea"></textarea>',
+             showCancelButton: true,
+             confirmButtonText: '확인',
+             cancelButtonText: '취소',
+             preConfirm: () => {
+                 const replyText = document.getElementById('replyText').value;
+                 // 데이터를 서버로 보내고 POST 요청 보냄
+                 console.log(replyText, replyNum);
+                 postReplyData(replyText, replyNum);
+             }
+         });
+     }
+
+     // POST 요청을 보내는 함수
+     function postReplyData(replyText, replyNum) {
+         $.ajax({
+             type: 'POST',
+             url: 'updateReply.do',
+             data: {
+                 reply: replyText,
+                 boardNum: '${bdata.boardNum}',
+                 replyNum: replyNum
+             },
+             success: function(response) {
+                 // 성공적으로 서버 응답을 받았을 때 실행할 코드
+                 console.log(response);
+                 // 원하는 후속 작업 수행
+                 alert('대댓글 수정 완료');
+                 
+                 location.reload();
+             },
+             error: function(xhr, status, error) {
+                 // Ajax 오류 처리
+                 console.error(error);
+             }
+         });
+     }
+	
    $(document).ready(function(){
       var recommend = parseInt(${recommend});
       var prohibit = parseInt(${prohibit});
@@ -582,6 +598,7 @@ i {
 	<script src="assets/js/breakpoints.min.js"></script>
 	<script src="assets/js/util.js"></script>
 	<script src="assets/js/nav.util.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 	<c:choose>
 		<c:when test="${empty memberID}">
 			<script src="assets/js/main.js"></script>
