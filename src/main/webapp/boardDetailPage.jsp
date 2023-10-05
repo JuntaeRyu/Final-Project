@@ -108,18 +108,13 @@ i {
 											</c:if>
 										</ul>
 									</header>
-									<!-- 
-								<section>
-									<!-- 이미지 변수 아직 안만들어서 냅둠
-									<span class="image featured"><img src="images/pic05.jpg"
-										alt="" /></span>
-								</section>
-								 -->
 									<section>
-										<div id="editor">
-											<c:if test="${not empty bdata.boardImg}">
-												<img src="images/boardImg/${bdata.boardImg}" alt="" />
+											<c:if test="${not empty bdata.boardImgList}">
+											<c:forEach var="boardImg" items="${bdata.boardImgList}">
+												<img src="${boardImg}" alt="" />
+											</c:forEach>
 											</c:if>
+										<div id="editor">
 											<p>${bdata.content}</p>
 										</div>
 									</section>
@@ -144,7 +139,9 @@ i {
 												<li class="icon solid fa-user">${cdata.nickName}</li>
 												<li class="icon fa-clock">${cdata.commentsDate}</li>
 												<c:if test="${memberID eq cdata.memberID || role eq 2}">
-													<i class="icon solid fa-bars commentsButton"></i>
+													<c:if test="${cdata.comments ne null}">
+														<i class="icon solid fa-bars commentsButton"></i>
+													</c:if>
 												</c:if>
 											</ul>
 											<ul class="commentsMenuList">
@@ -158,7 +155,7 @@ i {
 												<li>
 													<form action="deleteComment.do" method="post">
 														<input type="hidden" name="boardNum" value="${bdata.boardNum}"> <input type="hidden" name="commentsNum" value="${cdata.commentsNum}" />
-														<button type="submit" style="background: none; border: none; text-decoration: none; color: #6b7770; padding: 0;">삭제</button>
+														<button id="deleteComments" type="submit" style="background: none; border: none; text-decoration: none; color: #6b7770; padding: 0;">삭제</button>
 													</form>
 												</li>
 											</ul>
@@ -198,7 +195,7 @@ i {
 															<li>
 																<form action="deleteReply.do" method="post">
 																	<input type="hidden" name="boardNum" value="${bdata.boardNum}"> <input type="hidden" name="replyNum" value="${rdata.replyNum}">
-																	<button type="submit" style="background: none; border: none; text-decoration: none; color: #6b7770; padding: 0;">삭제</button>
+																	<button id="deleteReply" type="submit" style="background: none; border: none; text-decoration: none; color: #6b7770; padding: 0;">삭제</button>
 																</form>
 															</li>
 														</ul>
@@ -295,15 +292,6 @@ i {
 
 	</div>
 
-	<!-- Scripts -->
-	<!-- <script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
-	<script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/translations/ko.js"></script>
-	<script>
-		ClassicEditor.create(document.querySelector('#editor'), {
-		  toolbar: false ,
-		  language: 'ko'
-		});
-	</script>  -->
 	<script>
 	function funcComments(commentsNum, prohibit, iconColor){
 		   console.log(commentsNum);
@@ -344,6 +332,42 @@ i {
 	           }
 	        });
 	   }
+	</script>
+	
+	<script>
+	$("#deleteComments").click(function (event) {
+		event.preventDefault();
+		
+		Swal.fire({
+			title: '정말로 삭제 하시겠습니까?',
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonColor: '#3085d6',
+			cancelButtonColor: '#d33',
+			confirmButtonText: '승인',
+			cancelButtonText: '취소'
+		}).then((result) => {
+			if (result.isConfirmed) {
+				$(this).closest('form').submit();
+			}
+		});
+	});
+
+	$("#deleteReply").click( function (event) {
+		event.preventDefault();
+		
+		Swal.fire({
+			title: '정말로 삭제 하시겠습니까?',
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonText: '승인',
+			cancelButtonText: '취소'
+		}).then((result) => {
+			if (result.isConfirmed) {
+				$(this).closest('form').submit();
+			}
+		});
+	});
 	</script>
 
 	<script type="text/javascript">

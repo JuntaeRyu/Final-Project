@@ -8,7 +8,6 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -35,7 +34,11 @@ public class CommentController {
 		boolean flag = commentsService.insert(cVO);
 
 		if(flag) {
-			return "redirect:boardDetailPage.do?boardNum="+cVO.getBoardNum();
+			model.addAttribute("title", "댓글작성 성공!");
+			model.addAttribute("icon", "success");
+			model.addAttribute("url", "boardDetailPage.do?boardNum="+cVO.getBoardNum());
+			
+			return "SweetAlert2.jsp";
 		}
 		else {
 			model.addAttribute("title", "댓글작성실패.." );
@@ -56,7 +59,11 @@ public class CommentController {
 		boolean flag = commentsService.update(cVO);
 
 		if(flag) {
-			return "redirect:boardDetailPage.do?boardNum="+cVO.getBoardNum();
+			model.addAttribute("title", "댓글수정 성공!");
+			model.addAttribute("icon", "success");
+			model.addAttribute("url", "boardDetailPage.do?boardNum="+cVO.getBoardNum());
+			
+			return "SweetAlert2.jsp";
 		}
 		else {
 			model.addAttribute("title", "댓글 수정 실패..");
@@ -77,17 +84,36 @@ public class CommentController {
 		
 		List<ReplyVO> rdatas=replyService.selectAll(rVO);
 		System.out.println("rdatas"+rdatas);
+	
+		boolean flag = false;
 		
 		if (!(rdatas.isEmpty())) {
 			cVO.setSearchCondition("updateComments");
 			cVO.setComments(null);
 
-			commentsService.update(cVO);
-		} else {
-			commentsService.delete(cVO);
-		}
+			flag = commentsService.update(cVO);
 
-		return "redirect:boardDetailPage.do?boardNum="+cVO.getBoardNum();
+			model.addAttribute("text", "대댓글이 있어서 삭제된 댓글입니다로 수정됩니다");
+//			model.addAttribute("text", '대댓글이 있는 경우 "삭제된 댓글입니다"로 수정됩니다');
+		} else {
+			flag = commentsService.delete(cVO);
+		}
+		
+		if (flag) {
+			model.addAttribute("title", "댓글삭제 성공!");
+			model.addAttribute("icon", "success");
+			model.addAttribute("url", "boardDetailPage.do?boardNum="+cVO.getBoardNum());
+
+			return "SweetAlert2.jsp";
+		}
+		else {
+			model.addAttribute("title", "댓글 삭제 실패..");
+			model.addAttribute("text", "다시한번 확인해주세요..");
+			model.addAttribute("icon", "warning");
+
+			return "goback.jsp";
+		}
+		
 	}
 
 	@RequestMapping(value = "/insertReply.do", method = RequestMethod.POST)
@@ -99,7 +125,11 @@ public class CommentController {
 		boolean flag = replyService.insert(rVO);
 		
 		if (flag) {
-			return "redirect:boardDetailPage.do?boardNum="+cVO.getBoardNum();
+			model.addAttribute("title", "대댓글 작성 성공!");
+			model.addAttribute("icon", "success");
+			model.addAttribute("url", "boardDetailPage.do?boardNum="+cVO.getBoardNum());
+			
+			return "SweetAlert2.jsp";
 		} 
 		else {
 			request.setAttribute("title", "대댓글 작성실패.." );
@@ -119,8 +149,11 @@ public class CommentController {
         boolean flag = replyService.update(rVO);
         
         if (flag) {
-        	// 그냥 서치컨디션으로 reply에 boardNum을 넣는게 어때요?
-            return "redirect:boardDetailPage.do?boardNum="+cVO.getBoardNum();
+        	model.addAttribute("title", "대댓글 수정 성공!");
+			model.addAttribute("icon", "success");
+			model.addAttribute("url", "boardDetailPage.do?boardNum="+cVO.getBoardNum());
+			
+			return "SweetAlert2.jsp";
         } else {
         	model.addAttribute("title", "대댓글 수정실패.." );
 			model.addAttribute("text", "다시한번 확인해주세요.." );
@@ -138,8 +171,11 @@ public class CommentController {
         boolean flag = replyService.delete(rVO);
         
         if (flag) {
-        	// 그냥 서치컨디션으로 reply에 boardNum을 넣는게 어때요?
-            return "redirect:boardDetailPage.do?boardNum="+cVO.getBoardNum();
+        	model.addAttribute("title", "대댓글 삭제 성공!");
+			model.addAttribute("icon", "success");
+			model.addAttribute("url", "boardDetailPage.do?boardNum="+cVO.getBoardNum());
+			
+			return "SweetAlert2.jsp";
         }
         else {
             request.setAttribute("title", "대댓글 삭제실패..");

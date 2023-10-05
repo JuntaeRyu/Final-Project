@@ -155,13 +155,19 @@ ul.pagination li a {
 }
 
 .Abtn {
-	width: 200px;
-	text-decoration: none;
+	width: 200px !important;
 	border: none;
 	background-color: #4CAF50;
 	border-radius: 5px;
 	color: white;
 	margin-bottom: 10px;
+	text-decoration: none !important;
+    height: 30px;
+    padding: 0px !important;
+    font-family: 'Open Sans Condensed', sans-serif;
+    font-size: 1.25em;
+    font-weight: bold;
+	line-height: initial;
 }
 </style>
 
@@ -171,9 +177,9 @@ ul.pagination li a {
 	<!-- 회원탈퇴 모달 -->
 	<div id="deleteMemberModal" class="modal">
 		<div class="modal-content">
-			<span class="close">&times;</span>
-			<label style="font-size: 25px;" for="password">비밀번호 확인</label>
-			<input type="password" id="passwordMember" placeholder="비밀번호를 입력하세요">
+			<span class="close">&times;</span> <label style="font-size: 25px;"
+				for="password">비밀번호 확인</label> <input type="password"
+				id="passwordMember" placeholder="비밀번호를 입력하세요">
 			<button id="submitBtnMember" onclick="clickbtn()">확인</button>
 		</div>
 	</div>
@@ -196,6 +202,7 @@ ul.pagination li a {
 					<h1>
 						<a href="main.do" id="logo">매칭 리스트</a>
 					</h1>
+					<p></p>
 				</div>
 			</div>
 		</header>

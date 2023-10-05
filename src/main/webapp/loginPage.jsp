@@ -16,7 +16,9 @@
 <!-- <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" /> -->
 <link rel="icon" href="assets/css/images/favicon.ico" type="image/x-icon" />
 <link rel="stylesheet" href="assets/css/main.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.css">
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.js"></script>
 <script src="https://accounts.google.com/gsi/client" sync defer>
 	//Google api
 </script>
@@ -256,16 +258,9 @@ button {
 										<h1>아이디</h1>
 										<input type="text" name="memberID" placeholder="아이디 입력" required>
 										<h1>비밀번호</h1>
-										<input type="password" name="memberPW" placeholder="비밀번호 입력" required> <input type="submit" value="HealthDuo 로그인">
+										<input type="password" name="memberPW" placeholder="비밀번호 입력" required>
+										<input type="submit" value="HealthDuo 로그인">
 									</form>
-									<div id="container_eAPI">
-										<div id="g_id_onload" data-client_id="742345547790-hcm827chb6v7006pdfjcdssef10iu22l.apps.googleusercontent.com" data-callback="handleCredentialResponse"></div>
-										<div class="g_id_signin" data-type="standard" data-size="medium" data-text="signin_with" data-shape="rectangular" data-width=185></div>
-										<div id="g_id_onload" data-client_id="742345547790-hcm827chb6v7006pdfjcdssef10iu22l.apps.googleusercontent.com" data-callback="handleCredentialResponse"></div>
-										<div class="g_id_signin" data-type="standard" data-size="medium" data-text="signin_with" data-shape="rectangular" data-width=185></div>
-										<div id="g_id_onload" data-client_id="742345547790-hcm827chb6v7006pdfjcdssef10iu22l.apps.googleusercontent.com" data-callback="handleCredentialResponse"></div>
-										<div class="g_id_signin" data-type="standard" data-size="medium" data-text="signin_with" data-shape="rectangular" data-width=185></div>
-									</div>
 								</section>
 							</article>
 
@@ -403,13 +398,13 @@ button {
 		passwordEmailVerificationInput.setAttribute('disabled', true);
 		
     	passwordCheckInfoModal.style.display = "none";
-    });
+	});
     
     ///////////////// 아이디
     /////// 핸드폰 번호로 아이디 찾기
-    let PhoneCheckNum = null;  // 핸드폰 인증번호를 저장하기위한 공간
+	let PhoneCheckNum = null;  // 핸드폰 인증번호를 저장하기위한 공간
     // 핸드폰번호로 인증번호 받기
-    function midPhoneNumVerificationNumSend(event) {
+	function midPhoneNumVerificationNumSend(event) {
 		var params = { phoneNum : $("#midPhoneInput").val() };
     	$.ajax({
             url: 'findIDPhoneCheck.do',
@@ -422,9 +417,14 @@ button {
 				midPhoneNumVerificationInput.removeAttribute('disabled');
             },
             error: function(error){
-               alert("인증번호 발송실패");
+            	swal.fire({
+            		title: '발송실패!',
+            		text: '인증번호가 발송되지 않았습니다',
+            		icon: 'warning',
+            		confirmButtonText: '확인'
+            	});
             }
-         });
+       	});
     	event.preventDefault();
     }
     
@@ -444,9 +444,14 @@ button {
         		midEmailVerificationInput.removeAttribute('disabled');
             },
             error: function(error){
-               alert("인증번호 발송실패");
-            }
-         });
+            	swal.fire({
+           			title: '발송실패!',
+           			text: '인증번호가 발송되지 않았습니다',
+           			icon: 'warning',
+           			confirmButtonText: '확인'
+           		});
+        	}
+        });
     	event.preventDefault();
     }
     
@@ -465,11 +470,20 @@ button {
             findMID(url, params);
     	}
     	else if (PhoneCheckNum == null && EmailCheckNum == null) {
-			alert("잘못된 접근입니다");
+			swal.fire({
+       			title: '잘못된 접근!',
+       			icon: 'error',
+       			confirmButtonText: '확인'
+       		});
 			disabled();
     	}
     	else{
-			alert("인증번호가 일치하지 않습니다");
+			swal.fire({
+       			title: '인증실패!',
+       			text: '인증번호가 일치하지 않습니다',
+       			icon: 'warning',
+       			confirmButtonText: '확인'
+       		});
     	}
     	event.preventDefault();
     }
@@ -494,7 +508,12 @@ button {
             	}
             },
             error: function(error){
-				alert("오류가 발생했습니다!");
+				swal.fire({
+           			title: '오류발생!',
+           			html: '아이디를 찾아오는 과정에서 오류가 발생했습니다!<br>다시 시도해 주십시오',
+           			icon: 'warning',
+           			confirmButtonText: '확인'
+           		});
 				clear();
 				modalHide();
             }
@@ -535,7 +554,12 @@ button {
 				passwordPhoneNumVerificationInput.removeAttribute('disabled');
     		},
     		error: function(error){
-                alert("인증번호 발송실패");
+                swal.fire({
+           			title: '발송실패!',
+           			text: '인증번호가 발송되지 않았습니다',
+           			icon: 'warning',
+           			confirmButtonText: '확인'
+           		});
             }
     	});
     	event.preventDefault();
@@ -557,7 +581,12 @@ button {
 				passwordEmailVerificationInput.removeAttribute('disabled');
             },
             error: function(error){
-               alert("인증번호 발송실패");
+               swal.fire({
+          			title: '발송실패!',
+          			text: '인증번호가 발송되지 않았습니다',
+          			icon: 'warning',
+          			confirmButtonText: '확인'
+          		});
             }
          });
     	event.preventDefault();
@@ -585,13 +614,22 @@ button {
     		checkMember(url,params);
     	}
     	else if (PhoneCheckNum == null && EmailCheckNum == null) {
-			alert("잘못된 접근입니다");
+			swal.fire({
+       			title: '잘못된 접근!',
+       			icon: 'error',
+       			confirmButtonText: '확인'
+       		});
 			clear();
     		modalHide();
     		disabled();
     	}
     	else{
-			alert("인증번호가  일치하지 않습니다");
+			swal.fire({
+       			title: '인증실패!',
+       			text: '인증번호가 일치하지 않습니다',
+       			icon: 'warning',
+       			confirmButtonText: '확인'
+       		});
     	}
     	event.preventDefault();
     }
@@ -604,7 +642,12 @@ button {
             data: params,
             success: function(memberID){
             	if (memberID == null) {
-            		alert("일치하는 계정이 없습니다");
+            		swal.fire({
+               			title: '확인 실패',
+               			text: '일치하는 계정이 없습니다',
+               			icon: 'question',
+               			confirmButtonText: '확인'
+               		});
             		clear();
             		modalHide();
             	}
@@ -616,7 +659,12 @@ button {
             	}
             },
             error: function(error){
-				alert("오류가 발생했습니다!");
+				swal.fire({
+           			title: '오류발생!',
+           			html: '오류가 발생하였습니다<br>다시 시도하여 주십시오',
+           			icon: 'error',
+           			confirmButtonText: '확인'
+           		});
 				clear();
 				modalHide();
             }
@@ -627,7 +675,11 @@ button {
 	// 비밀번호 변경 기능
 	function updatePW (event) {
 		if (PhoneCheckNum == null && EmailCheckNum == null) { // 둘다 비어있다면 인증을 받지 않았음
-			alert("잘못된 접근입니다");
+			swal.fire({
+       			title: '잘못된 접근!',
+       			icon: 'error',
+       			confirmButtonText: '확인'
+       		});
     	}
 		else {
     		var params = {
@@ -641,13 +693,28 @@ button {
         	    data: params,
         	    success: function(check){
         	    	if (check == null) {
-        	    		alert("변경 실패!");
+        	    		swal.fire({
+                   			title: '변경 실패!',
+                   			html: '비밀번호가 변경되지 않았습니다<br>다시 시도하여 주십시오',
+                   			icon: 'warning',
+                   			confirmButtonText: '확인'
+                   		});
         	    	} else {
-        	    		alert("변경되었습니다!");
+        	    		swal.fire({
+                   			title: '변경성공!',
+                   			text: '비밓번호가 변경되었습니다',
+                   			icon: 'success',
+                   			confirmButtonText: '확인'
+                   		});
         	    	}
         	    },
 	    	    error: function(error){
-	    	    	alert("오류 발생!\n관리자에게 문의해주세요");
+	    	    	swal.fire({
+	           			title: '오류 발생!',
+	           			html: '알 수 없는 오류가 발생하였습니다!<br>관리자에게 문의해주세요',
+	           			icon: 'error',
+	           			confirmButtonText: '확인'
+	           		});
 	    	    }
 	        });
 		}

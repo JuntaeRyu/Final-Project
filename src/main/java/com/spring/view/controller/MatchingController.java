@@ -133,7 +133,11 @@ public class MatchingController {
 		boolean flag = matchingService.insert(mcVO);
 
 		if(flag) {
-			return "redirect:ownMatchPage.do";
+			model.addAttribute("title", "매칭신청 성공!");
+			model.addAttribute("icon", "success");
+			model.addAttribute("url", "ownMatchPage.do");
+			
+			return "SweetAlert2.jsp";
 		}
 		else {
 			model.addAttribute("title", "매칭 중복 신청 ..");
@@ -151,7 +155,12 @@ public class MatchingController {
 		boolean flag = matchingService.update(mcVO);
 
 		if(flag) {
-			return "redirect:ownMatchPage.do";
+			model.addAttribute("title", "매칭 수락!");
+			model.addAttribute("text", "매칭이 수락되었습니다");
+			model.addAttribute("icon", "success");
+			model.addAttribute("url", "ownMatchPage.do");
+			
+			return "SweetAlert2.jsp";
 		}
 		else {
 			model.addAttribute("title", "매칭신청 수락 실패..");
@@ -169,7 +178,12 @@ public class MatchingController {
 		boolean flag = matchingService.delete(mcVO);
 
 		if(flag) {
-			return "redirect:ownMatchPage.do";
+			model.addAttribute("title", "매칭 거절!");
+			model.addAttribute("text", "매칭이 거절되었습니다");
+			model.addAttribute("icon", "success");
+			model.addAttribute("url", "ownMatchPage.do");
+			
+			return "SweetAlert2.jsp";
 		}
 		else {
 			model.addAttribute("title", "매칭신청 수락 실패..");

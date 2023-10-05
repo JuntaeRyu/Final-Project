@@ -226,6 +226,9 @@ textarea.fixed-width {
 										<h1>${mdata.email}</h1>
 									</section>
 								</section>
+								<section id="mypageinfo" style="padding: 20px 20px 20px 20px;">
+									<h3> 누적경고 횟수 : ${mdata.warnCnt}</h3>
+								</section>
 
 								<section id="mypageprofile">
 								<h3>프로필</h3>

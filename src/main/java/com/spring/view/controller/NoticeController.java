@@ -157,7 +157,11 @@ public class NoticeController {
 		boolean flag = boardService.insert(bVO);
 
 		if(flag) {
-			return "redirect:noticeListPage.do";
+			model.addAttribute("title", "공지사항 작성 성공!");
+			model.addAttribute("icon", "success");
+			model.addAttribute("url", "noticeListPage.do");
+			
+			return "SweetAlert2.jsp";
 		} else {
 			model.addAttribute("title", "공지사항작성실패.." );
 			model.addAttribute("text", "다시한번 확인해주세요.." );
@@ -205,7 +209,11 @@ public class NoticeController {
 		boolean flag = boardService.update(bVO);
 
 		if (flag) {
-			return "redirect:noticeDetailPage.do?boardNum"+bVO.getBoardNum();
+			model.addAttribute("title", "공지사항 수정 성공!");
+			model.addAttribute("icon", "success");
+			model.addAttribute("url", "noticeDetailPage.do?boardNum"+bVO.getBoardNum());
+			
+			return "SweetAlert2.jsp";
 		} else {
 			model.addAttribute("title", "공지사항 수정 실패..");
 			model.addAttribute("text", "다시한번 확인해주세요..");
@@ -222,7 +230,11 @@ public class NoticeController {
 		boolean flag = boardService.delete(bVO);
 
 		if (flag) {
-			return "redirect:noticeListPage.do";
+			model.addAttribute("title", "공지사항 삭제 성공!");
+			model.addAttribute("icon", "success");
+			model.addAttribute("url", "noticeListPage.do");
+			
+			return "SweetAlert2.jsp";
 		}
 		else {
 			// 삭제 실패 메시지를 설정하기 위해 필요한 데이터를 request에 저장합니다.

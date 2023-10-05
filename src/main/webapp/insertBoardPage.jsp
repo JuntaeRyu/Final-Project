@@ -12,8 +12,13 @@
 <link rel="stylesheet" href="assets/css/main.css" />
 </head>
 <body class="homepage is-preload">
-	<script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
-	<script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/translations/ko.js"></script>
+	<script src="https://cdn.ckeditor.com/ckeditor5/38.1.0/classic/ckeditor.js"></script>
+	<script src="https://cdn.ckeditor.com/ckeditor5/34.0.0/classic/translations/ko.js"></script>
+	<script type="module">
+    import * as LR from "https://cdn.jsdelivr.net/npm/@uploadcare/blocks@0.25.0/web/lr-file-uploader-regular.min.js";
+
+    LR.registerBlocks(LR);
+	</script>
 </head>
 <body>
 	<div id="page-wrapper">
@@ -42,9 +47,21 @@
 										<div style="text-align: left;">
 											<input type="radio" id="info" name="category" value="1" checked> <label for="info">정보</label> <input type="radio" id="chat" name="category" value="2"> <label for="chat">잡담</label>
 										</div>
-										<input style="width: 100%; padding-right: 10px;" type="text" name="title" placeholder="제목">
+										<input style="width: 100%; padding-right: 10px;" type="text" name="title" placeholder="제목" required>
+										<lr-config
+					    					ctx-name="boardImg"
+					    					pubkey="da833dfe1dc16760f1e6"
+					    					max-local-file-size-bytes="10000000"
+					    					multiple-max="10"
+					    					img-only="true" ></lr-config>
+										<lr-file-uploader-minimal
+					   						css-src="https://cdn.jsdelivr.net/npm/@uploadcare/blocks@0.25.0/web/lr-file-uploader-minimal.min.css"
+					    					ctx-name="boardImg"
+					   						class="my-config" > </lr-file-uploader-minimal>
+										<lr-data-output ctx-name="boardImg" use-console use-input use-group use-event ></lr-data-output>
 										<textarea name="content" id="editor"></textarea>
 										<input type="hidden" name="memberID" value="${memberID}"> <input type="submit" value="작성하기" />
+										<div id="boardImg"></div>
 									</form>
 								</section>
 							</article>
@@ -105,10 +122,35 @@
 
 	<!-- Scripts -->
 	<script>
-		ClassicEditor.create(document.querySelector('#editor'), {
-		  toolbar: ['heading', '|', 'bold', 'italic', 'imageUpload'],
-		  language: 'ko',
-		});
+	const boardImgContainer = document.getElementById("boardImg");
+	const dataOutput = document.querySelector('lr-data-output');
+	
+	let imageCount = 0;
+	
+	ClassicEditor.create(document.querySelector("#editor"), {
+		toolbar: ['heading', '|', 'bold', 'italic' ],
+		language: "ko",
+	}).catch((error) => {
+		console.error(error);
+	});
+	
+	window.addEventListener('lr-data-output', (event) => {
+		boardImgContainer.replaceChildren();
+		
+		for (var i = 0; i < event.detail.data.files.length; i++) {
+        	
+			console.log(event.detail.data.files.length);
+			console.log(event.detail.data.files[i].cdnUrl);
+        	
+	    	const boardImg = document.createElement("input");
+	    	boardImg.type = "hidden";
+	    	boardImg.value = event.detail.data.files[i].cdnUrl;
+	    	boardImg.setAttribute("name", "boardImg");
+	    	boardImgContainer.appendChild(boardImg);
+	    	console.log(boardImg.value);
+		}
+    });
+	
 	</script>
 	<script src="assets/js/jquery.min.js"></script>
 	<script src="assets/js/jquery.dropotron.min.js"></script>

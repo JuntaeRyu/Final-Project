@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -152,6 +151,8 @@ public class MypageController {
 		bVO.setSearchCondition("ownBoard");
 
 		List<BoardVO> bdatas = boardService.selectAll(bVO);
+		
+		boolean flag = false;
 
 		for(int i = 0; i < bdatas.size(); i++) {
 			for (String boardNum : boardNums) {
@@ -161,12 +162,26 @@ public class MypageController {
 
 					bVO.setSearchCondition("boardNum");
 
-					boardService.delete(bVO);
+					if (!boardService.delete(bVO)) {
+						flag = true;
+					}
 				}
 			}
 		}
+		
+		if (flag) {
+			model.addAttribute("title", "삭제 오류!");
+			model.addAttribute("text", "일부 글들이 삭제되지 않았습니다");
+			model.addAttribute("icon", "warning");
+		}
+		else {
+			model.addAttribute("title", "삭제 성공!");
+			model.addAttribute("icon", "success");
+		}
+		
+		model.addAttribute("url", "ownBoardListPage.do");
 
-		return "redirect:ownBoardListPage.do";
+		return "SweetAlert2.jsp";
 	}
 
 	@RequestMapping(value = "/updateProfilePage.do")
@@ -236,12 +251,15 @@ public class MypageController {
 		try {
 			Thread.sleep(4000);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
 		if(flag) {
-			return "redirect:updateProfilePage.do";
+			model.addAttribute("title", "프로필 이미지 변경 성공!");
+			model.addAttribute("icon", "success");
+			model.addAttribute("url", "updateProfilePage.do");
+			
+			return "SweetAlert2.jsp";
 		}
 		else {
 			model.addAttribute("title", "프로필 이미지 변경 실패..");
@@ -264,7 +282,11 @@ public class MypageController {
 		boolean flag = memberProfileService.update(mpVO);
 
 		if(flag) {
-			return "redirect:updateProfilePage.do";
+			model.addAttribute("title", "짧은 소개글 변경 성공!");
+			model.addAttribute("icon", "success");
+			model.addAttribute("url", "updateProfilePage.do");
+			
+			return "SweetAlert2.jsp";
 		}
 		else {
 			model.addAttribute("title", "한줄 소개글 수정 실패..");
@@ -287,7 +309,11 @@ public class MypageController {
 		boolean flag = memberProfileService.update(mpVO);
 
 		if(flag) {
-			return "redirect:updateProfilePage.do";
+			model.addAttribute("title", "소개글 수정 성공!");
+			model.addAttribute("icon", "success");
+			model.addAttribute("url", "updateProfilePage.do");
+			
+			return "SweetAlert2.jsp";
 		}
 		else {
 			model.addAttribute("title", "소개글 수정 실패..");
@@ -330,7 +356,16 @@ public class MypageController {
 		boolean flag = memberService.update(mVO);
 
 		if(flag) {
-			return "redirect:logout.do";
+			session.removeAttribute("memberID");
+			session.removeAttribute("nickName");
+			session.removeAttribute("role");
+			
+			model.addAttribute("title", "비밀번호 변경 성공!");
+			model.addAttribute("text", "다시 로그인 해주십시오");
+			model.addAttribute("icon", "success");
+			model.addAttribute("url", "main.do");
+			
+			return "SweetAlert2.jsp";
 		} 
 		else {
 			model.addAttribute("title", "비밀번호 변경 실패..");
@@ -350,7 +385,11 @@ public class MypageController {
 		boolean flag = memberService.update(mVO);
 
 		if(flag) {
-			return "redirect:updateInfoPage.do";
+			model.addAttribute("title", "닉네임 변경 성공!");
+			model.addAttribute("icon", "success");
+			model.addAttribute("url", "updateInfoPage.do");
+			
+			return "SweetAlert2.jsp";
 		}
 		else {
 			model.addAttribute("title", "닉네임 변경 실패..");
@@ -370,7 +409,11 @@ public class MypageController {
 		boolean flag = memberService.update(mVO);
 
 		if(flag) {
-			return "redirect:updateInfoPage.do";
+			model.addAttribute("title", "이메일 변경 성공!");
+			model.addAttribute("icon", "success");
+			model.addAttribute("url", "updateInfoPage.do");
+			
+			return "SweetAlert2.jsp";
 		}
 		else {
 			model.addAttribute("title", "이메일 변경 실패..");
@@ -390,7 +433,11 @@ public class MypageController {
 		boolean flag = memberService.update(mVO);
 
 		if(flag) {
-			return "redirect:updateInfoPage.do";
+			model.addAttribute("title", "주소변경 성공!");
+			model.addAttribute("icon", "success");
+			model.addAttribute("url", "updateInfoPage.do");
+			
+			return "SweetAlert2.jsp";
 		}
 		else {
 			model.addAttribute("title", "주소 변경 실패..");
@@ -410,7 +457,16 @@ public class MypageController {
 		boolean flag = memberService.delete(mVO);
 
 		if (flag) {
-			return "redirect:logout.do";
+			session.removeAttribute("memberID");
+			session.removeAttribute("nickName");
+			session.removeAttribute("role");
+			
+			model.addAttribute("title", "회원탈퇴 성공!");
+			model.addAttribute("text", "아쉽지만, 다음 방문을 기대하겠습니다");
+			model.addAttribute("icon", "success");
+			model.addAttribute("url", "main.do");
+			
+			return "SweetAlert2.jsp";
 		}
 		else {
 			model.addAttribute("title", "탈퇴실패..");

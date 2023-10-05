@@ -1,5 +1,7 @@
 package com.spring.biz.board;
 
+import java.util.ArrayList;
+import java.util.List;
 
 public class BoardVO {
     
@@ -18,6 +20,7 @@ public class BoardVO {
     private String searchCondition;	// 서치컨디션
     private String nickName; 		// 작성자 닉네임
     private int boardCommentsCnt;	// 해당 게시글의 댓글수
+    private List<String> boardImgList=new ArrayList<String>();	// 게시물 사진 리스트
     
     // 게시글 번호를 반환하는 메서드
     public int getBoardNum() {
@@ -148,5 +151,17 @@ public class BoardVO {
 	public void setBoardCommentsCnt(int boardCommentsCnt) {
 		this.boardCommentsCnt = boardCommentsCnt;
 	}
+	
+	// 게시물 이미지 리스트를 반환하는 메서드
+	public List<String> getBoardImgList() {
+		return boardImgList;
+	}
+
+	// 게시물 이미지 리스트를 설정하는 메서드
+	public void setBoardImgList(List<String> boardImgList) {
+		this.boardImgList = boardImgList;
+	}
+	
+	
 	   
 }

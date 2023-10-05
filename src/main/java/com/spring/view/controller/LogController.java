@@ -45,9 +45,14 @@ public class LogController {
 			session.setAttribute("role", mVO.getRole());
 
 			if(mVO.getRole()==2) {
-				return "redirect:goAdminLoginSuccess.jsp";
+				return "goAdminLoginSuccess.jsp";
 			}
-			return "redirect:main.do";
+			model.addAttribute("title", "로그인 성공!");
+			model.addAttribute("text", mVO.getNickName() + "님의 방문을 환영합니다");
+			model.addAttribute("icon", "success");
+			model.addAttribute("url", "main.do");
+			
+			return "SweetAlert2.jsp";
 		}
 		else {
 			model.addAttribute("title", "로그인 실패!");
@@ -207,14 +212,19 @@ public class LogController {
 	}
 
 	@RequestMapping(value = "/logout.do")
-	public String logout(HttpSession session) {
+	public String logout(HttpSession session, Model model) {
 		System.out.println("로그: LogController: logout() ");
 
 		session.removeAttribute("memberID");
 		session.removeAttribute("nickName");
 		session.removeAttribute("role");
+		
+		model.addAttribute("title", "로그아웃!");
+		model.addAttribute("text", "다음에 또 방문해 주세요~");
+		model.addAttribute("icon", "success");
+		model.addAttribute("url", "main.do");
 
-		return "redirect:main.do";
+		return "SweetAlert2.jsp";
 	}
 
 	@ResponseBody

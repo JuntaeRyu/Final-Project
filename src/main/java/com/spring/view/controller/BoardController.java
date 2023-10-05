@@ -10,7 +10,6 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -18,7 +17,6 @@ import com.spring.biz.board.BoardService;
 import com.spring.biz.board.BoardVO;
 import com.spring.biz.comments.CommentsService;
 import com.spring.biz.comments.CommentsVO;
-import com.spring.biz.member.MemberVO;
 import com.spring.biz.page.PageVO;
 import com.spring.biz.prohibit.ProhibitService;
 import com.spring.biz.prohibit.ProhibitVO;
@@ -47,7 +45,7 @@ public class BoardController {
 
 
 	@RequestMapping(value = "/boardListPage.do")
-	public String boardListPage(@ModelAttribute("data")BoardVO bVO, CommentsVO cVO, PageVO pageVO, Model model) {
+	public String boardListPage(BoardVO bVO, CommentsVO cVO, PageVO pageVO, Model model) {
 		System.out.println("로그: Board: boardListPage() ");
 
 		if (pageVO.getCurrentPage() > 0) {
@@ -184,7 +182,7 @@ public class BoardController {
 
 		// BoardDAO를 통해 해당 게시글의 상세 정보를 가져옵니다.
 		bVO = boardService.selectOne(bVO);
-
+		
 		// 추천 여부에 따라 request에 "recommend" 속성을 설정합니다.
 		if (rcVO != null) {
 			request.setAttribute("recommend", 1);
@@ -258,6 +256,14 @@ public class BoardController {
 
 		// 해당 게시글의 상세 정보를 request에 저장하고, boardPage.jsp로 이동합니다.
 		if (bVO != null) {
+			
+			String[] boardImgs = bVO.getBoardImg().split(",");
+			System.out.println(boardImgs);
+			for(String boardImg : boardImgs) {
+				bVO.getBoardImgList().add(boardImg);
+			}
+			bVO.setBoardImgList(bVO.getBoardImgList());
+			
 			request.setAttribute("bdata", bVO);
 			request.setAttribute("cdatas", comments);
 			request.setAttribute("rdatas", replies);
@@ -265,9 +271,9 @@ public class BoardController {
 			////////////// 사이드바 - 해당게시물 작성자의 또다른 글 3개 ///////////////////
 			bVO.setSearchCondition("writerBoard");
 			
-			List<BoardVO> writerbdatas = boardService.selectAll(bVO);
+			List<BoardVO> writerBoards = boardService.selectAll(bVO);
 			
-			request.setAttribute("writerbdatas", writerbdatas);
+			request.setAttribute("writerbdatas", writerBoards);
 			///////////////////////////////////////
 			
 			bVO.setSearchCondition("viewCnt");
@@ -298,6 +304,8 @@ public class BoardController {
 	public String insertBoardPage(HttpSession session, Model model) {
 		System.out.println("로그: Board: insertBoardPage() ");
 
+		
+		
 		if(session.getAttribute("memberID") == null || (Integer)session.getAttribute("role") == 9) {
 			model.addAttribute("title", "잘못된 접근입니다.");
 			model.addAttribute("text", "다시 한번 확인해주세요.");
@@ -313,10 +321,22 @@ public class BoardController {
 	public String insertBoard(BoardVO bVO, HttpSession session, Model model) {
 		System.out.println("로그: Board: insertBoard() ");
 
+		String imgUrl=bVO.getBoardImg();
+		
+		System.out.println("img "+imgUrl);
+		
+		// 첫 번째 쉼표(,)까지의 부분을 잘라냄
+		int indexOfComma = imgUrl.indexOf(",");
+		bVO.setBoardImg(imgUrl.substring(indexOfComma + 1));
+
 		boolean flag = boardService.insert(bVO);
 
 		if(flag) {
-			return "redirect:boardListPage.do";
+			model.addAttribute("title", "글 작성 성공!");
+			model.addAttribute("icon", "success");
+			model.addAttribute("url", "boardListPage.do");
+			
+			return "SweetAlert2.jsp";
 		}
 		else {
 			// 게시글 등록이 실패했을 경우, 경고 메시지를 설정하고 이전 페이지로 돌아갑니다.
@@ -357,7 +377,11 @@ public class BoardController {
 		boolean flag = boardService.update(bVO);
 
 		if(flag) {
-			return "redirect:boardDetailPage.do?boardNum="+bVO.getBoardNum();
+			model.addAttribute("title", "게시글 수정 성공!");
+			model.addAttribute("icon", "success");
+			model.addAttribute("url", "boardDetailPage.do?boardNum="+bVO.getBoardNum());
+			
+			return "SweetAlert2.jsp";
 		}
 		else {
 			model.addAttribute("title", "게시글 수정 실패..");
@@ -377,7 +401,11 @@ public class BoardController {
 		boolean flag = boardService.delete(bVO);
 
 		if (flag) {
-			return "redirect:boardListPage.do";
+			model.addAttribute("title", "게시글 삭제 성공!");
+			model.addAttribute("icon", "success");
+			model.addAttribute("url", "boardListPage.do");
+			
+			return "SweetAlert2.jsp";
 		}
 		else {
 			model.addAttribute("title", "게시글 삭제 실패..");

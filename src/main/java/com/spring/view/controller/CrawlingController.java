@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.spring.biz.advertisement.AdvertisementService;
 import com.spring.biz.advertisement.AdvertisementVO;
@@ -39,28 +38,33 @@ public class CrawlingController {
 		}
 		
 		if (flag) {
-			System.out.println("로그: 광고 저장 오류");
-			System.out.println("로그: 프로그램을 종료하고 DB를 확인해주세요");
+			model.addAttribute("title", "광고 저장 실패!");
+			model.addAttribute("text", "프로그램을 중지하고 DB를 확인해주세요");
+			model.addAttribute("icon", "error");
+			model.addAttribute("url", "#");
+		}
+		else {
+			model.addAttribute("title", "크롤링 성공!");
+			model.addAttribute("text", "프로그램을 실행합니다");
+			model.addAttribute("icon", "success");
+			model.addAttribute("url", "main.do");
 		}
 		
-//		List<AdvertisementVO> adatas = advertisementService.selectAll(null);
-//		for (AdvertisementVO adata : adatas) {
-//			System.out.println(adata.getSite());
-//			System.out.println(adata.getItem());
-//			System.out.println(adata.getSiteUrl());
-//		}
-		
-		model.addAttribute("adatas", advertisementService.selectAll(null));
-		
-		return "main.do";
+		return "SweetAlert2.jsp";
 	}
 	
 	@RequestMapping(value = "/reset.do")
-	public String reset () {
+	public String reset (Model model) {
 		
 		if (!advertisementService.reset(null)) {
 			System.out.println("로그: 오류났으니 일단 프로그램 정지");
-			return "#";
+			
+			model.addAttribute("title", "광고 테이블 리셋 실패!");
+			model.addAttribute("text", "광고 테이블 생성에 실패했습니다<br>DB를 확인해주세요");
+			model.addAttribute("icon", "error");
+			model.addAttribute("url", "#");
+			
+			return "SweetAlert2.jsp";
 		}
 		
 		return "redirect:crawling.do";

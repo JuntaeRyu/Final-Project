@@ -1,5 +1,7 @@
 package com.spring.view.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -203,7 +205,7 @@ public class LikeController {
 
 	@ResponseBody
 	@RequestMapping(value = "/commentsProhibit.do", produces = "application/json; charset=utf-8", method = RequestMethod.POST)
-	public String commentsProhibit(ProhibitVO pVO, CommentsVO cVO, HttpSession session, HttpServletRequest request) {
+	public String commentsProhibit(ProhibitVO pVO, CommentsVO cVO, ReplyVO rVO, HttpSession session, HttpServletRequest request) {
 		System.out.println("로그: LikeController:  commentsProhibit() ");
 
 		System.out.println("ajax 로그 : " + request.getParameter("phresult"));
@@ -218,6 +220,23 @@ public class LikeController {
 			
 			commentsService.update(cVO);
 			
+			cVO = commentsService.selectOne(cVO);
+			
+			if(cVO.getProhibitCnt() >= 5) {
+				rVO.setSearchCondition("commentsReplyNum");
+				
+				List<ReplyVO> rdatas = replyService.selectAll(rVO);
+				
+				if(!(rdatas.isEmpty())) {
+					cVO.setSearchCondition("updateComments");
+					cVO.setComments(null);
+					
+					commentsService.update(cVO);
+				}
+				
+				commentsService.delete(cVO);
+			}
+			
 			return "1";
 		}
 		else {
@@ -230,11 +249,6 @@ public class LikeController {
 			return "0"; // 클라이언트에게 성공 응답을 보냅니다. (0은 성공을 나타냄)
 		}
 
-//		request.setAttribute("title", "잘못된 요청입니다..");
-//		request.setAttribute("text", "다시한번 확인해주세요..");
-//		request.setAttribute("icon", "warning");
-//
-//		return "goback.jsp";
 	}
 
 	@ResponseBody
@@ -254,6 +268,12 @@ public class LikeController {
 			
 			replyService.update(rVO);
 			
+			rVO = replyService.selectOne(rVO);
+			
+			if(rVO.getProhibitCnt() >= 5) {
+				replyService.delete(rVO);
+			}
+			
 			return "1";
 		}
 		else {
@@ -266,11 +286,6 @@ public class LikeController {
 			return "0";
 		}
 		
-//		request.setAttribute("title", "잘못된 요청입니다..");
-//		request.setAttribute("text", "다시한번 확인해주세요..");
-//		request.setAttribute("icon", "warning");
-
-//		return "goback.jsp";
 	}
 
 }
