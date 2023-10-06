@@ -15,9 +15,12 @@
 <!-- <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" /> -->
 <link rel="icon" href="assets/css/images/favicon.ico" type="image/x-icon" />
 <link rel="stylesheet" href="assets/css/main.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.css">
+<script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.js"></script>
 <style>
 #title-cell {
-	width: auto; /* 원하는 크기로 조정할 수 있습니다 */
+	width: 250px; /* 원하는 크기로 조정할 수 있습니다 */
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
@@ -258,15 +261,6 @@ label {
 									</h3>
 								</c:if>
 								<section id="ownBoardListBox">
-									<!-- <ul class="meta" >
-													<li><h3><a href="#">제목</a></h3></li>
-													<li class="icon solid fa-user">작성자</li>
-													<li class="icon  fa-clock">작성날짜</li>
-													<li class="icon solid fa-comments">34</li>
-													<li class="icon solid fa-eye">조회수</li>
-													<li class="icon fa-heart">34</li>
-												</ul>
-												<hr> -->
 									<c:if test="${empty bdatas}">
 										<h2 style="text-align: center; margin: 0.2em 0 0.2em 0;">현재 게시글이 없습니다</h2>
 									</c:if>
@@ -303,7 +297,7 @@ label {
 															<td class="title"><h1 id="title-cell">
 																	<a href="boardDetailPage.do?boardNum=${v.boardNum}">${v.title}</a>
 																</h1></td>
-															<td class="icon solid fa-user">${v.nickName}</td>
+															<td class="icon solid fa-user nickName">${v.nickName}</td>
 															<td class="icon fa-clock boardDate">${v.boardDate}</td>
 															<c:if test="${v.boardCommentsCnt == 0}">
 																<td class="icon fa-comments">${v.boardCommentsCnt}</td>
@@ -351,55 +345,29 @@ label {
 		</section>
 
 		<!-- Footer -->
-		<footer id="footer">
-			<div class="container">
-				<div class="row gtr-200">
-					<div class="col-12">
-
-						<!-- About -->
-						<section>
-							<h2 class="major">
-								<span>What's this about?</span>
-							</h2>
-							<p>
-								This is <strong>TXT</strong>, yet another free responsive site template designed by <a href="http://twitter.com/ajlkn">AJ</a> for <a href="http://html5up.net">HTML5 UP</a>. It's released under the <a href="http://html5up.net/license/">Creative Commons Attribution</a> license so feel free to use it for whatever you're working on (personal or commercial), just be sure to give us credit for the design. That's basically it :)
-							</p>
-						</section>
-
-					</div>
-					<div class="col-12">
-
-						<!-- Contact -->
-						<section>
-							<h2 class="major">
-								<span>Get in touch</span>
-							</h2>
-							<ul class="contact">
-								<li><a class="icon brands fa-facebook-f" href="#"><span class="label">Facebook</span></a></li>
-								<li><a class="icon brands fa-twitter" href="#"><span class="label">Twitter</span></a></li>
-								<li><a class="icon brands fa-instagram" href="#"><span class="label">Instagram</span></a></li>
-								<li><a class="icon brands fa-dribbble" href="#"><span class="label">Dribbble</span></a></li>
-								<li><a class="icon brands fa-linkedin-in" href="#"><span class="label">LinkedIn</span></a></li>
-							</ul>
-						</section>
-
-					</div>
-				</div>
-
-				<!-- Copyright -->
-				<div id="copyright">
-					<ul class="menu">
-						<li>&copy; Untitled. All rights reserved</li>
-						<li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
-					</ul>
-				</div>
-
-			</div>
-		</footer>
+		<NPNC:healthDuo_footer />
 
 	</div>
 
 	<!-- Scripts -->
+	<script type="text/javascript">
+	$("#checkBoradDelete").click(function (event) {
+		event.preventDefault();
+		
+		Swal.fire({
+			title: '정말로 삭제 하시겠습니까?',
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonText: '승인',
+			cancelButtonText: '취소'
+		}).then((result) => {
+			if (result.isConfirmed) {
+				$(this).closest('form').submit();
+			}
+		});
+	});
+	</script>
+	
 	<script>
 	const openModalBtnMember = document.getElementById("openModalBtnMember");
 	

@@ -39,7 +39,17 @@ public class LogController {
 
 		mVO = memberService.selectOne(mVO);
 
+		
 		if(mVO != null) {
+
+			if(mVO.getRole() == 9) {
+				model.addAttribute("title", mVO.getNickName() + "님은<br>이용이 정지된 회원입니다.");
+				model.addAttribute("text", "정지 풀리는 날: "+mVO.getSuspensionMember());
+				model.addAttribute("icon", "error");
+				
+				return "goback.jsp";
+			}
+
 			session.setAttribute("memberID", mVO.getMemberID());
 			session.setAttribute("nickName", mVO.getNickName());
 			session.setAttribute("role", mVO.getRole());
@@ -48,7 +58,7 @@ public class LogController {
 				return "goAdminLoginSuccess.jsp";
 			}
 			model.addAttribute("title", "로그인 성공!");
-			model.addAttribute("text", mVO.getNickName() + "님의 방문을 환영합니다");
+			model.addAttribute("text", mVO.getNickName() + "님 방문을 환영합니다");
 			model.addAttribute("icon", "success");
 			model.addAttribute("url", "main.do");
 			

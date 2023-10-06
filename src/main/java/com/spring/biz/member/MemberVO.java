@@ -12,7 +12,7 @@ public class MemberVO {
     private String detailAddress;   // 회원의 상세주소를 저장하는 멤버변수
     private int warnCnt;    	// 경고횟수를 저장하는 멤버 변수
     private int role;   		// 회원의 권한을 저장하는 멤버변수
-
+    private String suspensionMember;
     // 서치컨디션
     private String searchCondition;    	// 검색 조건을 저장하는 멤버 변수
 	private String searchType;		// 검색종류를 저장하는 멤버변수
@@ -155,5 +155,15 @@ public class MemberVO {
 	public void setWarnCnt(int warnCnt) {
 		this.warnCnt = warnCnt;
 	}
+
+	public String getSuspensionMember() {
+		return suspensionMember;
+	}
+
+	public void setSuspensionMember(String suspensionMember) {
+		this.suspensionMember = suspensionMember;
+	}
+	
+	
 	
 }

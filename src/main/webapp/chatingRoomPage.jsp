@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -13,24 +13,23 @@
 <script src="assets/js/cookie.js"></script>
 
 <style>
-	.container {
-		width: 500px;
-	}
-	
-	#list {
-		height: 300px;
-		padding: 15px;
-		overflow: auto;
-	}
-   
+.container {
+	width: 500px;
+}
+
+#list {
+	height: 300px;
+	padding: 15px;
+	overflow: auto;
+}
 </style>
 
 </head>
 <body>
-   	<!-- chat.jsp -->
+	<!-- chat.jsp -->
 	<div class="container">
-		<h1 class="page-header">HealthDuo</h1>		
-		
+		<h1 class="page-header">HealthDuo</h1>
+
 		<table class="table table-bordered">
 			<tr>
 				<td><input type="text" name="user" id="user" class="form-control" value="${nickName}" readonly></td>
@@ -46,9 +45,9 @@
 				<td colspan="2"><input type="text" name="msg" id="msg" placeholder="대화 내용을 입력하세요." class="form-control" disabled></td>
 			</tr>
 		</table>
-   		<a class="Abtn" href="mypage.do">마이페이지로 돌아가기</a>
-	</div>	  
-   	<script>
+		<a class="Abtn" href="mypage.do">마이페이지로 돌아가기</a>
+	</div>
+	<script>
    	
    		// 채팅 서버 주소
    		let url = "ws://localhost:8088/app/chatserver";
@@ -165,7 +164,24 @@
 				
 			}
 		});
-   		
+		
+		$('#btnDisconnect').click(function() {
+			 event.stopPropagation();
+			ws.send('3#' + $('#user').val() + '#');
+			ws.close();
+			
+			$('#btnConnect').attr('disabled', false);
+			$('#btnDisconnect').attr('disabled', true);
+			
+			$('#msg').val('');
+			$('#msg').attr('disabled', true);
+		});
+		
+		window.addEventListener('beforeunload', function () {
+		    ws.send('3#' + $('#user').val() + '#');
+		    ws.close();
+		});
+		
 	</script>
 </body>
 </html>

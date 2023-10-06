@@ -1764,12 +1764,17 @@ ul.meta li:before {
 }
 
 #boardListBox table.meta .icon {
-	width: 150px;
+	width: 100px;
+	text-align: center;
+}
+
+#boardListBox table.meta .date {
+	width: 200px !important;
 	text-align: center;
 }
 
 #boardListBox table.meta .nickName {
-	width: 200px !important;
+	width: 250px !important;
 	text-align: center;
 }
 
@@ -1816,12 +1821,17 @@ ul.meta li:before {
 }
 
 #ownBoardListBox table.meta .title {
-	width: 400px;
+	width: 250px;
 	text-align: center;
 }
 
 #ownBoardListBox table.meta .icon {
-	width: 150px;
+	width: 100px;
+	text-align: center;
+}
+
+#ownBoardListBox table.meta .nickName {
+	width: 250px !important;
 	text-align: center;
 }
 
@@ -2162,7 +2172,6 @@ ul.meta li:before {
 	border-radius: 10px;
 	margin-bottom: 30px;
 	text-align: left;
-	margin-top: 10px;
 }
 
 #editor p {
@@ -2171,9 +2180,8 @@ ul.meta li:before {
 }
 
 #editor {
- 	white-space: pre-wrap;
+ 	white-space: normal;
 	width: auto;
-	height: auto;
 }
 
 #boardTitle {
@@ -2770,6 +2778,13 @@ body {
 }
 
 /* Sidebar + Content */
+
+.sidebar {
+	border: 1px solid #d8e2d9;
+    border-radius: 10px;
+    padding: 7px 7px 7px 20px;
+}
+
 .sidebar h2.major {
 	text-align: left;
 	margin: 0 0 1.5em 0;
@@ -3341,4 +3356,9 @@ body {
 	#advertisement {
 		display: none;
 	}
+}
+.sideGo{
+	color: #ffffff;
+    font-size: 1em;
+    background-color: #90b98c !important;
 }

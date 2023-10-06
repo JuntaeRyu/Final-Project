@@ -10,8 +10,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 <link rel="icon" href="assets/css/images/favicon.ico" type="image/x-icon" />
 <link rel="stylesheet" href="assets/css/main.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.css">
 </head>
 <body class="homepage is-preload">
+	<script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.js"></script>
 	<script src="https://cdn.ckeditor.com/ckeditor5/38.1.0/classic/ckeditor.js"></script>
 	<script src="https://cdn.ckeditor.com/ckeditor5/34.0.0/classic/translations/ko.js"></script>
 	<script type="module">
@@ -60,7 +63,7 @@
 					   						class="my-config" > </lr-file-uploader-minimal>
 										<lr-data-output ctx-name="boardImg" use-console use-input use-group use-event ></lr-data-output>
 										<textarea name="content" id="editor"></textarea>
-										<input type="hidden" name="memberID" value="${memberID}"> <input type="submit" value="작성하기" />
+										<input type="hidden" name="memberID" value="${memberID}"> <input id="completeBtn" type="submit" value="작성하기" />
 										<div id="boardImg"></div>
 									</form>
 								</section>
@@ -72,51 +75,7 @@
 		</section>
 
 		<!-- Footer -->
-		<footer id="footer">
-			<div class="container">
-				<div class="row gtr-200">
-					<div class="col-12">
-
-						<!-- About -->
-						<section>
-							<h2 class="major">
-								<span>What's this about?</span>
-							</h2>
-							<p>
-								This is <strong>TXT</strong>, yet another free responsive site template designed by <a href="http://twitter.com/ajlkn">AJ</a> for <a href="http://html5up.net">HTML5 UP</a>. It's released under the <a href="http://html5up.net/license/">Creative Commons Attribution</a> license so feel free to use it for whatever you're working on (personal or commercial), just be sure to give us credit for the design. That's basically it :)
-							</p>
-						</section>
-
-					</div>
-					<div class="col-12">
-
-						<!-- Contact -->
-						<section>
-							<h2 class="major">
-								<span>Get in touch</span>
-							</h2>
-							<ul class="contact">
-								<li><a class="icon brands fa-facebook-f" href="#"><span class="label">Facebook</span></a></li>
-								<li><a class="icon brands fa-twitter" href="#"><span class="label">Twitter</span></a></li>
-								<li><a class="icon brands fa-instagram" href="#"><span class="label">Instagram</span></a></li>
-								<li><a class="icon brands fa-dribbble" href="#"><span class="label">Dribbble</span></a></li>
-								<li><a class="icon brands fa-linkedin-in" href="#"><span class="label">LinkedIn</span></a></li>
-							</ul>
-						</section>
-
-					</div>
-				</div>
-
-				<!-- Copyright -->
-				<div id="copyright">
-					<ul class="menu">
-						<li>&copy; Untitled. All rights reserved</li>
-						<li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
-					</ul>
-				</div>
-
-			</div>
-		</footer>
+		<NPNC:healthDuo_footer />
 
 	</div>
 
@@ -152,6 +111,29 @@
     });
 	
 	</script>
+	
+	<script>
+	console.log("1");
+	$("#completeBtn").click(function (event){
+		event.preventDefault();
+		console.log("3");
+		
+		Swal.fire({
+			title: '작성완료 하시겠습니까?',
+			icon: 'question',
+			showCancelButton: true,
+			confirmButtonText: '승인',
+			cancelButtonText: '취소'
+		}).then((result) => {
+			if (result.isConfirmed) {
+				console.log("4");
+				$(this).closest('form').submit();
+			}
+		});
+	});
+	console.log("2");
+	</script>
+	
 	<script src="assets/js/jquery.min.js"></script>
 	<script src="assets/js/jquery.dropotron.min.js"></script>
 	<script src="assets/js/jquery.scrolly.min.js"></script>

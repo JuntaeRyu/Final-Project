@@ -19,6 +19,8 @@
 <link rel="icon" href="assets/css/images/favicon.ico"
 	type="image/x-icon" />
 <link rel="stylesheet" href="assets/css/main.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.js"></script>
 
 <style type="text/css">
 /* 모달 스타일 */
@@ -315,11 +317,11 @@ ul.pagination li a {
 														style="text-align: center; display: grid; justify-content: center;">
 														<form action="acceptMatching.do" method="POST">
 															<input type="hidden" name="matchingNum" value="${receiverdata.matchingNum}">
-															<input type="submit" class="Abtn" value="수락">
+															<input id="acceptBtn" type="submit" class="Abtn" value="수락">
 														</form>
 														<form action="deleteMatching.do" method="POST">
 															<input type="hidden" name="matchingNum" value="${receiverdata.matchingNum}">
-															<input type="submit" class="Abtn" style="background-color: #FA5858;" value="거절">
+															<input id="refuseBtn" type="submit" class="Abtn" style="background-color: #FA5858;" value="거절">
 														</form>
 
 													</div>
@@ -332,7 +334,7 @@ ul.pagination li a {
 														</form>
 														<form action="deleteMatching.do" method="POST">
 															<input type="hidden" name="matchingNum"
-																value="${receiverdata.matchingNum}"> <input
+																value="${receiverdata.matchingNum}"> <input id="receiverDeleteBtn"
 																type="submit" class="Abtn"
 																style="background-color: #FA5858;" value="삭제">
 														</form>
@@ -393,7 +395,7 @@ ul.pagination li a {
 														<a class="Abtn" style="background-color: #6E6E6E;">대기중</a>
 														<form action="deleteMatching.do" method="POST" style="text-align: center; display: grid; justify-content: center;">
 															<input type="hidden" name="matchingNum" value="${senderdata.matchingNum}">
-															<input type="submit" class="Abtn" style="background-color: #FA5858;" value="취소">
+															<input id="cancelBtn" type="submit" class="Abtn" style="background-color: #FA5858;" value="취소">
 														</form>
 													</div>
 												</c:if>
@@ -404,8 +406,9 @@ ul.pagination li a {
 													<form action="deleteMatching.do" method="post" style="text-align: center; display: grid; justify-content: center;">
 														<input type="hidden" name="matchingNum"
 															value="${senderdata.matchingNum}"> <input
+															id="senderDeleteBtn"
 															type="submit" class="Abtn"
-															style="background-color: #FA5858;" value="취소">
+															style="background-color: #FA5858;" value="삭제">
 													</form>
 												</c:if>
 											</div>
@@ -424,62 +427,7 @@ ul.pagination li a {
 		</section>
 
 		<!-- Footer -->
-		<footer id="footer">
-			<div class="container">
-				<div class="row gtr-200">
-					<div class="col-12">
-
-						<!-- About -->
-						<section>
-							<h2 class="major">
-								<span>What's this about?</span>
-							</h2>
-							<p>
-								This is <strong>TXT</strong>, yet another free responsive site
-								template designed by <a href="http://twitter.com/ajlkn">AJ</a>
-								for <a href="http://html5up.net">HTML5 UP</a>. It's released
-								under the <a href="http://html5up.net/license/">Creative
-									Commons Attribution</a> license so feel free to use it for whatever
-								you're working on (personal or commercial), just be sure to give
-								us credit for the design. That's basically it :)
-							</p>
-						</section>
-
-					</div>
-					<div class="col-12">
-
-						<!-- Contact -->
-						<section>
-							<h2 class="major">
-								<span>Get in touch</span>
-							</h2>
-							<ul class="contact">
-								<li><a class="icon brands fa-facebook-f" href="#"><span
-										class="label">Facebook</span></a></li>
-								<li><a class="icon brands fa-twitter" href="#"><span
-										class="label">Twitter</span></a></li>
-								<li><a class="icon brands fa-instagram" href="#"><span
-										class="label">Instagram</span></a></li>
-								<li><a class="icon brands fa-dribbble" href="#"><span
-										class="label">Dribbble</span></a></li>
-								<li><a class="icon brands fa-linkedin-in" href="#"><span
-										class="label">LinkedIn</span></a></li>
-							</ul>
-						</section>
-
-					</div>
-				</div>
-
-				<!-- Copyright -->
-				<div id="copyright">
-					<ul class="menu">
-						<li>&copy; Untitled. All rights reserved</li>
-						<li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
-					</ul>
-				</div>
-
-			</div>
-		</footer>
+		<NPNC:healthDuo_footer />
 
 	</div>
 
@@ -487,6 +435,85 @@ ul.pagination li a {
 	<script src="https://code.jquery.com/jquery-3.7.1.min.js"
 		integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
 		crossorigin="anonymous"></script>
+	
+	<script type="text/javascript">
+	$("#acceptBtn").click(function (event) {
+		event.preventDefault();
+		
+		Swal.fire({
+			title: '수락 하시겠습니까?',
+			icon: 'qeustion',
+			showCancelButton: true,
+			confirmButtonText: '확인',
+			cancelButtonText: '취소'
+		}).then((result) => {
+			if (result.isConfirmed) {
+				$(this).closest('form').submit();
+			}
+		});
+	});
+	$("#refuseBtn").click(function (event) {
+		event.preventDefault();
+		
+		Swal.fire({
+			title: '거절 하시겠습니까?',
+			icon: 'qeustion',
+			showCancelButton: true,
+			confirmButtonText: '확인',
+			cancelButtonText: '취소'
+		}).then((result) => {
+			if (result.isConfirmed) {
+				$(this).closest('form').submit();
+			}
+		});
+	});
+	$("#receiverDeleteBtn").click(function (event) {
+		event.preventDefault();
+		
+		Swal.fire({
+			title: '삭제 하시겠습니까?',
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonText: '확인',
+			cancelButtonText: '취소'
+		}).then((result) => {
+			if (result.isConfirmed) {
+				$(this).closest('form').submit();
+			}
+		});
+	});
+	$("#cancelBtn").click(function (event) {
+		event.preventDefault();
+		
+		Swal.fire({
+			title: '취소 하시겠습니까?',
+			icon: 'qeustion',
+			showCancelButton: true,
+			confirmButtonText: '확인',
+			cancelButtonText: '취소'
+		}).then((result) => {
+			if (result.isConfirmed) {
+				$(this).closest('form').submit();
+			}
+		});
+	});
+	$("#senderDeleteBtn").click(function (event) {
+		event.preventDefault();
+		
+		Swal.fire({
+			title: '삭제 하시겠습니까?',
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonText: '확인',
+			cancelButtonText: '취소'
+		}).then((result) => {
+			if (result.isConfirmed) {
+				$(this).closest('form').submit();
+			}
+		});
+	});
+	</script>
+	
 	<script>
 	const openModalBtnMember = document.getElementById("openModalBtnMember");
 	

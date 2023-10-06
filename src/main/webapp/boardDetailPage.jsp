@@ -10,7 +10,7 @@
 -->
 <html>
 <style>
-#anotherTitle {
+.anotherTitle {
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
@@ -38,6 +38,20 @@ i {
 	padding: 10px;
 	margin-bottom: 7px;
 	margin-right: 12px;
+}
+#imgBox {
+	display: flex;
+    flex-direction: column; /* 이미지를 세로로 나열합니다. */
+    gap: 10px;
+    align-items: flex-start;
+}
+#imgBox img {
+	width: auto; /* 이미지가 부모 요소인 imgBox의 너비에 맞게 조절됩니다. */
+    max-height: 380px;
+}
+#imgSection {
+	display: flex;
+    flex-direction: column;
 }
 </style>
 <head>
@@ -67,7 +81,7 @@ i {
 		<section id="main">
 			<div class="container">
 				<div class="row">
-					<div class="col-3 col-12-medium">
+					<div class="col-3 col-12-medium" style="padding-left: 20px;">
 						<NPNC:sidebar />
 					</div>
 					<div class="col-9 col-12-medium imp-medium">
@@ -96,7 +110,7 @@ i {
 											</form>
 										</li>
 									</ul>
-									<header>
+									<header style="margin: 0 0 0.5em 0;">
 										<p id="boardTitle">${bdata.title}</p>
 										<ul class="meta">
 											<li class="icon solid fa-user"><a href="profileDetailPage.do?memberID=${bdata.memberID}">${bdata.nickName}</a></li>
@@ -108,16 +122,18 @@ i {
 											</c:if>
 										</ul>
 									</header>
-									<section>
-											<c:if test="${not empty bdata.boardImgList}">
+										<c:if test="${not empty bdata.boardImgList}">
+											<section id="imgSection">
+											<div id="imgBox">
 											<c:forEach var="boardImg" items="${bdata.boardImgList}">
 												<img src="${boardImg}" alt="" />
 											</c:forEach>
-											</c:if>
+											</div>
+											</section>
+										</c:if>
 										<div id="editor">
 											<p>${bdata.content}</p>
 										</div>
-									</section>
 								</section>
 								<!-- 댓글 작성 -->
 								<c:if test="${not empty memberID}">
@@ -161,11 +177,13 @@ i {
 											</ul>
 
 											<ul class="meta">
-												<c:if test="${cdata.check eq '0' }">
-													<li><i class="icon solid fa-ban comments" style="color: #c2bcbc" onclick="javascript:funcComments('${cdata.commentsNum}' , '${cdata.check}', this)" title="신고"></i></li>
-												</c:if>
-												<c:if test="${cdata.check eq '1' }">
-													<li><i class="icon solid fa-ban comments" style="color: #f58300;" onclick="javascript:funcComments('${cdata.commentsNum}' , '${cdata.check}', this)" title="신고"></i></li>
+												<c:if test="${cdata.comments ne null}">
+													<c:if test="${cdata.check eq '0' }">
+														<li><i class="icon solid fa-ban comments" style="color: #c2bcbc" onclick="javascript:funcComments('${cdata.commentsNum}' , '${cdata.check}', this)" title="신고"></i></li>
+													</c:if>
+													<c:if test="${cdata.check eq '1' }">
+														<li><i class="icon solid fa-ban comments" style="color: #f58300;" onclick="javascript:funcComments('${cdata.commentsNum}' , '${cdata.check}', this)" title="신고"></i></li>
+													</c:if>
 												</c:if>
 											</ul>
 											<c:if test="${cdata.comments eq null}">
@@ -244,51 +262,7 @@ i {
 		</section>
 		<button id="scrollToTop" onclick="scrollToTop()" class="icon solid fa-chevron-up"></button>
 		<!-- Footer -->
-		<footer id="footer">
-			<div class="container">
-				<div class="row gtr-200">
-					<div class="col-12">
-
-						<!-- About -->
-						<section>
-							<h2 class="major">
-								<span>What's this about?</span>
-							</h2>
-							<p>
-								This is <strong>TXT</strong>, yet another free responsive site template designed by <a href="http://twitter.com/ajlkn">AJ</a> for <a href="http://html5up.net">HTML5 UP</a>. It's released under the <a href="http://html5up.net/license/">Creative Commons Attribution</a> license so feel free to use it for whatever you're working on (personal or commercial), just be sure to give us credit for the design. That's basically it :)
-							</p>
-						</section>
-
-					</div>
-					<div class="col-12">
-
-						<!-- Contact -->
-						<section>
-							<h2 class="major">
-								<span>Get in touch</span>
-							</h2>
-							<ul class="contact">
-								<li><a class="icon brands fa-facebook-f" href="#"><span class="label">Facebook</span></a></li>
-								<li><a class="icon brands fa-twitter" href="#"><span class="label">Twitter</span></a></li>
-								<li><a class="icon brands fa-instagram" href="#"><span class="label">Instagram</span></a></li>
-								<li><a class="icon brands fa-dribbble" href="#"><span class="label">Dribbble</span></a></li>
-								<li><a class="icon brands fa-linkedin-in" href="#"><span class="label">LinkedIn</span></a></li>
-							</ul>
-						</section>
-
-					</div>
-				</div>
-
-				<!-- Copyright -->
-				<div id="copyright">
-					<ul class="menu">
-						<li>&copy; Untitled. All rights reserved</li>
-						<li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
-					</ul>
-				</div>
-
-			</div>
-		</footer>
+		<NPNC:healthDuo_footer />
 
 	</div>
 

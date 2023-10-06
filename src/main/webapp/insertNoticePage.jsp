@@ -9,6 +9,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 <link rel="icon" href="assets/css/images/favicon.ico" type="image/x-icon" />
 <link rel="stylesheet" href="assets/css/main.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 </head>
 <body class="homepage is-preload">
 	<script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
@@ -37,9 +40,9 @@
 							<article class="box page-content">
 								<section id="insertNoticeBox">
 									<form action="insertNotice.do" method="POST">
-										<input type="hidden" name="category" value="0"> <input style="width: 100%;" type="text" placeholder="공지사항" disabled> <input style="width: 100%;" type="text" name="title" placeholder="제목">
-										<textarea name="content" id="editor"></textarea>
-										<input type="hidden" name="memberID" value="${memberID}"> <input type="submit" value="작성하기" />
+										<input type="hidden" name="category" value="0"> <input style="width: 100%;" type="text" placeholder="공지사항" disabled> <input style="width: 100%;" type="text" name="title" placeholder="제목" required>
+										<textarea name="content" id="editor" required></textarea>
+										<input type="hidden" name="memberID" value="${memberID}"> <input id="completeBtn" type="submit" value="작성하기" />
 									</form>
 								</section>
 							</article>
@@ -51,59 +54,32 @@
 
 		
 		<!-- Footer -->
-		<footer id="footer">
-			<div class="container">
-				<div class="row gtr-200">
-					<div class="col-12">
-
-						<!-- About -->
-						<section>
-							<h2 class="major">
-								<span>What's this about?</span>
-							</h2>
-							<p>
-								This is <strong>TXT</strong>, yet another free responsive site template designed by <a href="http://twitter.com/ajlkn">AJ</a> for <a href="http://html5up.net">HTML5 UP</a>. It's released under the <a href="http://html5up.net/license/">Creative Commons Attribution</a> license so feel free to use it for whatever you're working on (personal or commercial), just be sure to give us credit for the design. That's basically it :)
-							</p>
-						</section>
-
-					</div>
-					<div class="col-12">
-
-						<!-- Contact -->
-						<section>
-							<h2 class="major">
-								<span>Get in touch</span>
-							</h2>
-							<ul class="contact">
-								<li><a class="icon brands fa-facebook-f" href="#"><span class="label">Facebook</span></a></li>
-								<li><a class="icon brands fa-twitter" href="#"><span class="label">Twitter</span></a></li>
-								<li><a class="icon brands fa-instagram" href="#"><span class="label">Instagram</span></a></li>
-								<li><a class="icon brands fa-dribbble" href="#"><span class="label">Dribbble</span></a></li>
-								<li><a class="icon brands fa-linkedin-in" href="#"><span class="label">LinkedIn</span></a></li>
-							</ul>
-						</section>
-
-					</div>
-				</div>
-
-				<!-- Copyright -->
-				<div id="copyright">
-					<ul class="menu">
-						<li>&copy; Untitled. All rights reserved</li>
-						<li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
-					</ul>
-				</div>
-
-			</div>
-		</footer>
+		<NPNC:healthDuo_footer />
 
 	</div>
 
 	<!-- Scripts -->
+	<script type="text/javascript">
+	$("#completeBtn").click(function (event){
+		event.preventDefault();
+		
+		Swal.fire({
+			title: '작성 완료하시겠습니까?',
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonText: '확인',
+			cancelButtonText: '취소'
+		}).then((result) => {
+			if (result.isConfirmed) {
+				$(this).closest('form').submit();
+			}
+		});
+	});
+	</script>
 	<script>
 		ClassicEditor.create(document.querySelector('#editor'), {
 		  toolbar: ['heading', '|', 'bold', 'italic'],
-		  language: 'ko',
+		  language: 'ko',	
 		});
 	</script>
 	<script src="assets/js/jquery.min.js"></script>

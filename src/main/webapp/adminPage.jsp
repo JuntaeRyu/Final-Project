@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="NPNC"%>
@@ -14,14 +13,12 @@
 <head>
 <title>HealthDuo</title>
 <meta charset="utf-8" />
-<meta name="viewport"
-	content="width=device-width, initial-scale=1, user-scalable=no" />
-<link rel="icon" href="assets/css/images/favicon.ico"
-	type="image/x-icon" />
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+<link rel="icon" href="assets/css/images/favicon.ico" type="image/x-icon" />
 <link rel="stylesheet" href="assets/css/main.css" />
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"
-	integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
-	crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 
 <style type="text/css">
 /* 모달 스타일 */
@@ -191,6 +188,7 @@ ul.pagination li a {
 									<span>사용 목록</span>
 								</h2>
 								<ul class="divided">
+									<!-- 
 									<li>
 										<article class="box post-summary">
 											<h3>
@@ -198,7 +196,7 @@ ul.pagination li a {
 											</h3>
 										</article>
 									</li>
-
+									 -->
 									<li>
 										<article class="box post-summary">
 											<h3>
@@ -211,6 +209,14 @@ ul.pagination li a {
 										<article class="box post-summary">
 											<h3>
 												<a class="chooseBtn" href="adminPage.do?role=2">관리자목록</a>
+											</h3>
+										</article>
+									</li>
+
+									<li>
+										<article class="box post-summary">
+											<h3>
+												<a class="chooseBtn" href="adminPage.do?role=9">정지된회원목록</a>
 											</h3>
 										</article>
 									</li>
@@ -230,15 +236,13 @@ ul.pagination li a {
 									<input type="hidden" name="role" value="${searchRole}">
 									<table class="pull-right">
 										<tr>
-											<td class="adminTd1"><select class="form-control"
-												name="searchType">
+											<td class="adminTd1"><select class="form-control" name="searchType">
 													<c:forEach var="v" items="${searchMap}">
 														<option value="${v.value}">${v.key}</option>
 													</c:forEach>
 											</select></td>
-											<td class="adminTd2"><input type="text" class="form-control" name="searchText" maxlength="100"
-												placeholder="검색어를 입력하세요."></td>
-											
+											<td class="adminTd2"><input type="text" class="form-control" name="searchText" maxlength="100" placeholder="검색어를 입력하세요."></td>
+
 											<td class="adminTd3"><input type="submit" class="searchBtn" value="검색"></td>
 										</tr>
 									</table>
@@ -248,41 +252,61 @@ ul.pagination li a {
 							<hr>
 
 							<section id="memberListBox">
-								<table class="meta">
-									<thead>
-										<tr class="tab">
-											<td class="icon solid fa-id-card"><span> 아이디</span></td>
-											<td class="icon solid fa-address-card"><span> 이름</span></td>
-											<td class="icon fa-address-card"><span> 닉네임</span></td>
-											<td class="icon solid fa-phone"><span> 전화번호</span></td>
-											<td class="icon solid fa-venus-mars"><span> 성별</span></td>
-											<td class="icon solid fa-address-book"><span>
-													관리자여부</span></td>
-										</tr>
-									</thead>
-									<tbody id="adminTableBody">
-										<c:forEach var="v" items="${mdatas}">
-											<tr>
-												<td>${v.memberID}</td>
-												<td>${v.name}</td>
-												<td>${v.nickName}</td>
-												<td class="icon solid fa-phone">${v.phoneNum}</td>
-												<c:if test="${v.gender eq 1}">
-													<td class="icon solid fa-mars">남성</td>
-												</c:if>
-												<c:if test="${v.gender eq 2}">
-													<td class="icon solid fa-venus">여성</td>
-												</c:if>
-												<c:if test="${v.role eq 2}">
-													<td>관리자</td>
-												</c:if>
-												<c:if test="${v.role eq 3}">
-													<td>회원</td>
-												</c:if>
-											</tr>
-										</c:forEach>
-									</tbody>
-								</table>
+								<c:if test="${fn:length(mdatas) <= 0}">
+									<h3 style="text-align: center">현재 해당하는 회원이 없습니다.</h3>
+								</c:if>
+								<c:if test="${fn:length(mdatas) > 0}">
+									<form action="updateMemberRole.do" method="POST">
+										<table class="meta">
+											<thead>
+												<tr class="tab">
+													<td class="icon solid fa-id-card"><span> 아이디</span></td>
+													<td class="icon solid fa-address-card"><span> 이름</span></td>
+													<td class="icon fa-address-card"><span> 닉네임</span></td>
+													<td class="icon solid fa-phone"><span> 전화번호</span></td>
+													<td class="icon solid fa-venus-mars"><span> 성별</span></td>
+													<td class="icon solid fa-address-book"><span>관리자여부</span></td>
+													<td></td>
+												</tr>
+											</thead>
+											<tbody id="adminTableBody">
+												<c:forEach var="v" items="${mdatas}">
+													<tr>
+														<td>${v.memberID}</td>
+														<td>${v.name}</td>
+														<td>${v.nickName}</td>
+														<td class="icon solid fa-phone">${v.phoneNum}</td>
+														<c:if test="${v.gender eq 1}">
+															<td class="icon solid fa-mars">남성</td>
+														</c:if>
+														<c:if test="${v.gender eq 2}">
+															<td class="icon solid fa-venus">여성</td>
+														</c:if>
+														<c:if test="${v.role eq 2}">
+															<td>관리자</td>
+														</c:if>
+														<c:if test="${v.role eq 3}">
+															<td>회원</td>
+														</c:if>
+														<td>
+															<input type="checkbox" name="mid" style="display: inline" value="${v.memberID}">
+														</td>
+													</tr>
+												</c:forEach>
+											</tbody>
+										</table>
+										<c:if test="${searchRole eq 2}">
+											<input class="editBtn" type="submit" value="관리자 권환 회수">
+										</c:if>
+										<c:if test="${searchRole eq 3}">
+											<input class="editBtn" type="submit" value="관리자 권한 부여">
+										</c:if>
+										<c:if test="${searchRole eq 9}">
+											<input class="editBtn" type="submit" value="경고 리셋">
+										</c:if>
+									</form>
+
+								</c:if>
 							</section>
 						</div>
 					</div>
@@ -291,66 +315,27 @@ ul.pagination li a {
 		</section>
 
 		<!-- Footer -->
-		<footer id="footer">
-			<div class="container">
-				<div class="row gtr-200">
-					<div class="col-12">
-
-						<!-- About -->
-						<section>
-							<h2 class="major">
-								<span>What's this about?</span>
-							</h2>
-							<p>
-								This is <strong>TXT</strong>, yet another free responsive site
-								template designed by <a href="http://twitter.com/ajlkn">AJ</a>
-								for <a href="http://html5up.net">HTML5 UP</a>. It's released
-								under the <a href="http://html5up.net/license/">Creative
-									Commons Attribution</a> license so feel free to use it for whatever
-								you're working on (personal or commercial), just be sure to give
-								us credit for the design. That's basically it :)
-							</p>
-						</section>
-
-					</div>
-					<div class="col-12">
-
-						<!-- Contact -->
-						<section>
-							<h2 class="major">
-								<span>Get in touch</span>
-							</h2>
-							<ul class="contact">
-								<li><a class="icon brands fa-facebook-f" href="#"><span
-										class="label">Facebook</span></a></li>
-								<li><a class="icon brands fa-twitter" href="#"><span
-										class="label">Twitter</span></a></li>
-								<li><a class="icon brands fa-instagram" href="#"><span
-										class="label">Instagram</span></a></li>
-								<li><a class="icon brands fa-dribbble" href="#"><span
-										class="label">Dribbble</span></a></li>
-								<li><a class="icon brands fa-linkedin-in" href="#"><span
-										class="label">LinkedIn</span></a></li>
-							</ul>
-						</section>
-
-					</div>
-				</div>
-
-				<!-- Copyright -->
-				<div id="copyright">
-					<ul class="menu">
-						<li>&copy; Untitled. All rights reserved</li>
-						<li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
-					</ul>
-				</div>
-
-			</div>
-		</footer>
-
+		<NPNC:healthDuo_footer />
 	</div>
 
 	<!-- Scripts -->
+	<script type="text/javascript">
+	$(".editBtn").click(function (event) {
+		event.preventDefault();
+		
+		Swal.fire({
+			title: '수정하시겠습니까?',
+			icon: 'question',
+			showCancelButton: true,
+			confirmButtonText: '확인',
+			cancelButtonText: '취소'
+		}).then((result) => {
+			if (result.isConfirmed) {
+				$(this).closest('form').submit();
+			}
+		});
+	});
+	</script>
 	<script src="assets/js/jquery.min.js"></script>
 	<script src="assets/js/jquery.dropotron.min.js"></script>
 	<script src="assets/js/jquery.scrolly.min.js"></script>
@@ -372,88 +357,4 @@ ul.pagination li a {
 		</c:otherwise>
 	</c:choose>
 </body>
-<script type="text/javascript">
-	// JavaScript 함수: 페이지 이동 시 탭 상태를 유지하고 해당 탭의 페이지로 이동하는 함수
-	function changePage(page) {
-		// 예제에서는 페이지를 새로고침하는 방식으로 처리하였지만, 실제로는 AJAX를 사용하여 비동기적으로 페이지를 변경하는 것이 좋습니다.
-		window.location.href = "boardListPage.do?page=" + page;
-	}
-</script>
-
-<!-- 검색 비동기 -->
-<script type="text/javascript">
-	$(document)
-			.ready(
-					function() { // 이 페이지가 다 열렸을때(로딩끝났을때) 아래 함수를 실행한다.
-						$(".searchBtn")
-								.on(
-										"click",
-										function() {
-											var searchCondition = $(
-													'#searchCondition').val(); // C와 변수명 정하기
-											var searchText = $('#searchText')
-													.val(); // C와 변수명 정하기
-
-											$
-													.ajax({
-														url : 'searchAdmin.do?searchCondition='
-																+ searchField
-																+ '&nickName='
-																+ searchText
-																+ '&memberID='
-																+ serchText,
-														type : 'POST',
-														success : function(
-																result) {
-															// 결과 배열을 순회하면서 각 요소를 테이블 행으로 추가합니다.
-															var adminTableBody = $('#adminTableBody');
-															adminTableBody
-																	.empty(); // 기존 내용 삭제
-
-															for (var i = 0; i < result.length; i++) {
-																var admin = result[i];
-																var genderIconClass = admin.gender === 1 ? 'fa-mars'
-																		: 'fa-venus';
-																var roleText = admin.role === 2 ? '관리자'
-																		: '회원';
-																var rowHtml = '<tr>'
-																		+ '<td>'
-																		+ admin.memberId
-																		+ '</td>'
-																		+ '<td>'
-																		+ admin.name
-																		+ '</td>'
-																		+ '<td>'
-																		+ admin.nickName
-																		+ '</td>'
-																		+ '<td class="icon solid fa-phone">'
-																		+ admin.phoneNum
-																		+ '</td>'
-																		+ '<td class="icon solid '+ genderIconClass +'">'
-																		+ admin.gender === 1 ? '남성'
-																		: '여성'
-																				+ '</td>'
-																				+ '<td>'
-																				+ roleText
-																				+ '</td>'
-																				+ '</tr>';
-																adminTableBody
-																		.append(rowHtml);
-															}
-
-															console.log(
-																	'result: ',
-																	result);
-														},
-														error : function(error) {
-															console.log(error);
-														}
-													});
-										});
-					});
-</script>
-
-
-
-
 </html>

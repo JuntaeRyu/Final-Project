@@ -10,7 +10,22 @@
 -->
 <html>
 <style>
+.anotherTitle {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	margin: 0.5em 0;
+}
 
+#topContent {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	margin: 0.5em 0;
+	display: -webkit-box;
+	-webkit-line-clamp: 3; /* 여기서 숫자를 조절하여 표시할 줄 수를 지정할 수 있습니다 */
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+}
 
 i {
 	cursor: pointer;
@@ -52,8 +67,8 @@ i {
 		<section id="main">
 			<div class="container">
 				<div class="row">
-					<div class="col-3 col-12-medium">
-						<NPNC:sidebar/>
+					<div class="col-3 col-12-medium" style="padding-left: 20px;">
+						<NPNC:sidebarNotice />
 					</div>
 					<div class="col-9 col-12-medium imp-medium">
 						<div class="content">
@@ -65,13 +80,11 @@ i {
 										<i id="boardButton" class="icon solid fa-bars"></i>
 									</c:if>
 									<ul id="menuList">
-									<c:if test="${ role ne 2}">
-											<li><form action="updateNoticePage.do" method="post">
-												<input type="hidden" name="boardNum" value="${bdata.boardNum}" />
-												<button type="submit" style="background: none; border: none; text-decoration: none; color: #6b7770;">
-													수정</button>
-											</form></li>
-										</c:if>
+										<li><form action="updateNoticePage.do" method="post">
+											<input type="hidden" name="boardNum" value="${bdata.boardNum}" />
+											<button type="submit" style="background: none; border: none; text-decoration: none; color: #6b7770;">
+												수정</button>
+										</form></li>
 										
 										<li>
 										<form action="deleteNotice.do" method="post">
@@ -111,8 +124,7 @@ i {
 								<c:if test="${not empty memberID}">
 									<section id="insertCommentBox">
 										<form id="insertComment" action="insertComment.do" method="POST">
-											<input type="hidden" name="boardNum" value="${bdata.boardNum}">
-											<input type="text" name="comments" placeholder="댓글 작성 내용" required> <input style="width: 80px;" type="submit" value="작성">
+											<input type="hidden" name="boardNum" value="${bdata.boardNum}"> <input type="text" name="comments" placeholder="댓글 작성 내용" required> <input style="width: 80px;" type="submit" value="작성">
 										</form>
 									</section>
 								</c:if>
@@ -126,52 +138,11 @@ i {
 											<ul class="meta" style="text-align: left;">
 												<li class="icon solid fa-user">${cdata.nickName}</li>
 												<li class="icon fa-clock">${cdata.commentsDate }</li>
-												<c:if test="${memberID eq cdata.memberID || role eq 2}">
-													<i class="icon solid fa-bars commentsButton"></i>
-												</c:if>
 											</ul>
-											<ul class="commentsMenuList">
-												<c:if test="${role ne 2}">
-													<li>
-														<form action="updateComment.do" method="post">
-															<input type="hidden" name="boardNum"
-																value="${bdata.boardNum}"> <input type="hidden"
-																name="commentsNum" value="${cdata.commentsNum}" />
-															<button type="submit"
-																style="background: none; border: none; text-decoration: none; color: #6b7770; padding: 0;">수정</button>
-														</form>
-													</li>
-												</c:if>
-
-												<li>
-													<form action="deleteComment.do" method="post">
-														<input type="hidden" name="boardNum"
-															value="${bdata.boardNum}"> <input type="hidden"
-															name="commentsNum" value="${cdata.commentsNum}" />
-														<button type="submit"
-															style="background: none; border: none; text-decoration: none; color: #6b7770; padding: 0;">삭제</button>
-													</form>
-												</li>
-											</ul>
-											<c:if test="${cdata.comments eq null}">
-												<h1>삭제된 댓글입니다.</h1>
-											</c:if>
-											<c:if test="${cdata.comments ne null}">
-												<h1>${cdata.comments}</h1>
-											</c:if>
+											<h1>${cdata.comments}</h1>
 											<ul class="meta">
-												<c:if test="${cdata.check eq '0' }">
-													<li><i class="icon solid fa-ban comments"
-														style="color: #c2bcbc"
-														onclick="javascript:funcComments('${cdata.commentsNum}' , '${cdata.check}', this)"
-														title="신고"></i></li>
-												</c:if>
-												<c:if test="${cdata.check eq '1' }">
-													<li><i class="icon solid fa-ban comments"
-														style="color: #f58300;"
-														onclick="javascript:funcComments('${cdata.commentsNum}' , '${cdata.check}', this)"
-														title="신고"></i></li>
-												</c:if>
+												<li class="icon fa-heart">댓글 추천수 변수 없음</li>
+												<li class="icon solid fa-ban">${cdata.prohibitCnt}</li>
 											</ul>
 
 											<!-- 대댓글 -->
@@ -179,53 +150,10 @@ i {
 												<c:if test="${cdata.commentsNum eq rdata.commentsNum}">
 													<p id="replyIcon" class="icon solid fa-reply"></p>
 													<section id="replyBox">
-														<ul class="meta">
-															<c:if test="${memberID eq rdata.memberID || role eq 2}">
-																<i class="icon solid fa-bars replyButton"></i>
-															</c:if>
-														</ul>
-														<ul class="replyMenuList">
-															<c:if test="${role ne 2}">
-																<li>
-																	<form action="updateReply.do" method="post">
-																		<input type="hidden" name="boardNum"
-																			value="${bdata.boardNum}"> <input
-																			type="hidden" name="replyNum"
-																			value="${rdata.replyNum}">
-																		<button type="submit"
-																			style="background: none; border: none; text-decoration: none; color: #6b7770; padding: 0;">수정</button>
-																	</form>
-																</li>
-															</c:if>
-
-															<li>
-																<form action="deleteReply.do" method="post">
-																	<input type="hidden" name="boardNum"
-																		value="${bdata.boardNum}"> <input
-																		type="hidden" name="replyNum"
-																		value="${rdata.replyNum}">
-																	<button type="submit"
-																		style="background: none; border: none; text-decoration: none; color: #6b7770; padding: 0;">삭제</button>
-																</form>
-															</li>
-														</ul>
 														<h1>${rdata.reply}</h1>
-														<ul class="meta" style="text-align: right">
-															<li class="icon solid fa-user" style="float: left;">${rdata.nickName}</li>
-															<li class="icon fa-clock" style="float: left;">${rdata.replyDate}</li>
-
-															<c:if test="${rdata.check eq '0'}">
-																<li><i class="icon solid fa-ban reply"
-																	style="color: #c2bcbc;"
-																	onclick="javascript:funcReply('${rdata.replyNum}', '${rdata.check}', this)"
-																	title="신고"></i></li>
-															</c:if>
-															<c:if test="${rdata.check eq '1'}">
-																<li><i class="icon solid fa-ban reply"
-																	style="color: #f58300;"
-																	onclick="javascript:funcReply('${rdata.replyNum}', '${rdata.check}', this)"
-																	title="신고"></i></li>
-															</c:if>
+														<ul class="meta">
+															<li class="icon solid fa-user">${rdata.nickName}</li>
+															<li class="icon fa-clock">${rdata.replyDate}</li>
 														</ul>
 													</section>
 												</c:if>
@@ -236,7 +164,7 @@ i {
 													<button class="insertReplyBtn">대댓글 작성</button>
 												</c:if>
 												<section id="replyInsertBox" class="insertReply" style="display: none;">
-													<form id="replyInsert" action="insertReply.do">
+													<form id="replyInsert" action="insertReply.do" method="POST">
 														<input type="hidden" name="boardNum" value="${cdata.boardNum}"> <input type="hidden" name="commentsNum" value="${cdata.commentsNum}"> <input type="text" name="reply" placeholder="대댓글 작성 내용" required> <input style="width: 80px;" type="submit" value="작성">
 													</form>
 												</section>
@@ -259,51 +187,7 @@ i {
 		</section>
 		<button id="scrollToTop" onclick="scrollToTop()" class="icon solid fa-chevron-up"></button>
 		<!-- Footer -->
-		<footer id="footer">
-			<div class="container">
-				<div class="row gtr-200">
-					<div class="col-12">
-
-						<!-- About -->
-						<section>
-							<h2 class="major">
-								<span>What's this about?</span>
-							</h2>
-							<p>
-								This is <strong>TXT</strong>, yet another free responsive site template designed by <a href="http://twitter.com/ajlkn">AJ</a> for <a href="http://html5up.net">HTML5 UP</a>. It's released under the <a href="http://html5up.net/license/">Creative Commons Attribution</a> license so feel free to use it for whatever you're working on (personal or commercial), just be sure to give us credit for the design. That's basically it :)
-							</p>
-						</section>
-
-					</div>
-					<div class="col-12">
-
-						<!-- Contact -->
-						<section>
-							<h2 class="major">
-								<span>Get in touch</span>
-							</h2>
-							<ul class="contact">
-								<li><a class="icon brands fa-facebook-f" href="#"><span class="label">Facebook</span></a></li>
-								<li><a class="icon brands fa-twitter" href="#"><span class="label">Twitter</span></a></li>
-								<li><a class="icon brands fa-instagram" href="#"><span class="label">Instagram</span></a></li>
-								<li><a class="icon brands fa-dribbble" href="#"><span class="label">Dribbble</span></a></li>
-								<li><a class="icon brands fa-linkedin-in" href="#"><span class="label">LinkedIn</span></a></li>
-							</ul>
-						</section>
-
-					</div>
-				</div>
-
-				<!-- Copyright -->
-				<div id="copyright">
-					<ul class="menu">
-						<li>&copy; Untitled. All rights reserved</li>
-						<li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
-					</ul>
-				</div>
-
-			</div>
-		</footer>
+		<NPNC:healthDuo_footer />
 
 	</div>
 
@@ -367,53 +251,6 @@ i {
 	     }
 	   });
 	}
-	const commentsButtons = document.getElementsByClassName('commentsButton');
-	   const commentsMenuList = document.getElementsByClassName('commentsMenuList');
-	   const commentsBan = document.getElementsByClassName('icon solid fa-ban comments');
-	   
-	   let commentsMenuVisible = false;
-	   
-	   
-	   if (commentsButtons.length > 0 && commentsMenuList.length > 0) {
-		   for (let i = 0; i < commentsButtons.length; i++) {
-		     commentsButtons[i].addEventListener('click', () => {
-		       commentsMenuVisible = !commentsMenuVisible;
-
-		       if (commentsMenuVisible) {
-		         commentsMenuList[i].style.display = 'block';
-		         commentsBan[i].style.display='none';
-		       } else {
-		         commentsMenuList[i].style.display = 'none';
-		         commentsBan[i].style.display='block';
-		       }
-		     });
-		   }
-	   }
-		     
-		const replyButtons = document.getElementsByClassName('replyButton');
-	   const replyMenuList = document.getElementsByClassName('replyMenuList');
-	   const replyBan = document.getElementsByClassName('icon solid fa-ban reply');
-	   
-	   let replyMenuVisible = false;
-	   
-	   
-	   if (replyButtons.length > 0 && replyMenuList.length > 0) {
-		   for (let i = 0; i < replyButtons.length; i++) {
-		     replyButtons[i].addEventListener('click', () => {
-		       replyMenuVisible = !replyMenuVisible;
-
-		       if (replyMenuVisible) {
-		         replyMenuList[i].style.display = 'block';
-		         replyBan[i].style.display='none';
-		       } else {
-		         replyMenuList[i].style.display = 'none';
-		         replyBan[i].style.display='block';
-		       }
-		     });
-		     
-		     
-		   }
-		 }
    
    document.addEventListener("DOMContentLoaded", function() {
 	    const insertReplyBtns = document.querySelectorAll('.insertReplyBtn');

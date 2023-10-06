@@ -19,7 +19,7 @@
 <link rel="stylesheet" href="assets/css/main.css" />
 <style>
 #title-cell {
-	width: 200px; /* 원하는 크기로 조정할 수 있습니다 */
+	width: 400px; /* 원하는 크기로 조정할 수 있습니다 */
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
@@ -126,8 +126,8 @@ ul.pagination li a {
 														<td class="title"><h1 id="title-cell">
 																<a href="boardDetailPage.do?boardNum=${v.boardNum}">${v.title}</a>
 															</h1></td>
-														<td class="icon solid fa-user"> ${v.nickName}</td>
-														<td class="icon fa-clock"> ${v.boardDate}</td>
+														<td class="icon solid fa-user nickName"> ${v.nickName}</td>
+														<td class="icon fa-clock date"> ${v.boardDate}</td>
 														<c:if test="${v.boardCommentsCnt == 0}">
 															<td class="icon fa-comments"> ${v.boardCommentsCnt}</td>
 														</c:if>
@@ -185,62 +185,7 @@ ul.pagination li a {
 		</section>
 
 		<!-- Footer -->
-		<footer id="footer">
-			<div class="container">
-				<div class="row gtr-200">
-					<div class="col-12">
-
-						<!-- About -->
-						<section>
-							<h2 class="major">
-								<span>What's this about?</span>
-							</h2>
-							<p>
-								This is <strong>TXT</strong>, yet another free responsive site
-								template designed by <a href="http://twitter.com/ajlkn">AJ</a>
-								for <a href="http://html5up.net">HTML5 UP</a>. It's released
-								under the <a href="http://html5up.net/license/">Creative
-									Commons Attribution</a> license so feel free to use it for whatever
-								you're working on (personal or commercial), just be sure to give
-								us credit for the design. That's basically it :)
-							</p>
-						</section>
-
-					</div>
-					<div class="col-12">
-
-						<!-- Contact -->
-						<section>
-							<h2 class="major">
-								<span>Get in touch</span>
-							</h2>
-							<ul class="contact">
-								<li><a class="icon brands fa-facebook-f" href="#"><span
-										class="label">Facebook</span></a></li>
-								<li><a class="icon brands fa-twitter" href="#"><span
-										class="label">Twitter</span></a></li>
-								<li><a class="icon brands fa-instagram" href="#"><span
-										class="label">Instagram</span></a></li>
-								<li><a class="icon brands fa-dribbble" href="#"><span
-										class="label">Dribbble</span></a></li>
-								<li><a class="icon brands fa-linkedin-in" href="#"><span
-										class="label">LinkedIn</span></a></li>
-							</ul>
-						</section>
-
-					</div>
-				</div>
-
-				<!-- Copyright -->
-				<div id="copyright">
-					<ul class="menu">
-						<li>&copy; Untitled. All rights reserved</li>
-						<li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
-					</ul>
-				</div>
-
-			</div>
-		</footer>
+		<NPNC:healthDuo_footer />
 
 	</div>
 

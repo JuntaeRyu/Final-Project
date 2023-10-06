@@ -10,6 +10,14 @@
    Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
 -->
 <html>
+<style>
+.anotherTitle {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	margin: 0.5em 0;
+}
+</style>
 <head>
 <title>HealthDuo</title>
 <meta charset="utf-8" />
@@ -61,7 +69,9 @@
 		</c:if>
 		<!-- Main -->
 		<section id="main">
-			<NPNC:advertisement />
+			<c:if test="${role ne 2}">
+				<NPNC:advertisement />
+			</c:if>
 			<div class="container">
 				<div class="row gtr-200">
 					<!-- 여기부터 -->
@@ -156,9 +166,11 @@
 															<li class="icon fa-clock">${firstBdata.boardDate}</li>
 														</ul>
 													</header>
-													<a href="boardDetailPage.do?boardNum=${firstBdata.boardNum}" class="image featured"><img src="images/boardImg/${firstBdata.boardImg}" alt="" /></a>
+													<a href="boardDetailPage.do?boardNum=${firstBdata.boardNum}" class="image featured"><img src="${firstBdata.boardImg}" alt="" /></a>
 													<p style="white-space: pre-wrap">${firstBdata.content}</p>
+													<div style="text-align:right;">
 													<a href="boardDetailPage.do?boardNum=${firstBdata.boardNum}" class="button">글 상세보기</a>
+													</div>
 												</article>
 											</c:if>
 										</div>
@@ -173,7 +185,7 @@
 															<li>
 																<article class="box post-summary">
 																	<h1 class="icon solid fa-crown" style="color: #9a9a98"></h1>
-																	<h4>
+																	<h4 class="anotherTitle">
 																		<a href="boardDetailPage.do?boardNum=${bdata.boardNum}">${bdata.title}</a>
 																	</h4>
 																	<h6 class="icon solid fa-user">${bdata.nickName}</h6>
@@ -199,7 +211,7 @@
 															<li>
 																<article class="box post-summary">
 																	<h1 class="icon solid fa-crown" style="color: #92692f"></h1>
-																	<h4>
+																	<h4 class="anotherTitle">
 																		<a href="boardDetailPage.do?boardNum=${bdata.boardNum}">${bdata.title}</a>
 																	</h4>
 																	<h6 class="icon solid fa-user">${bdata.nickName}</h6>
@@ -224,7 +236,7 @@
 														<c:otherwise>
 															<li>
 																<article class="box post-summary">
-																	<h4>
+																	<h4 class="anotherTitle">
 																		<a href="boardDetailPage.do?boardNum=${bdata.boardNum}">${bdata.title}</a>
 																	</h4>
 																	<h6 class="icon solid fa-user">${bdata.nickName}</h6>
@@ -249,7 +261,9 @@
 													</c:choose>
 												</c:forEach>
 											</ul>
+											<div style="text-align:center;">
 											<a href="boardListPage.do" class="button alt">전체보기</a>
+											</div>
 										</div>
 									</div>
 								</div>

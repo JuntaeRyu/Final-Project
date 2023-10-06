@@ -9,23 +9,6 @@
 -->
 <html>
 <style>
-#anotherTitle {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    margin: 0.5em 0;
-}
-
-#topContent {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    margin: 0.5em 0;
-    display: -webkit-box;
-    -webkit-line-clamp: 3; /* 여기서 숫자를 조절하여 표시할 줄 수를 지정할 수 있습니다 */
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-}
-
 i {
 	cursor: pointer;
 }
@@ -319,6 +302,22 @@ label {
 .file-input {
 	display: none;
 }
+.anotherTitle {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	margin: 0.5em 0;
+}
+
+#topContent {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	margin: 0.5em 0;
+	display: -webkit-box;
+	-webkit-line-clamp: 3; /* 여기서 숫자를 조절하여 표시할 줄 수를 지정할 수 있습니다 */
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+}
 </style>
 <head>
 <title>HealthDuo</title>
@@ -326,8 +325,10 @@ label {
 <!-- <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" /> -->
 <link rel="icon" href="assets/css/images/favicon.ico" type="image/x-icon" />
 <link rel="stylesheet" href="assets/css/main.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.css">
 </head>
 <body class="is-preload">
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.js"></script>
 	<script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
 	<div id="page-wrapper">
 
@@ -347,8 +348,8 @@ label {
 		<section id="main">
 			<div class="container">
 				<div class="row">
-					<div class="col-3 col-12-medium">
-						<NPNC:sidebar/>
+					<div class="col-3 col-12-medium" style="padding-left: 20px;">
+						<NPNC:sidebar />
 					</div>
 
 					<div class="col-9 col-12-medium imp-medium">
@@ -383,7 +384,7 @@ label {
 									<textarea> ${mpdata.intro}</textarea>
 								</section>
 
-								<button style="float: right;" type="button" onclick="location.href='applyMatching.do?receiverID=${mpdata.memberID}';">매칭 신청</button>
+								<button id="application" style="float: right;" type="button">매칭 신청</button>
 
 							</article>
 
@@ -396,51 +397,7 @@ label {
 		</section>
 		<button id="scrollToTop" onclick="scrollToTop()" class="icon solid fa-chevron-up"></button>
 		<!-- Footer -->
-		<footer id="footer">
-			<div class="container">
-				<div class="row gtr-200">
-					<div class="col-12">
-
-						<!-- About -->
-						<section>
-							<h2 class="major">
-								<span>What's this about?</span>
-							</h2>
-							<p>
-								This is <strong>TXT</strong>, yet another free responsive site template designed by <a href="http://twitter.com/ajlkn">AJ</a> for <a href="http://html5up.net">HTML5 UP</a>. It's released under the <a href="http://html5up.net/license/">Creative Commons Attribution</a> license so feel free to use it for whatever you're working on (personal or commercial), just be sure to give us credit for the design. That's basically it :)
-							</p>
-						</section>
-
-					</div>
-					<div class="col-12">
-
-						<!-- Contact -->
-						<section>
-							<h2 class="major">
-								<span>Get in touch</span>
-							</h2>
-							<ul class="contact">
-								<li><a class="icon brands fa-facebook-f" href="#"><span class="label">Facebook</span></a></li>
-								<li><a class="icon brands fa-twitter" href="#"><span class="label">Twitter</span></a></li>
-								<li><a class="icon brands fa-instagram" href="#"><span class="label">Instagram</span></a></li>
-								<li><a class="icon brands fa-dribbble" href="#"><span class="label">Dribbble</span></a></li>
-								<li><a class="icon brands fa-linkedin-in" href="#"><span class="label">LinkedIn</span></a></li>
-							</ul>
-						</section>
-
-					</div>
-				</div>
-
-				<!-- Copyright -->
-				<div id="copyright">
-					<ul class="menu">
-						<li>&copy; Untitled. All rights reserved</li>
-						<li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
-					</ul>
-				</div>
-
-			</div>
-		</footer>
+		<NPNC:healthDuo_footer />
 
 	</div>
 
@@ -453,6 +410,36 @@ label {
 		  language: 'ko'
 		});
 	</script>  -->
+	
+	<script type="text/javascript">
+	$("#application").click(function (event) {
+		event.preventDefault();
+		
+		Swal.fire({
+			title: '신청 하시겠습니까?',
+			icon: 'question',
+			showCancelButton: true,
+			confirmButtonText: '확인',
+			cancelButtonText: '취소'
+		}).then((result) => {
+			if (result.isConfirmed) {
+				 var form = $('<form>')
+			        .attr('method', 'POST')
+			        .attr('action', 'applyMatching.do');
+				 
+				 var input = $('<input>')
+			        .attr('type', 'hidden')
+			        .attr('name', 'receiverID')
+			        .val('${mpdata.memberID}');
+				 
+				 form.append(input);
+				 form.appendTo('body');
+				 form.submit();
+			}
+		});
+	});
+	</script>
+	
 	<script type="text/javascript">
    $(document).ready(function(){
    		var recommend = parseInt(${recommend});

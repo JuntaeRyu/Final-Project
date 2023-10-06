@@ -12,13 +12,11 @@
 window.onload=function() {
     swal.fire({
       title: '${title}',
-      text: '${text}',
+      html: '${text}',
       icon: '${icon}',
       confirmButtonText: '확인'
     }).then((result) => {
-    if (result.isConfirmed) {
     	location.href="${url}";
-       }
     });
   };
 </script>

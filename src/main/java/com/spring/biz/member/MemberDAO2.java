@@ -43,7 +43,7 @@ public class MemberDAO2 implements InterfaceMemberDAO{
 	private final String sql_SELECTONE_DUPLICATE_EMAIL = "SELECT EMAIL FROM MEMBER WHERE EMAIL=?";
 	// 회원 로그인
 	private final String sql_SELECTONE_LOGIN = "SELECT M.MEMBERID, M.MEMBERPW, M.NAME, M.NICKNAME, M.EMAIL, M.PHONENUM, M.GENDER, M.ADDRESS, M.DETAILADDRESS, M.ROLE, "
-			+ "(SELECT COUNT(*) FROM WARN W WHERE W.MEMBERID = M.MEMBERID) AS WARNCNT "
+			+ "(SELECT COUNT(*) FROM WARN W WHERE W.MEMBERID = M.MEMBERID) AS WARNCNT, TO_CHAR(SUSPENSIONMEMBER, 'YYYY-MM-DD') AS SUSPENSIONMEMBER "
 			+ "FROM MEMBER M WHERE MEMBERID=? AND MEMBERPW=?"; // 로그인
 	// 회원 아이디 검색 (이메일)
 	private final String sql_SELECTONE_SEARCHID_EMAIL = "SELECT MEMBERID FROM MEMBER WHERE EMAIL = ?";
@@ -256,6 +256,7 @@ class MemberRowMapper implements RowMapper<MemberVO> {
 		mdata.setDetailAddress(rs.getString("DETAILADDRESS"));
 		mdata.setRole(rs.getInt("ROLE"));
 		mdata.setWarnCnt(rs.getInt("WARNCNT"));
+		mdata.setSuspensionMember(rs.getString("SUSPENSIONMEMBER"));
 
 
 		return mdata;

@@ -170,10 +170,10 @@ public class BoardController {
 
 		rcVO.setMemberID((String)session.getAttribute("memberID"));
 		rcVO.setCommonNum(Integer.parseInt(request.getParameter("boardNum")));
-		
+
 		pVO.setMemberID((String)session.getAttribute("memberID")); 
 		pVO.setCommonNum(Integer.parseInt(request.getParameter("boardNum")));
-		
+
 		// RecommendDAO를 통해 해당 게시글에 대한 사용자의 추천 여부를 확인합니다.
 		rcVO = recommendService.selectOne(rcVO);
 
@@ -182,7 +182,7 @@ public class BoardController {
 
 		// BoardDAO를 통해 해당 게시글의 상세 정보를 가져옵니다.
 		bVO = boardService.selectOne(bVO);
-		
+
 		// 추천 여부에 따라 request에 "recommend" 속성을 설정합니다.
 		if (rcVO != null) {
 			request.setAttribute("recommend", 1);
@@ -196,7 +196,7 @@ public class BoardController {
 		} else {
 			request.setAttribute("prohibit", 0);
 		}
-		
+
 		rVO.setSearchCondition("totalReply");
 
 		List<CommentsVO> cdatas = commentsService.selectAll(cVO);
@@ -206,12 +206,12 @@ public class BoardController {
 		List<ReplyVO> rdatas = replyService.selectAll(rVO);
 
 		List<ReplyVO> replies = new ArrayList<ReplyVO>();
-		
+
 		for(int i = 0; i < cdatas.size(); i++) {
 			if(bVO.getBoardNum() == cdatas.get(i).getBoardNum()) {
-				
+
 				comments.add(cdatas.get(i));
-				
+
 				for(int j = 0; j < rdatas.size(); j++) {
 					if(cdatas.get(i).getCommentsNum() == rdatas.get(j).getCommentsNum()) {
 						replies.add(rdatas.get(j));
@@ -219,34 +219,34 @@ public class BoardController {
 				}
 			}
 		}
-		
+
 		for(int i = 0; i < comments.size(); i++) {
 			comments.get(i).setCheck(0);
-			
+
 			pVO = new ProhibitVO();
-			
+
 			pVO.setMemberID((String)session.getAttribute("memberID"));
 			pVO.setCommonNum(comments.get(i).getCommentsNum());
-			
+
 			pVO = prohibitService.selectOne(pVO);
-			
+
 			if(pVO != null) {
 				if(pVO.getCommonNum() == comments.get(i).getCommentsNum()) {
 					comments.get(i).setCheck(1);
 				}
 			}
 		}
-		
+
 		for(int i = 0; i < replies.size(); i++) {
 			replies.get(i).setCheck(0);
-			
+
 			pVO = new ProhibitVO();
-			
+
 			pVO.setMemberID((String)session.getAttribute("memberID"));
 			pVO.setCommonNum(replies.get(i).getReplyNum());
-			
+
 			pVO = prohibitService.selectOne(pVO);
-			
+
 			if(pVO != null) {
 				if(pVO.getCommonNum() == replies.get(i).getReplyNum()) {
 					replies.get(i).setCheck(1);
@@ -256,38 +256,40 @@ public class BoardController {
 
 		// 해당 게시글의 상세 정보를 request에 저장하고, boardPage.jsp로 이동합니다.
 		if (bVO != null) {
-			
-			String[] boardImgs = bVO.getBoardImg().split(",");
-			System.out.println(boardImgs);
-			for(String boardImg : boardImgs) {
-				bVO.getBoardImgList().add(boardImg);
+			if(bVO.getBoardImg()!=null) {
+
+				String[] boardImgs = bVO.getBoardImg().split(",");
+				System.out.println(boardImgs);
+				for(String boardImg : boardImgs) {
+					bVO.getBoardImgList().add(boardImg);
+				}
+				bVO.setBoardImgList(bVO.getBoardImgList());
 			}
-			bVO.setBoardImgList(bVO.getBoardImgList());
-			
+
 			request.setAttribute("bdata", bVO);
 			request.setAttribute("cdatas", comments);
 			request.setAttribute("rdatas", replies);
-			
+
 			////////////// 사이드바 - 해당게시물 작성자의 또다른 글 3개 ///////////////////
 			bVO.setSearchCondition("writerBoard");
-			
+
 			List<BoardVO> writerBoards = boardService.selectAll(bVO);
-			
+
 			request.setAttribute("writerbdatas", writerBoards);
 			///////////////////////////////////////
-			
+
 			bVO.setSearchCondition("viewCnt");
 
 			boardService.update(bVO);
 
 			////////////// 사이드바 - 이 달의 1등 게시물 /////////////////////////////
 			bVO.setSearchCondition("topBoard");
-			
+
 			bVO = boardService.selectOne(bVO);
-			
+
 			request.setAttribute("topbdata", bVO);
 			/////////////////////////////////////////////////////////////////
-			
+
 			return "boardDetailPage.jsp";
 		}
 		// 해당 게시글이 없는 경우에는 메시지와 함께 경고 페이지를 보여줍니다.
@@ -304,8 +306,8 @@ public class BoardController {
 	public String insertBoardPage(HttpSession session, Model model) {
 		System.out.println("로그: Board: insertBoardPage() ");
 
-		
-		
+
+
 		if(session.getAttribute("memberID") == null || (Integer)session.getAttribute("role") == 9) {
 			model.addAttribute("title", "잘못된 접근입니다.");
 			model.addAttribute("text", "다시 한번 확인해주세요.");
@@ -313,7 +315,7 @@ public class BoardController {
 
 			return "goback.jsp";
 		}
-		
+
 		return "insertBoardPage.jsp";
 	}
 
@@ -321,13 +323,16 @@ public class BoardController {
 	public String insertBoard(BoardVO bVO, HttpSession session, Model model) {
 		System.out.println("로그: Board: insertBoard() ");
 
-		String imgUrl=bVO.getBoardImg();
-		
-		System.out.println("img "+imgUrl);
-		
-		// 첫 번째 쉼표(,)까지의 부분을 잘라냄
-		int indexOfComma = imgUrl.indexOf(",");
-		bVO.setBoardImg(imgUrl.substring(indexOfComma + 1));
+		if(bVO.getBoardImg()!=null) {
+
+			String imgUrl=bVO.getBoardImg();
+
+			System.out.println("img "+imgUrl);
+
+			// 첫 번째 쉼표(,)까지의 부분을 잘라냄
+			int indexOfComma = imgUrl.indexOf(",");
+			bVO.setBoardImg(imgUrl.substring(indexOfComma + 1));
+		}
 
 		boolean flag = boardService.insert(bVO);
 
@@ -335,7 +340,7 @@ public class BoardController {
 			model.addAttribute("title", "글 작성 성공!");
 			model.addAttribute("icon", "success");
 			model.addAttribute("url", "boardListPage.do");
-			
+
 			return "SweetAlert2.jsp";
 		}
 		else {
@@ -380,7 +385,7 @@ public class BoardController {
 			model.addAttribute("title", "게시글 수정 성공!");
 			model.addAttribute("icon", "success");
 			model.addAttribute("url", "boardDetailPage.do?boardNum="+bVO.getBoardNum());
-			
+
 			return "SweetAlert2.jsp";
 		}
 		else {
@@ -397,14 +402,14 @@ public class BoardController {
 		System.out.println("로그: Board: deleteBoard() ");
 
 		bVO.setSearchCondition("boardNum");
-		
+
 		boolean flag = boardService.delete(bVO);
 
 		if (flag) {
 			model.addAttribute("title", "게시글 삭제 성공!");
 			model.addAttribute("icon", "success");
 			model.addAttribute("url", "boardListPage.do");
-			
+
 			return "SweetAlert2.jsp";
 		}
 		else {

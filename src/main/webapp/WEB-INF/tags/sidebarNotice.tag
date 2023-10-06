@@ -8,14 +8,14 @@
 							<!-- Recent Posts -->
 							<section style="margin-bottom: 2em;">
 								<h2 class="major">
-									<span>작성자의 <br> &nbsp;&nbsp;&nbsp;&nbsp;다른 게시글</span>
+									<span>관리자의 <br> &nbsp;&nbsp;&nbsp;&nbsp;다른 게시글</span>
 								</h2>
 								<ul class="divided">
 									<c:if test="${not empty writerbdatas}">
 									<c:forEach items="${writerbdatas}" var="post">
 										<li>
 											<article class="box post-summary">
-												<h3 class="anotherTitle">
+												<h3 id="anotherTitle">
 													<a href="boardDetailPage.do?boardNum=${post.boardNum }">${post.title}</a>
 												</h3>
 												<ul class="meta">
@@ -28,12 +28,12 @@
 									</c:if>
 									<c:if test="${empty writerbdatas}">
 										<li>
-										해당 회원에 작성된 글이 없습니다.
+										해당 관리자가 작성한 글이 없습니다.
 										</li>
 									</c:if>
 								</ul>
 								<div style="text-align:center;">
-									<a href="boardListPage.do" class="button alt sideGo">커뮤니티 보러가기</a>
+									<a href="noticeListPage.do" class="button alt sideGo">공지사항 보러가기</a>
 								</div>
 							</section>
 							<hr>

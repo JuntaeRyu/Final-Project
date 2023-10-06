@@ -19,6 +19,7 @@
 <link rel="icon" href="assets/css/images/favicon.ico"
 	type="image/x-icon" />
 <link rel="stylesheet" href="assets/css/main.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.css">
 <style>
 p {
 	margin-bottom: 0;
@@ -99,7 +100,7 @@ button {
 										<input id="phoneInput" type="text" name="phoneNum" placeholder="핸드폰 번호 입력"
 											required>
 										<div class="verification-container">
-											<input id="phoneNumVerificationInput" type="text" class="checkInfo" placeholder="인증번호 입력" disabled>
+											<input id="phoneNumVerificationInput" type="text" class="checkInfo" placeholder="인증번호 입력" disabled required>
 											<button onclick="phoneNumVerificationNumSend(event)">인증번호 받기</button>
 										</div>
 										</div>
@@ -126,7 +127,7 @@ button {
 										</div>
 										<p>원활한 매칭을 위해 동까지만 저장됩니다</p>
 										<p>&nbsp;</p>
-										<input type="submit" value="회원가입">
+										<input id="signupBtn" type="submit" value="회원가입">
 									</form>
 								</section>
 							</article>
@@ -139,68 +140,15 @@ button {
 		</section>
 
 		<!-- Footer -->
-		<footer id="footer">
-			<div class="container">
-				<div class="row gtr-200">
-					<div class="col-12">
-
-						<!-- About -->
-						<section>
-							<h2 class="major">
-								<span>What's this about?</span>
-							</h2>
-							<p>
-								This is <strong>TXT</strong>, yet another free responsive site
-								template designed by <a href="http://twitter.com/ajlkn">AJ</a>
-								for <a href="http://html5up.net">HTML5 UP</a>. It's released
-								under the <a href="http://html5up.net/license/">Creative
-									Commons Attribution</a> license so feel free to use it for whatever
-								you're working on (personal or commercial), just be sure to give
-								us credit for the design. That's basically it :)
-							</p>
-						</section>
-
-					</div>
-					<div class="col-12">
-
-						<!-- Contact -->
-						<section>
-							<h2 class="major">
-								<span>Get in touch</span>
-							</h2>
-							<ul class="contact">
-								<li><a class="icon brands fa-facebook-f" href="#"><span
-										class="label">Facebook</span></a></li>
-								<li><a class="icon brands fa-twitter" href="#"><span
-										class="label">Twitter</span></a></li>
-								<li><a class="icon brands fa-instagram" href="#"><span
-										class="label">Instagram</span></a></li>
-								<li><a class="icon brands fa-dribbble" href="#"><span
-										class="label">Dribbble</span></a></li>
-								<li><a class="icon brands fa-linkedin-in" href="#"><span
-										class="label">LinkedIn</span></a></li>
-							</ul>
-						</section>
-
-					</div>
-				</div>
-
-				<!-- Copyright -->
-				<div id="copyright">
-					<ul class="menu">
-						<li>&copy; Untitled. All rights reserved</li>
-						<li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
-					</ul>
-				</div>
-
-			</div>
-		</footer>
+		<NPNC:healthDuo_footer />
 
 	</div>
 
 	<!-- Scripts -->
 	<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.js"></script>
 	<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+	
 	<script>
     function sample6_execDaumPostcode() {
     	event.preventDefault();
@@ -265,25 +213,45 @@ button {
 				phoneNumVerificationInput.removeAttribute('disabled');
             },
             error: function(error){
-               alert("인증번호 발송실패");
+            	swal.fire({
+           			title: '발송실패!',
+           			text: '인증번호가 발송되지 않았습니다',
+           			icon: 'warning',
+           			confirmButtonText: '확인'
+           		});
             }
          });
     }
 	
-	$('#signup').on('submit', function(event) {
-
+	$('#signupBtn').click(function (event) {
+		event.preventDefault();
+		
 	    // 인증번호 확인 로직 추가
 	    var enteredVerificationCode = $("#phoneNumVerificationInput").val();
 
 	    if (enteredVerificationCode === phoneCheckNum) {
 	        // 인증번호가 일치하면 폼을 서버로 제출
-	        return true; // 폼 제출을 허용하고 페이지를 리로드 또는 이동
+	        Swal.fire({
+				title: '가입하시겠습니까?',
+				icon: 'question',
+				showCancelButton: true,
+				confirmButtonText: '확인',
+				cancelButtonText: '취소'
+			}).then((result) => {
+				if (result.isConfirmed) {
+					$(this).closest('form').submit();
+				}
+			});
 	    } else {
 	        // 인증번호가 일치하지 않으면 사용자에게 메시지를 표시하거나 처리할 로직을 추가하세요
-	        alert("인증번호가 일치하지 않습니다.");
-	        return false; // 폼 제출을 취소하고 페이지를 리로드 또는 이동하지 않음
+	        Swal.fire({
+	        	title: '인증번호가 일치하지 않습니다',
+	        	icon: 'warning',
+	        	confirmButtonText: '확인'
+	        });
 	    }
 	});
+	
 	////// 아이디
     var memberIDInput = document.getElementById("memberIDInput");
     var memberIDMessage = document.getElementById("memberIDMessage");
@@ -307,7 +275,11 @@ button {
                 	}
                 },
                 error: function(error){
-                   alert("잘못된접근입니다.");
+                	swal.fire({
+                		title: '잘못된 접근!',
+               			icon: 'error',
+               			confirmButtonText: '확인'
+               		});
                 }
              });
         	event.preventDefault();
@@ -343,7 +315,11 @@ button {
                 	}
                 },
                 error: function(error){
-                   alert("잘못된접근입니다.");
+                	swal.fire({
+              			title: '잘못된 접근!',
+              			icon: 'error',
+              			confirmButtonText: '확인'
+              		});
                 }
              });
         	event.preventDefault();
@@ -381,7 +357,12 @@ button {
                 	}
                 },
                 error: function(error){
-                   alert("잘못된접근입니다.");
+                   swal.fire({
+              			title: '잘못된 접근!',
+              			icon: 'error',
+              			confirmButtonText: '확인'
+              		});
+                   
                 }
              });
         	event.preventDefault();

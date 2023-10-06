@@ -121,7 +121,27 @@ public class NoticeController {
 			request.setAttribute("bdata", bVO);
 			request.setAttribute("cdatas", comments);
 			request.setAttribute("rdatas", replies);
+			
+			//////////////사이드바 - 해당게시물 작성자의 또다른 글 3개 ///////////////////
+			bVO.setSearchCondition("writerBoard");
 
+			List<BoardVO> writerBoards = boardService.selectAll(bVO);
+
+			request.setAttribute("writerbdatas", writerBoards);
+			///////////////////////////////////////
+
+			bVO.setSearchCondition("viewCnt");
+
+			boardService.update(bVO);
+
+			////////////// 사이드바 - 이 달의 1등 게시물 /////////////////////////////
+			bVO.setSearchCondition("topBoard");
+
+			bVO = boardService.selectOne(bVO);
+
+			request.setAttribute("topbdata", bVO);
+			/////////////////////////////////////////////////////////////////
+			
 			return "noticeDetailPage.jsp";
 		}
 		else {
@@ -211,7 +231,7 @@ public class NoticeController {
 		if (flag) {
 			model.addAttribute("title", "공지사항 수정 성공!");
 			model.addAttribute("icon", "success");
-			model.addAttribute("url", "noticeDetailPage.do?boardNum"+bVO.getBoardNum());
+			model.addAttribute("url", "noticeDetailPage.do?boardNum="+bVO.getBoardNum());
 			
 			return "SweetAlert2.jsp";
 		} else {
