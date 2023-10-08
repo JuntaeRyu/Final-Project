@@ -16,9 +16,7 @@ window.onload=function() {
       icon: 'success',
       confirmButtonText: '확인'
     }).then((result) => {
-    if (result.isConfirmed) {
     	window.location.href = 'main.do';
-       }
     });
   };
 </script>

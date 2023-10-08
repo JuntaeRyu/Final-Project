@@ -82,7 +82,7 @@
 								<ul class="special">
 									<li><a href="prohibitListPage.do" class="icon solid fa-comment-slash" title="신고글 목록"><span class="label"></span></a></li>
 									<li><a href="boardListPage.do" class="icon solid fa-book-open" title="커뮤니티 목록"><span class="label"></span></a></li>
-									<li><a href="memberListPage.do" class="icon solid fa-users" title="회원 관리"><span class="label"></span></a></li>
+									<li><a href="prohibitMemberListPage.do" class="icon solid fa-users" title="회원 관리"><span class="label"></span></a></li>
 									<li><a href="insertNoticePage.do" class="icon solid fa-bullhorn" title="공지사항 작성"><span class="label"></span></a></li>
 								</ul>
 							</section>

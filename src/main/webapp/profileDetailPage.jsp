@@ -381,11 +381,15 @@ label {
 
 								<section id="mypageintroduction">
 									<h2 style="color: #bead7c;">소개글</h2>
-									<textarea> ${mpdata.intro}</textarea>
+									<textarea readonly> ${mpdata.intro}</textarea>
 								</section>
 
-								<button id="application" style="float: right;" type="button">매칭 신청</button>
-
+								<c:if test="${not empty memberID && role != 2}">
+									<button id="application" style="float: right;" type="button">매칭 신청</button>
+								</c:if>
+								<c:if test="${role == 2}">
+									<button id="reset" style="float: right;" type="button">리셋하기</button>
+								</c:if>
 							</article>
 
 						</div>
@@ -412,6 +416,33 @@ label {
 	</script>  -->
 	
 	<script type="text/javascript">
+	$("#reset").click(function (event) {
+		event.preventDefault();
+		
+		Swal.fire({
+			title: '리셋하시겠습니까?',
+			icon: 'question',
+			showCancelButton: true,
+			confirmButtonText: '확인',
+			cancelButtonText: '취소'
+		}).then((result) => {
+			if (result.isConfirmed) {
+				 var form = $('<form>')
+			        .attr('method', 'POST')
+			        .attr('action', 'deleteMemberProhibitList.do');
+				 
+				 var input = $('<input>')
+			        .attr('type', 'hidden')
+			        .attr('name', 'number')
+			        .val('${mpdata.profileNum}');
+				 
+				 form.append(input);
+				 form.appendTo('body');
+				 form.submit();
+			}
+		});
+	});
+
 	$("#application").click(function (event) {
 		event.preventDefault();
 		

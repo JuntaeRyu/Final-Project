@@ -4,9 +4,9 @@
 
 <!DOCTYPE HTML>
 <!--
-	TXT by HTML5 UP
-	html5up.net | @ajlkn
-	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+   TXT by HTML5 UP
+   html5up.net | @ajlkn
+   Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
 -->
 <html>
 <style>
@@ -26,7 +26,6 @@
 	-webkit-box-orient: vertical;
 	overflow: hidden;
 }
-
 i {
 	cursor: pointer;
 }
@@ -81,17 +80,15 @@ i {
 									</c:if>
 									<ul id="menuList">
 										<li><form action="updateNoticePage.do" method="post">
-											<input type="hidden" name="boardNum" value="${bdata.boardNum}" />
-											<button type="submit" style="background: none; border: none; text-decoration: none; color: #6b7770;">
-												수정</button>
-										</form></li>
-										
+												<input type="hidden" name="boardNum" value="${bdata.boardNum}" />
+												<button type="submit" style="background: none; border: none; text-decoration: none; color: #6b7770;">수정</button>
+											</form></li>
+
 										<li>
-										<form action="deleteNotice.do" method="post">
-											<input type="hidden" name="boardNum" value="${bdata.boardNum}" />
-											<button type="submit" style="background: none; border: none; text-decoration: none; color: #6b7770;">
-												삭제</button>
-										</form>
+											<form id="deleteNotice" action="deleteNotice.do" method="post">
+												<input type="hidden" name="boardNum" value="${bdata.boardNum}" />
+												<button type="submit" style="background: none; border: none; text-decoration: none; color: #6b7770;">삭제</button>
+											</form>
 										</li>
 									</ul>
 									<header>
@@ -100,20 +97,19 @@ i {
 											<li class="icon solid fa-user">${bdata.nickName}</li>
 											<li class="icon fa-clock">${bdata.boardDate}</li>
 											<c:if test="${not empty memberID}">
-												<li><i id="rc" class="icon fa-heart" style="color: #f22202;" title="추천"></i> 
-												<p class="cnt" style="display: inline-block;">${bdata.recommendCnt}</p>
-												</li>
+												<li><i id="rc" class="icon fa-heart" style="color: #f22202;" title="추천"></i>
+													<p class="cnt" style="display: inline-block;">${bdata.recommendCnt}</p></li>
 											</c:if>
 											<!-- <li class="icon fa-comments">${csdatas.size()}</li> -->
 										</ul>
 									</header>
 									<!-- 
-								<section>
-									<!-- 이미지 변수 아직 안만들어서 냅둠
-									<span class="image featured"><img src="images/pic05.jpg"
-										alt="" /></span>
-								</section>
-								 -->
+                        <section>
+                           <!-- 이미지 변수 아직 안만들어서 냅둠
+                           <span class="image featured"><img src="images/pic05.jpg"
+                              alt="" /></span>
+                        </section>
+                         -->
 									<section>
 										<div id="editor">
 											<p>${bdata.content}</p>
@@ -136,36 +132,115 @@ i {
 									<c:if test="${not empty cdatas}">
 										<c:forEach var="cdata" items="${cdatas}">
 											<ul class="meta" style="text-align: left;">
-												<li class="icon solid fa-user">${cdata.nickName}</li>
+												<c:if test="${cdata.memberID ne null}">
+													<li class="icon solid fa-user">${cdata.nickName}</li>
+												</c:if>
+												<c:if test="${cdata.memberID eq null}">
+													<li class="icon solid">😢탈퇴한 사용자</li>
+												</c:if>
 												<li class="icon fa-clock">${cdata.commentsDate }</li>
+												<c:if test="${memberID eq cdata.memberID || role eq 2}">
+												<c:if test="${not empty role}">
+													<c:if test="${cdata.comments ne null}">
+														<i class="icon solid fa-bars commentsButton"></i>
+													</c:if>
+													</c:if>
+												</c:if>
 											</ul>
-											<h1>${cdata.comments}</h1>
+											<ul class="commentsMenuList">
+												<c:if test="${role ne 2}">
+													<li>
+														<button type="button" style="background: none; border: none; text-decoration: none; color: #6b7770; padding: 0;" onclick="updateComments('${cdata.commentsNum}')">수정</button>
+													</li>
+												</c:if>
+
+												<li>
+													<form action="deleteComment.do" method="post">
+														<input type="hidden" name="boardNum" value="${bdata.boardNum}"> <input type="hidden" name="commentsNum" value="${cdata.commentsNum}" />
+														<button type="submit" style="background: none; border: none; text-decoration: none; color: #6b7770; padding: 0;">삭제</button>
+													</form>
+												</li>
+											</ul>
+											<c:if test="${cdata.comments eq null}">
+												<h1>삭제된 댓글입니다.</h1>
+											</c:if>
+											<c:if test="${cdata.comments ne null}">
+												<h1>${cdata.comments}</h1>
+											</c:if>
+											<c:if test="${not empty memberID}">
 											<ul class="meta">
-												<li class="icon fa-heart">댓글 추천수 변수 없음</li>
-												<li class="icon solid fa-ban">${cdata.prohibitCnt}</li>
+												<c:if test="${cdata.comments ne null}">
+													<c:if test="${cdata.check eq '0' }">
+														<li><i class="icon solid fa-ban comments" style="color: #c2bcbc" onclick="javascript:funcComments('${cdata.commentsNum}' , '${cdata.check}', this)" title="신고"></i></li>
+													</c:if>
+													<c:if test="${cdata.check eq '1' }">
+														<li><i class="icon solid fa-ban comments" style="color: #f58300;" onclick="javascript:funcComments('${cdata.commentsNum}' , '${cdata.check}', this)" title="신고"></i></li>
+													</c:if>
+												</c:if>
 											</ul>
+											</c:if>
 
 											<!-- 대댓글 -->
 											<c:forEach var="rdata" items="${rdatas}">
 												<c:if test="${cdata.commentsNum eq rdata.commentsNum}">
 													<p id="replyIcon" class="icon solid fa-reply"></p>
 													<section id="replyBox">
-														<h1>${rdata.reply}</h1>
 														<ul class="meta">
-															<li class="icon solid fa-user">${rdata.nickName}</li>
-															<li class="icon fa-clock">${rdata.replyDate}</li>
+														<c:if test="${not empty role}">
+															<c:if test="${memberID eq rdata.memberID || role eq 2}">
+																<i class="icon solid fa-bars replyButton"></i>
+															</c:if>
+															</c:if>
+														</ul>
+														<ul class="replyMenuList">
+															<c:if test="${role ne 2}">
+																<li>
+																	<button type="button" style="background: none; border: none; text-decoration: none; color: #6b7770; padding: 0;" onclick="updateReply('${rdata.replyNum}')">수정</button>
+																</li>
+															</c:if>
+
+															<li>
+																<form action="deleteReply.do" method="post">
+																	<input type="hidden" name="boardNum" value="${bdata.boardNum}"> <input type="hidden" name="replyNum" value="${rdata.replyNum}">
+																	<button type="submit" style="background: none; border: none; text-decoration: none; color: #6b7770; padding: 0;">삭제</button>
+																</form>
+															</li>
+														</ul>
+														<h1>${rdata.reply}</h1>
+														<ul class="meta" style="text-align: right">
+														<c:if test="${rdata.memberID ne null}">
+																<li class="icon solid fa-user" style="float: left;">${rdata.nickName}</li>
+															</c:if>
+															<c:if test="${rdata.memberID eq null}">
+																<li class="icon solid" style="float: left;">😢탈퇴한 사용자</li>
+															</c:if>
+															<li class="icon fa-clock" style="float: left;">${rdata.replyDate}</li>
+															<li></li>
+															<c:if test="${not empty memberID}">
+																<c:if test="${rdata.check eq '0'}">
+																	<li><i class="icon solid fa-ban reply" style="color: #c2bcbc;" onclick="javascript:funcReply('${rdata.replyNum}', '${rdata.check}', this)" title="신고"></i></li>
+																</c:if>
+																<c:if test="${rdata.check eq '1'}">
+																	<li><i class="icon solid fa-ban reply" style="color: #f58300;" onclick="javascript:funcReply('${rdata.replyNum}', '${rdata.check}', this)" title="신고"></i></li>
+																</c:if>
+															</c:if>
 														</ul>
 													</section>
 												</c:if>
 											</c:forEach>
 											<!-- 대댓글 작성 -->
 											<div style="text-align: right;">
-												<c:if test="${not empty mid}">
-													<button class="insertReplyBtn">대댓글 작성</button>
+												<c:if test="${not empty memberID}">
+													<c:if test="${cdata.comments ne null}">
+														<button class="insertReplyBtn">대댓글 작성</button>
+													</c:if>
 												</c:if>
 												<section id="replyInsertBox" class="insertReply" style="display: none;">
-													<form id="replyInsert" action="insertReply.do" method="POST">
-														<input type="hidden" name="boardNum" value="${cdata.boardNum}"> <input type="hidden" name="commentsNum" value="${cdata.commentsNum}"> <input type="text" name="reply" placeholder="대댓글 작성 내용" required> <input style="width: 80px;" type="submit" value="작성">
+													<form id="replyInsert" action="insertReply.do" method="post">
+														<input type="hidden" name="boardNum" value="${cdata.boardNum}">
+														<input type="hidden" name="commentsNum" value="${cdata.commentsNum}">
+														<input type="text" name="reply" placeholder="대댓글 작성 내용" required>
+														<input style="width: 80px;" type="submit" value="작성">
 													</form>
 												</section>
 											</div>
@@ -186,20 +261,229 @@ i {
 			</div>
 		</section>
 		<button id="scrollToTop" onclick="scrollToTop()" class="icon solid fa-chevron-up"></button>
-		<!-- Footer -->
-		<NPNC:healthDuo_footer />
 
+		<NPNC:healthDuo_footer />
 	</div>
 
 	<!-- Scripts -->
 	<!-- <script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
-	<script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/translations/ko.js"></script>
-	<script>
-		ClassicEditor.create(document.querySelector('#editor'), {
-		  toolbar: false ,
-		  language: 'ko'
+   <script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/translations/ko.js"></script>
+   <script>
+      ClassicEditor.create(document.querySelector('#editor'), {
+        toolbar: false ,
+        language: 'ko'
+      });
+   </script>  -->
+   <script>
+	$("#deleteNotice").submit(function(event) {
+		event.preventDefault();
+		
+		Swal.fire({
+			title: '정말로 삭제 하시겠습니까?',
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonColor: '#3085d6',
+			cancelButtonColor: '#d33',
+			confirmButtonText: '승인',
+			cancelButtonText: '취소'
+		}).then((result) => {
+			if (result.isConfirmed) {
+				$(this).submit();
+			}
 		});
-	</script>  -->
+	});
+	</script>
+   <script>
+	function funcComments(commentsNum, prohibit, iconColor){
+		   console.log(commentsNum);
+		   console.log(prohibit);
+		   
+		   var title;
+		   
+		   if (prohibit == 0) {
+			   title = '신고하시겠습니까?';
+		   } else {
+			   title = '신고를 취소하시겠습니까?';
+		   }
+		   
+		   Swal.fire({
+				title: title,
+				icon: 'warning',
+				showCancelButton: true,
+				confirmButtonText: '확인',
+				cancelButtonText: '취소'
+			}).then((result) => {
+				if (result.isConfirmed) {
+				   $.ajax({
+			           url: 'commentsProhibit.do?phresult=' + prohibit + '&commentsNum=' + commentsNum,
+			           type: 'POST',
+			           success: function(phresult){
+			              console.log('phresult [' + phresult + ']');
+	              
+			              location.reload();
+			              
+			           },
+			           error: function(error){
+			              alert('error [' + error + ']');
+			           }
+			        });
+				}
+			});
+	   }
+	
+	function funcReply(replyNum, prohibit, iconColor){
+		   console.log(replyNum);
+		   console.log(prohibit);
+			
+		   var title;
+		   
+		   if (prohibit == 0) {
+			   title = '신고하시겠습니까?';
+		   } else {
+			   title = '신고를 취소하시겠습니까?';
+		   }
+		   
+		   Swal.fire({
+				title: title,
+				icon: 'warning',
+				showCancelButton: true,
+				confirmButtonText: '확인',
+				cancelButtonText: '취소'
+			}).then((result) => {
+				if (result.isConfirmed) {
+				   $.ajax({
+			           url: 'replyProhibit.do?phresult=' + prohibit + '&replyNum=' + replyNum,
+			           type: 'POST',
+			           success: function(phresult){
+			              console.log('phresult [' + phresult + ']');
+	              
+			              location.reload();
+	              
+			           },
+			           error: function(error){
+			              alert('error [' + error + ']');
+			           }
+			        });
+			   }
+	      });
+	 }
+	</script>
+	<script>
+   $("#deleteComments").click(function (event) {
+		event.preventDefault();
+		
+		Swal.fire({
+			title: '정말로 삭제 하시겠습니까?',
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonColor: '#3085d6',
+			cancelButtonColor: '#d33',
+			confirmButtonText: '승인',
+			cancelButtonText: '취소'
+		}).then((result) => {
+			if (result.isConfirmed) {
+				$(this).closest('form').submit();
+			}
+		});
+	});
+
+	$("#deleteReply").click( function (event) {
+		event.preventDefault();
+		
+		Swal.fire({
+			title: '정말로 삭제 하시겠습니까?',
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonText: '승인',
+			cancelButtonText: '취소'
+		}).then((result) => {
+			if (result.isConfirmed) {
+				$(this).closest('form').submit();
+			}
+		});
+	});
+	
+	function updateComments(commentsNum) {
+       Swal.fire({
+           title: '댓글 수정',
+           html: '<textarea id="commentText" class="swal2-textarea"></textarea>',
+           showCancelButton: true,
+           confirmButtonText: '확인',
+           cancelButtonText: '취소',
+           preConfirm: () => {
+               const commentText = document.getElementById('commentText').value;
+               // 데이터를 서버로 보내고 POST 요청 보냄
+               postCommentsData(commentText, commentsNum);
+           }
+       });
+   }
+
+   // POST 요청을 보내는 함수
+   function postCommentsData(commentText, commentsNum) {
+       $.ajax({
+           type: 'POST',
+           url: 'updateComment.do',
+           data: {
+               comments: commentText,
+               boardNum: '${bdata.boardNum}',
+               commentsNum: commentsNum
+           },
+           success: function(response) {
+               // 성공적으로 서버 응답을 받았을 때 실행할 코드
+               console.log(response);
+               // 원하는 후속 작업 수행
+               alert('댓글 수정 완료');
+               location.reload();
+           },
+           error: function(xhr, status, error) {
+               // Ajax 오류 처리
+               console.error(error);
+           }
+       });
+   }
+   
+	 function updateReply(replyNum) {
+       Swal.fire({
+           title: '대댓글 수정',
+           html: '<textarea id="replyText" class="swal2-textarea"></textarea>',
+           showCancelButton: true,
+           confirmButtonText: '확인',
+           cancelButtonText: '취소',
+           preConfirm: () => {
+               const replyText = document.getElementById('replyText').value;
+               // 데이터를 서버로 보내고 POST 요청 보냄
+               console.log(replyText, replyNum);
+               postReplyData(replyText, replyNum);
+           }
+       });
+   }
+
+   // POST 요청을 보내는 함수
+   function postReplyData(replyText, replyNum) {
+       $.ajax({
+           type: 'POST',
+           url: 'updateReply.do',
+           data: {
+               reply: replyText,
+               boardNum: '${bdata.boardNum}',
+               replyNum: replyNum
+           },
+           success: function(response) {
+               // 성공적으로 서버 응답을 받았을 때 실행할 코드
+               console.log(response);
+               // 원하는 후속 작업 수행
+               alert('대댓글 수정 완료');
+               
+               location.reload();
+           },
+           error: function(xhr, status, error) {
+               // Ajax 오류 처리
+               console.error(error);
+           }
+       });
+   }
+   </script>
+
 	<script type="text/javascript">
    $(document).ready(function(){
       var recommend = parseInt(${recommend});
@@ -240,39 +524,86 @@ i {
    const menuList = document.getElementById('menuList');
 
    let menuVisible = false;
-	if(boardButton != null && boardButton != undefined){
-  		boardButton.addEventListener('click', () => {
-   	menuVisible = !menuVisible;
+   if(boardButton != null && boardButton != undefined){
+        boardButton.addEventListener('click', () => {
+      menuVisible = !menuVisible;
     
-	     if (menuVisible) {
-	 	      menuList.style.display = 'block';
-	     } else {
-		      menuList.style.display = 'none';
-	     }
-	   });
-	}
+        if (menuVisible) {
+             menuList.style.display = 'block';
+        } else {
+            menuList.style.display = 'none';
+        }
+      });
+   }
+   const commentsButtons = document.getElementsByClassName('commentsButton');
+      const commentsMenuList = document.getElementsByClassName('commentsMenuList');
+      const commentsBan = document.getElementsByClassName('icon solid fa-ban comments');
+      
+      let commentsMenuVisible = false;
+      
+      
+      if (commentsButtons.length > 0 && commentsMenuList.length > 0) {
+         for (let i = 0; i < commentsButtons.length; i++) {
+           commentsButtons[i].addEventListener('click', () => {
+             commentsMenuVisible = !commentsMenuVisible;
+
+             if (commentsMenuVisible) {
+               commentsMenuList[i].style.display = 'block';
+               commentsBan[i].style.display='none';
+             } else {
+               commentsMenuList[i].style.display = 'none';
+               commentsBan[i].style.display='block';
+             }
+           });
+         }
+      }
+           
+      const replyButtons = document.getElementsByClassName('replyButton');
+      const replyMenuList = document.getElementsByClassName('replyMenuList');
+      const replyBan = document.getElementsByClassName('icon solid fa-ban reply');
+      
+      let replyMenuVisible = false;
+      
+      
+      if (replyButtons.length > 0 && replyMenuList.length > 0) {
+         for (let i = 0; i < replyButtons.length; i++) {
+           replyButtons[i].addEventListener('click', () => {
+             replyMenuVisible = !replyMenuVisible;
+
+             if (replyMenuVisible) {
+               replyMenuList[i].style.display = 'block';
+               replyBan[i].style.display='none';
+             } else {
+               replyMenuList[i].style.display = 'none';
+               replyBan[i].style.display='block';
+             }
+           });
+           
+           
+         }
+       }
    
    document.addEventListener("DOMContentLoaded", function() {
-	    const insertReplyBtns = document.querySelectorAll('.insertReplyBtn');
+       const insertReplyBtns = document.querySelectorAll('.insertReplyBtn');
 
-	    insertReplyBtns.forEach(function(insertReplyBtn) {
-	      const insertReplyContainer = insertReplyBtn.parentElement;
-	      const insertReply = insertReplyContainer.querySelector('.insertReply');
+       insertReplyBtns.forEach(function(insertReplyBtn) {
+         const insertReplyContainer = insertReplyBtn.parentElement;
+         const insertReply = insertReplyContainer.querySelector('.insertReply');
 
-	      insertReplyBtn.addEventListener('click', () => {
-	        if (insertReply.style.display === 'none') {
-	          insertReplyBtn.textContent = "작성 취소";
-	          insertReply.style.display = 'block';
-	        } else {
-	          insertReplyBtn.textContent = "대댓글 작성";
-	          insertReply.style.display = 'none';
-	        }
-	      });
-	    });
-	  });
+         insertReplyBtn.addEventListener('click', () => {
+           if (insertReply.style.display === 'none') {
+             insertReplyBtn.textContent = "작성 취소";
+             insertReply.style.display = 'block';
+           } else {
+             insertReplyBtn.textContent = "대댓글 작성";
+             insertReply.style.display = 'none';
+           }
+         });
+       });
+     });
    
-	console.log(window.location.pathname);
-	function scrollToTop() {
+   console.log(window.location.pathname);
+   function scrollToTop() {
        window.scrollTo({
            top: 0,
            behavior: 'smooth' // 부드러운 스크롤 효과 사용
@@ -296,6 +627,7 @@ i {
 	<script src="assets/js/breakpoints.min.js"></script>
 	<script src="assets/js/util.js"></script>
 	<script src="assets/js/nav.util.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 	<c:choose>
 		<c:when test="${empty memberID}">
 			<script src="assets/js/main.js"></script>

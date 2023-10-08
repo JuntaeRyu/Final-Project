@@ -16,9 +16,7 @@ window.onload=function() {
       icon: '${icon}',
       confirmButtonText: '확인'
     }).then((result) => {
-    if (result.isConfirmed) {
        window.history.go(-1);
-       }
     });
   };
 </script>

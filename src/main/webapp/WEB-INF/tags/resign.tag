@@ -1,7 +1,6 @@
 <%@ tag language="java" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
-
 	<script src="assets/js/jquery.min.js"></script>
 
 	<!-- 회원탈퇴 모달 -->
@@ -42,7 +41,12 @@
     $('#checkBtn').click(function(){
     	$('#checkModal').hide();
 		$('#passwordMember').val(""); // 입력된 값을 비움
-    	location.href = "deleteMember.do";
+		var form = $('<form>', {
+			  'method': 'POST',
+			  'action': 'deleteMember.do'
+		});
+		$('body').append(form);
+		form.submit();
     });
 
     // 최종 확인에서 취소를 했다면

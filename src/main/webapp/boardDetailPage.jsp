@@ -1,4 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="NPNC"%>
@@ -39,30 +40,36 @@ i {
 	margin-bottom: 7px;
 	margin-right: 12px;
 }
+
 #imgBox {
 	display: flex;
-    flex-direction: column; /* 이미지를 세로로 나열합니다. */
-    gap: 10px;
-    align-items: flex-start;
+	flex-direction: column; /* 이미지를 세로로 나열합니다. */
+	gap: 10px;
+	align-items: flex-start;
 }
+
 #imgBox img {
 	width: auto; /* 이미지가 부모 요소인 imgBox의 너비에 맞게 조절됩니다. */
-    max-height: 380px;
+	max-height: 380px;
 }
+
 #imgSection {
 	display: flex;
-    flex-direction: column;
+	flex-direction: column;
 }
 </style>
 <head>
 <title>HealthDuo</title>
 <meta charset="utf-8" />
 <!-- <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" /> -->
-<link rel="icon" href="assets/css/images/favicon.ico" type="image/x-icon" />
+<link rel="icon" href="assets/css/images/favicon.ico"
+	type="image/x-icon" />
 <link rel="stylesheet" href="assets/css/main.css" />
 </head>
 <body class="is-preload">
-	<script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+	<script src="https://code.jquery.com/jquery-3.7.0.min.js"
+		integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g="
+		crossorigin="anonymous"></script>
 	<div id="page-wrapper">
 
 		<!-- Header -->
@@ -97,49 +104,59 @@ i {
 										<c:if test="${role ne 2}">
 											<li>
 												<form action="updateBoardPage.do" method="post">
-													<input type="hidden" name="boardNum" value="${bdata.boardNum}" />
-													<button type="submit" style="background: none; border: none; text-decoration: none; color: #6b7770; padding: 0;">수정</button>
+													<input type="hidden" name="boardNum"
+														value="${bdata.boardNum}" />
+													<button type="submit"
+														style="background: none; border: none; text-decoration: none; color: #6b7770; padding: 0;">수정</button>
 												</form>
 											</li>
 										</c:if>
 
 										<li>
-											<form action="deleteBoard.do" method="post">
-												<input type="hidden" name="boardNum" value="${bdata.boardNum}" />
-												<button type="submit" style="background: none; border: none; text-decoration: none; color: #6b7770; padding: 0;">삭제</button>
+											<form id="deleteBoard" action="deleteBoard.do" method="post">
+												<input type="hidden" name="boardNum"
+													value="${bdata.boardNum}" />
+												<button type="submit"
+													style="background: none; border: none; text-decoration: none; color: #6b7770; padding: 0;">삭제</button>
 											</form>
 										</li>
 									</ul>
 									<header style="margin: 0 0 0.5em 0;">
 										<p id="boardTitle">${bdata.title}</p>
 										<ul class="meta">
-											<li class="icon solid fa-user"><a href="profileDetailPage.do?memberID=${bdata.memberID}">${bdata.nickName}</a></li>
+											<li class="icon solid fa-user"><a
+												href="profileDetailPage.do?memberID=${bdata.memberID}">${bdata.nickName}</a></li>
 											<li class="icon fa-clock">${bdata.boardDate}</li>
 											<c:if test="${not empty memberID}">
-												<li><i id="rc" class="icon fa-heart" style="color: #f22202;" title="추천"></i>
+												<li><i id="rc" class="icon fa-heart"
+													style="color: #f22202;" title="추천"></i>
 													<p class="cnt" style="display: inline-block;">${bdata.recommendCnt}</p></li>
 												<li><i id="ph" class="icon solid fa-ban" title="신고"></i></li>
 											</c:if>
 										</ul>
 									</header>
-										<c:if test="${not empty bdata.boardImgList}">
-											<section id="imgSection">
+									<c:if test="${not empty bdata.boardImgList}">
+										<section id="imgSection">
 											<div id="imgBox">
-											<c:forEach var="boardImg" items="${bdata.boardImgList}">
-												<img src="${boardImg}" alt="" />
-											</c:forEach>
+												<c:forEach var="boardImg" items="${bdata.boardImgList}">
+													<img src="${boardImg}" alt="" />
+												</c:forEach>
 											</div>
-											</section>
-										</c:if>
-										<div id="editor">
-											<p>${bdata.content}</p>
-										</div>
+										</section>
+									</c:if>
+									<div id="editor">
+										<p>${bdata.content}</p>
+									</div>
 								</section>
 								<!-- 댓글 작성 -->
 								<c:if test="${not empty memberID}">
 									<section id="insertCommentBox">
-										<form id="insertComment" action="insertComment.do" method="POST">
-											<input type="hidden" name="boardNum" value="${bdata.boardNum}"> <input type="text" name="comments" placeholder="댓글 작성 내용" required> <input style="width: 80px;" type="submit" value="작성">
+										<form id="insertComment" action="insertComment.do"
+											method="POST">
+											<input type="hidden" name="boardNum"
+												value="${bdata.boardNum}"> <input type="text"
+												name="comments" placeholder="댓글 작성 내용" required> <input
+												style="width: 80px;" type="submit" value="작성">
 										</form>
 									</section>
 								</c:if>
@@ -152,11 +169,18 @@ i {
 									<c:if test="${not empty cdatas}">
 										<c:forEach var="cdata" items="${cdatas}">
 											<ul class="meta" style="text-align: left;">
-												<li class="icon solid fa-user">${cdata.nickName}</li>
+												<c:if test="${cdata.memberID ne null}">
+													<li class="icon solid fa-user">${cdata.nickName}</li>
+												</c:if>
+												<c:if test="${cdata.memberID eq null}">
+													<li class="icon solid">😢탈퇴한 사용자</li>
+												</c:if>
 												<li class="icon fa-clock">${cdata.commentsDate}</li>
-												<c:if test="${memberID eq cdata.memberID || role eq 2}">
-													<c:if test="${cdata.comments ne null}">
-														<i class="icon solid fa-bars commentsButton"></i>
+												<c:if test="${not empty role}">
+													<c:if test="${memberID eq cdata.memberID || role eq 2}">
+														<c:if test="${cdata.comments ne null}">
+															<i class="icon solid fa-bars commentsButton"></i>
+														</c:if>
 													</c:if>
 												</c:if>
 											</ul>
@@ -164,28 +188,40 @@ i {
 												<c:if test="${role ne 2}">
 													<li>
 														<!-- 수정 버튼의 type을 "button"으로 변경하고 onclick 이벤트 추가 -->
-														<button type="button" style="background: none; border: none; text-decoration: none; color: #6b7770; padding: 0;" onclick="updateComments('${cdata.commentsNum}')">수정</button>
+														<button type="button"
+															style="background: none; border: none; text-decoration: none; color: #6b7770; padding: 0;"
+															onclick="updateComments('${cdata.commentsNum}')">수정</button>
 													</li>
 												</c:if>
 
 												<li>
 													<form action="deleteComment.do" method="post">
-														<input type="hidden" name="boardNum" value="${bdata.boardNum}"> <input type="hidden" name="commentsNum" value="${cdata.commentsNum}" />
-														<button id="deleteComments" type="submit" style="background: none; border: none; text-decoration: none; color: #6b7770; padding: 0;">삭제</button>
+														<input type="hidden" name="boardNum"
+															value="${bdata.boardNum}"> <input type="hidden"
+															name="commentsNum" value="${cdata.commentsNum}" />
+														<button id="deleteComments" type="submit"
+															style="background: none; border: none; text-decoration: none; color: #6b7770; padding: 0;">삭제</button>
 													</form>
 												</li>
 											</ul>
-
-											<ul class="meta">
-												<c:if test="${cdata.comments ne null}">
-													<c:if test="${cdata.check eq '0' }">
-														<li><i class="icon solid fa-ban comments" style="color: #c2bcbc" onclick="javascript:funcComments('${cdata.commentsNum}' , '${cdata.check}', this)" title="신고"></i></li>
+											<c:if test="${not empty memberID}">
+												<ul class="meta">
+													<c:if test="${cdata.comments ne null}">
+														<c:if test="${cdata.check eq '0' }">
+															<li><i class="icon solid fa-ban comments"
+																style="color: #c2bcbc"
+																onclick="javascript:funcComments('${cdata.commentsNum}' , '${cdata.check}', this)"
+																title="신고"></i></li>
+														</c:if>
+														<c:if test="${cdata.check eq '1' }">
+															<li><i class="icon solid fa-ban comments"
+																style="color: #f58300;"
+																onclick="javascript:funcComments('${cdata.commentsNum}' , '${cdata.check}', this)"
+																title="신고"></i></li>
+														</c:if>
 													</c:if>
-													<c:if test="${cdata.check eq '1' }">
-														<li><i class="icon solid fa-ban comments" style="color: #f58300;" onclick="javascript:funcComments('${cdata.commentsNum}' , '${cdata.check}', this)" title="신고"></i></li>
-													</c:if>
-												</c:if>
-											</ul>
+												</ul>
+											</c:if>
 											<c:if test="${cdata.comments eq null}">
 												<h1>삭제된 댓글입니다.</h1>
 											</c:if>
@@ -199,35 +235,57 @@ i {
 													<p id="replyIcon" class="icon solid fa-reply"></p>
 													<section id="replyBox">
 														<ul class="meta">
-															<c:if test="${memberID eq rdata.memberID || role eq 2}">
-																<i class="icon solid fa-bars replyButton"></i>
+															<c:if test="${not empty role}">
+																<c:if test="${memberID eq rdata.memberID || role eq 2}">
+																	<i class="icon solid fa-bars replyButton"></i>
+																</c:if>
 															</c:if>
 														</ul>
 														<ul class="replyMenuList">
 															<c:if test="${role ne 2}">
 																<li>
-																	<button type="button" style="background: none; border: none; text-decoration: none; color: #6b7770; padding: 0;" onclick="updateReply('${rdata.replyNum}')">수정</button>
+																	<button type="button"
+																		style="background: none; border: none; text-decoration: none; color: #6b7770; padding: 0;"
+																		onclick="updateReply('${rdata.replyNum}')">수정</button>
 																</li>
 															</c:if>
 
 															<li>
 																<form action="deleteReply.do" method="post">
-																	<input type="hidden" name="boardNum" value="${bdata.boardNum}"> <input type="hidden" name="replyNum" value="${rdata.replyNum}">
-																	<button id="deleteReply" type="submit" style="background: none; border: none; text-decoration: none; color: #6b7770; padding: 0;">삭제</button>
+																	<input type="hidden" name="boardNum"
+																		value="${bdata.boardNum}"> <input
+																		type="hidden" name="replyNum"
+																		value="${rdata.replyNum}">
+																	<button id="deleteReply" type="submit"
+																		style="background: none; border: none; text-decoration: none; color: #6b7770; padding: 0;">삭제</button>
 																</form>
 															</li>
 														</ul>
 														<h1>${rdata.reply}</h1>
 
 														<ul class="meta" style="text-align: right">
-															<li class="icon solid fa-user" style="float: left;">${rdata.nickName}</li>
-															<li class="icon fa-clock" style="float: left;">${rdata.replyDate}</li>
-
-															<c:if test="${rdata.check eq '0'}">
-																<li><i class="icon solid fa-ban reply" style="color: #c2bcbc;" onclick="javascript:funcReply('${rdata.replyNum}', '${rdata.check}', this)" title="신고"></i></li>
+															<c:if test="${rdata.memberID ne null}">
+																<li class="icon solid fa-user" style="float: left;">${rdata.nickName}</li>
 															</c:if>
-															<c:if test="${rdata.check eq '1'}">
-																<li><i class="icon solid fa-ban reply" style="color: #f58300;" onclick="javascript:funcReply('${rdata.replyNum}', '${rdata.check}', this)" title="신고"></i></li>
+															<c:if test="${rdata.memberID eq null}">
+																<li class="icon solid" style="float: left;">😢탈퇴한
+																	사용자</li>
+															</c:if>
+															<li class="icon fa-clock" style="float: left;">${rdata.replyDate}</li>
+															<li></li>
+															<c:if test="${not empty memberID}">
+																<c:if test="${rdata.check eq '0'}">
+																	<li><i class="icon solid fa-ban reply"
+																		style="color: #c2bcbc;"
+																		onclick="javascript:funcReply('${rdata.replyNum}', '${rdata.check}', this)"
+																		title="신고"></i></li>
+																</c:if>
+																<c:if test="${rdata.check eq '1'}">
+																	<li><i class="icon solid fa-ban reply"
+																		style="color: #f58300;"
+																		onclick="javascript:funcReply('${rdata.replyNum}', '${rdata.check}', this)"
+																		title="신고"></i></li>
+																</c:if>
 															</c:if>
 														</ul>
 													</section>
@@ -236,17 +294,27 @@ i {
 											<!-- 대댓글 작성 -->
 											<div style="text-align: right;">
 												<c:if test="${not empty memberID}">
-													<button class="insertReplyBtn">대댓글 작성</button>
+													<c:if test="${cdata.comments ne null}">
+														<button class="insertReplyBtn">대댓글 작성</button>
+													</c:if>
 												</c:if>
-												<section id="replyInsertBox" class="insertReply" style="display: none;">
-													<form id="replyInsert" action="insertReply.do" method="POST">
-														<input type="hidden" name="boardNum" value="${cdata.boardNum}"> <input type="hidden" name="commentsNum" value="${cdata.commentsNum}"> <input type="text" name="reply" placeholder="대댓글 작성 내용" required> <input style="width: 80px;" type="submit" value="작성">
+												<section id="replyInsertBox" class="insertReply"
+													style="display: none;">
+													<form id="replyInsert" action="insertReply.do"
+														method="POST">
+														<input type="hidden" name="boardNum"
+															value="${cdata.boardNum}"> <input type="hidden"
+															name="commentsNum" value="${cdata.commentsNum}">
+														<input type="text" name="reply" placeholder="대댓글 작성 내용"
+															required> <input style="width: 80px;"
+															type="submit" value="작성">
 													</form>
 												</section>
 											</div>
 											<!-- 대댓글 여기까지 -->
 
-											<hr style="border: 0; border-top: solid 1px #a7b5ac; margin: 1em 0.5em 1em 0;">
+											<hr
+												style="border: 0; border-top: solid 1px #a7b5ac; margin: 1em 0.5em 1em 0;">
 											<!-- 댓글 여기까지 -->
 										</c:forEach>
 									</c:if>
@@ -260,12 +328,32 @@ i {
 				</div>
 			</div>
 		</section>
-		<button id="scrollToTop" onclick="scrollToTop()" class="icon solid fa-chevron-up"></button>
+		<button id="scrollToTop" onclick="scrollToTop()"
+			class="icon solid fa-chevron-up"></button>
 		<!-- Footer -->
 		<NPNC:healthDuo_footer />
 
 	</div>
 
+	<script>
+	$("#deleteBoard").submit(function(event) {
+		event.preventDefault();
+		
+		Swal.fire({
+			title: '정말로 삭제 하시겠습니까?',
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonColor: '#3085d6',
+			cancelButtonColor: '#d33',
+			confirmButtonText: '승인',
+			cancelButtonText: '취소'
+		}).then((result) => {
+			if (result.isConfirmed) {
+				$(this).submit();
+			}
+		});
+	});
+	</script>
 	<script>
 	function funcComments(commentsNum, prohibit, iconColor){
 		   console.log(commentsNum);
@@ -275,6 +363,9 @@ i {
 	           type: 'POST',
 	           success: function(phresult){
 	              console.log('phresult [' + phresult + ']');
+	              
+	              location.reload();
+	              
 	              if (phresult == 1) {
 	                 $(iconColor).css("color", "#f58300");
 	              } else if (phresult == 0) {
@@ -295,6 +386,9 @@ i {
 	           type: 'POST',
 	           success: function(phresult){
 	              console.log('phresult [' + phresult + ']');
+	              
+	              location.reload();
+	              
 	              if (phresult == 1) {
 	                 $(iconColor).css("color", "#f58300");
 	              } else if (phresult == 0) {
@@ -307,7 +401,7 @@ i {
 	        });
 	   }
 	</script>
-	
+
 	<script>
 	$("#deleteComments").click(function (event) {
 		event.preventDefault();
@@ -506,8 +600,8 @@ i {
 	}
 
 	const commentsButtons = document.getElementsByClassName('commentsButton');
-   const commentsMenuList = document.getElementsByClassName('commentsMenuList');
-   const commentsBan = document.getElementsByClassName('icon solid fa-ban comments');
+	const commentsMenuList = document.getElementsByClassName('commentsMenuList');
+	const commentsBan = document.getElementsByClassName('icon solid fa-ban comments');
    
    let commentsMenuVisible = false;
    

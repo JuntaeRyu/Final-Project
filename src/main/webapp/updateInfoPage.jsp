@@ -234,10 +234,18 @@ textarea.fixed-width {
                      <article class="box page-content">
                         <h2 style="color: #bead7c;">기본정보</h2>
                         <section id="mypageinfo">
+                           <section style="display: flex; margin: 0;">
                            <h3>비밀번호</h3>
-                           <section style="display: flex; justify-content: space-between; align-items: center;" class="info">
-                              <h1>${mdata.memberPW}</h1>
 
+                              <div id="checkPasswordModal" class="modal">
+                                 <div class="modal-content">
+                                    <form id="checkPasswordForm">
+                                       <span class="close">&times;</span> <label style="font-size: 25px;">비밀번호 확인</label> 
+                                       <input style="width: 100%" name="memberPW" id="checkPassword" type="password" placeholder="현재 비밀번호 입력" required>
+                                       <button id="checkPasswordBtn" type="submit">확인</button>
+                                    </form>
+                                 </div>
+                              </div>
                               <div id="updatePasswordModal" class="modal">
                                  <div class="modal-content">
                                     <form id="updateMemberPWForm" action="updateMemberPW.do" method="post">
@@ -247,7 +255,7 @@ textarea.fixed-width {
                                     </form>
                                  </div>
                               </div>
-                              <input id="updateBtn1" style="display: block; margin-left: auto;" type="submit" value="수정">
+                              <input id="updateBtn1" style="padding: 0px 40px 0px 40px; height: 40px; display: block; margin-left: auto; margin-right: 10px;" type="submit" value="수정">
                            </section>
 
                            <h3>닉네임</h3>
@@ -295,7 +303,7 @@ textarea.fixed-width {
                               <div class="verification-container">
                                  <input type="text" style="width: 100%" id="sample6_extraAddress" name="detailAddress" placeholder="${mdata.detailAddress}">
                               </div>
-                                 <input style="display: none; margin-left: auto; top: -60px;" type="submit" value="수정">
+                                 <input id="updateAddressBtn" style="display: none; margin-left: auto; top: -60px;" type="submit" value="수정">
                               </form>
                            </section>
                            
@@ -364,6 +372,25 @@ textarea.fixed-width {
 	</script>
 	<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 	<script type="text/javascript">
+	$("#checkPasswordBtn").click(function(event){
+		event.preventDefault();
+		if ("${mdata.memberPW}" === $("#checkPassword").val()) {
+			$("#checkPasswordModal").css("display", "none");
+			$("#checkPassword").val("");
+			$("#updatePasswordModal").css("display", "block");
+		} else {
+			Swal.fire({
+				title: '비밀번호가 일치하지 않습니다',
+				icon: 'warning',
+				confirmButtonText: '확인',
+			}).then((result) => {
+				$("#checkPasswordModal").css("display", "none");
+				$("#checkPassword").val("");
+			});
+		}
+	});
+	</script>
+	<script type="text/javascript">
 	$("#updateMemberPWForm").submit(function (event) {
 		event.preventDefault();
 		
@@ -426,6 +453,7 @@ textarea.fixed-width {
 	});
 	</script>
    <script>
+   const checkPasswordModal = document.getElementById("checkPasswordModal");
    const updatePasswordModal = document.getElementById("updatePasswordModal");
    const updateNicknameModal = document.getElementById("updateNicknameModal");
    const updateEmailModal = document.getElementById("updateEmailModal");
@@ -441,7 +469,7 @@ textarea.fixed-width {
     const checkModal = document.getElementById("checkModal");
     
     const closeBtnMember = passwordModalMember.querySelector(".close");
-    const closeBtnUpdate1 = updatePasswordModal.querySelector(".close");
+    const closeBtnUpdate1 = checkPasswordModal.querySelector(".close");
     const closeBtnUpdate2 = updateNicknameModal.querySelector(".close");
     const closeBtnUpdate4 = updateEmailModal.querySelector(".close");
     
@@ -455,7 +483,7 @@ textarea.fixed-width {
 
     // "수정" 버튼 클릭 이벤트 처리
     updateBtn1.addEventListener("click", () => {
-      updatePasswordModal.style.display = "block";
+    	checkPasswordModal.style.display = "block";
     });
     updateBtn2.addEventListener("click", () => {
        updateNicknameModal.style.display = "block";
@@ -466,7 +494,7 @@ textarea.fixed-width {
 
     // "수정" 버튼에 대한 모달 닫기 버튼 클릭 이벤트 처리
     closeBtnUpdate1.addEventListener("click", () => {
-      updatePasswordModal.style.display = "none";
+    	checkPasswordModal.style.display = "none";
     });
     closeBtnUpdate2.addEventListener("click", () => {
        updateNicknameModal.style.display = "none";

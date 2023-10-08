@@ -41,7 +41,7 @@
 								<section id="insertNoticeBox">
 									<form action="insertNotice.do" method="POST">
 										<input type="hidden" name="category" value="0"> <input style="width: 100%;" type="text" placeholder="공지사항" disabled> <input style="width: 100%;" type="text" name="title" placeholder="제목" required>
-										<textarea name="content" id="editor" required></textarea>
+										<textarea name="content" id="editor"></textarea>
 										<input type="hidden" name="memberID" value="${memberID}"> <input id="completeBtn" type="submit" value="작성하기" />
 									</form>
 								</section>
@@ -60,7 +60,7 @@
 
 	<!-- Scripts -->
 	<script type="text/javascript">
-	$("#completeBtn").click(function (event){
+	$("form").submit(function (event){
 		event.preventDefault();
 		
 		Swal.fire({
@@ -71,7 +71,7 @@
 			cancelButtonText: '취소'
 		}).then((result) => {
 			if (result.isConfirmed) {
-				$(this).closest('form').submit();
+				$(this).submit();
 			}
 		});
 	});

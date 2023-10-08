@@ -150,6 +150,7 @@ button {
 						<button style="width: 35%; height: auto; margin-top: 0px; padding: 0px;" onclick="midPhoneNumVerificationNumSend(event)">인증번호 받기</button>
 					</div>
 				</div>
+				
 				<!-- 이메일 입력란 -->
 				<div id="emailMidInputContainer" style="display: none;">
 					<label for="email">이메일 확인</label> <input type="text" id="midEmailInput" class="checkInfo" placeholder="이메일을 입력해주세요" required>
@@ -220,7 +221,7 @@ button {
 			<form>
 				<h3 style="margin: 0px; text-align: center;">비밀번호 변경</h3>
 				<input type="hidden" id="memberID" class="checkInfo" required>
-				<input style="width: 100%" type="text" id="inputPW" class="checkInfo" placeholder="변경할 비밀번호를 입력해주세요" required>
+				<input style="width: 100%" type="password" id="inputPW" class="checkInfo" placeholder="변경할 비밀번호를 입력해주세요" required>
 				<button onclick="updatePW(event)" >확인</button>
 			</form>
 		</div>
@@ -371,6 +372,12 @@ button {
 				console.log('PhoneCheckNum [' + PhoneCheckNum + ']');
 				var midPhoneNumVerificationInput = document.getElementById('midPhoneNumVerificationInput');
 				midPhoneNumVerificationInput.removeAttribute('disabled');
+            	swal.fire({
+            		title: '발송성공!',
+            		text: '인증번호가 발송되었습니다',
+            		icon: 'success',
+            		confirmButtonText: '확인'
+            	});
             },
             error: function(error){
             	swal.fire({
@@ -398,6 +405,12 @@ button {
 				console.log('EmailCheckNum [' + EmailCheckNum + ']');
             	var midEmailVerificationInput = document.getElementById('midEmailVerificationInput');
         		midEmailVerificationInput.removeAttribute('disabled');
+            	swal.fire({
+            		title: '발송성공!',
+            		text: '인증번호가 발송되었습니다',
+            		icon: 'success',
+            		confirmButtonText: '확인'
+            	});
             },
             error: function(error){
             	swal.fire({
@@ -658,7 +671,7 @@ button {
         	    	} else {
         	    		swal.fire({
                    			title: '변경성공!',
-                   			text: '비밓번호가 변경되었습니다',
+                   			text: '비밀번호가 변경되었습니다',
                    			icon: 'success',
                    			confirmButtonText: '확인'
                    		});

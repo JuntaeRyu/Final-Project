@@ -11,6 +11,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.spring.biz.board.BoardService;
+import com.spring.biz.board.BoardVO;
 import com.spring.biz.comments.CommentsService;
 import com.spring.biz.comments.CommentsVO;
 import com.spring.biz.reply.ReplyService;
@@ -20,13 +22,16 @@ import com.spring.biz.reply.ReplyVO;
 public class CommentController {
 
 	@Autowired
+	private BoardService boardService;
+	
+	@Autowired
 	private CommentsService commentsService;
 	
 	@Autowired
 	private ReplyService replyService;
 
 	@RequestMapping(value = "/insertComment.do", method = RequestMethod.POST)
-	public String insertComment(CommentsVO cVO, HttpSession session, Model model) {
+	public String insertComment(BoardVO bVO,CommentsVO cVO, HttpSession session, Model model) {
 		System.out.println("로그: Comment: insertComment() ");
 
 		cVO.setMemberID((String)session.getAttribute("memberID"));
@@ -34,9 +39,19 @@ public class CommentController {
 		boolean flag = commentsService.insert(cVO);
 
 		if(flag) {
-			model.addAttribute("title", "댓글작성 성공!");
-			model.addAttribute("icon", "success");
-			model.addAttribute("url", "boardDetailPage.do?boardNum="+cVO.getBoardNum());
+			
+			bVO = boardService.selectOne(bVO);
+			
+			if(bVO.getCategory() == 0) {
+				model.addAttribute("title", "댓글작성 성공!");
+				model.addAttribute("icon", "success");
+				model.addAttribute("url", "noticeDetailPage.do?boardNum=" + cVO.getBoardNum());
+			}
+			else {
+				model.addAttribute("title", "댓글작성 성공!");
+				model.addAttribute("icon", "success");
+				model.addAttribute("url", "boardDetailPage.do?boardNum=" + cVO.getBoardNum());
+			}
 			
 			return "SweetAlert2.jsp";
 		}
@@ -94,7 +109,6 @@ public class CommentController {
 			flag = commentsService.update(cVO);
 
 			model.addAttribute("text", "대댓글이 있어서 삭제된 댓글입니다로 수정됩니다");
-//			model.addAttribute("text", '대댓글이 있는 경우 "삭제된 댓글입니다"로 수정됩니다');
 		} else {
 			flag = commentsService.delete(cVO);
 		}

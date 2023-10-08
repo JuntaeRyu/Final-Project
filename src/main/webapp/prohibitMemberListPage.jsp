@@ -86,6 +86,7 @@
 										<input id="profileReset" type="submit" value="프로필 초기화">
 									</div>
 									</form>
+										
 									</c:if>
 							</div>
 						</section>

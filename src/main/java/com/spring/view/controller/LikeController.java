@@ -71,6 +71,8 @@ public class LikeController {
 		else if (request.getParameter("rcresult").equals("1")) {
 			// 사용자가 이미 추천했을 경우, 데이터베이스에서 해당 추천을 삭제합니다.
 			rcVO = recommendService.selectOne(rcVO);
+			
+			rcVO.setSearchCondition("recommendCancel");
 
 			recommendService.delete(rcVO);
 
@@ -110,6 +112,8 @@ public class LikeController {
 		else if (request.getParameter("phresult").equals("1")) {
 			// "phresult" 값이 "1"이면 글 신고를 취소하고, 해당 글의 신고 상태를 업데이트합니다.
 			pVO = prohibitService.selectOne(pVO);
+			
+			pVO.setSearchCondition("prohibitCancel");
 
 			prohibitService.delete(pVO);
 
@@ -150,6 +154,8 @@ public class LikeController {
 		else if (request.getParameter("rcresult").equals("1")) {
 			// 사용자가 이미 추천했을 경우, 데이터베이스에서 해당 추천을 삭제합니다.
 			rcVO = recommendService.selectOne(rcVO);
+			
+			rcVO.setSearchCondition("recommendCancel");
 
 			recommendService.delete(rcVO);
 
@@ -189,6 +195,8 @@ public class LikeController {
 		else if (request.getParameter("phresult").equals("1")) {
 			// "phresult" 값이 "1"이면 글 신고를 취소하고, 해당 글의 신고 상태를 업데이트합니다.
 			pVO = prohibitService.selectOne(pVO);
+			
+			pVO.setSearchCondition("prohibitCancel");
 
 			prohibitService.delete(pVO);
 
@@ -242,6 +250,8 @@ public class LikeController {
 		else {
 			pVO = prohibitService.selectOne(pVO);
 			
+			pVO.setSearchCondition("prohibitCancel");
+			
 			prohibitService.delete(pVO);
 			
 			commentsService.update(cVO);
@@ -271,6 +281,8 @@ public class LikeController {
 			rVO = replyService.selectOne(rVO);
 			
 			if(rVO.getProhibitCnt() >= 5) {
+				rVO.setSearchCondition("replyNum");
+				
 				replyService.delete(rVO);
 			}
 			
@@ -278,6 +290,8 @@ public class LikeController {
 		}
 		else {
 			pVO = prohibitService.selectOne(pVO);
+			
+			pVO.setSearchCondition("prohibitCancel");
 			
 			prohibitService.delete(pVO);
 			

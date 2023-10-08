@@ -23,6 +23,12 @@ import com.spring.biz.member.MemberVO;
 import com.spring.biz.memberProfile.MemberProfileService;
 import com.spring.biz.memberProfile.MemberProfileVO;
 import com.spring.biz.page.PageVO;
+import com.spring.biz.prohibit.ProhibitService;
+import com.spring.biz.prohibit.ProhibitVO;
+import com.spring.biz.recommend.RecommendService;
+import com.spring.biz.recommend.RecommendVO;
+import com.spring.biz.reply.ReplyService;
+import com.spring.biz.reply.ReplyVO;
 import com.spring.biz.warn.WarnService;
 import com.spring.biz.warn.WarnVO;
 
@@ -43,6 +49,15 @@ public class AdminController {
 
 	@Autowired
 	private MemberProfileService memberProfileService;
+
+	@Autowired
+	private ReplyService replyService;
+
+	@Autowired
+	private RecommendService recommendService;
+
+	@Autowired
+	private ProhibitService prohibitService;
 
 	@ModelAttribute("searchMap")
 	public Map<String,String> searchMap(){
@@ -134,29 +149,55 @@ public class AdminController {
 	}
 
 	@RequestMapping(value = "/deleteProhibitList.do", method = RequestMethod.POST)
-	public String deleteProhibitList(@RequestParam("number") List<String> boardNums, BoardVO bVO, WarnVO wVO, Model model) {
+	public String deleteProhibitList(@RequestParam("number") List<Integer> boardNums,CommentsVO cVO, BoardVO bVO, WarnVO wVO,RecommendVO rcVO,ProhibitVO pVO,ReplyVO rVO, Model model) {
 		System.out.println("로그: Admin: deleteProhibitList() ");
+
+		boolean totalFlag = false;
+
+		rcVO.setSearchCondition("commonNum");
+		pVO.setSearchCondition("commonNum");
+		wVO.setSearchCondition("boardWarn");
 
 		bVO.setSearchCondition("prohibitBoard");
 
 		List<BoardVO> phbdatas = boardService.selectAll(bVO);
 
-		boolean totalFlag = false;
-		
 		for(int i = 0; i < phbdatas.size(); i++) {
-			for (String boardNum : boardNums) {
-				if(phbdatas.get(i).getBoardNum() == Integer.parseInt(boardNum)) {
+			for (Integer boardNum : boardNums) {
 
-					bVO = phbdatas.get(i);
+				cVO.setBoardNum(boardNum);
+				List<CommentsVO> cdatas = commentsService.selectAll(cVO);
+				for(int j=0;j<cdatas.size();j++) {
 
-					bVO.setSearchCondition("boardNum");
+					rVO.setCommentsNum(cdatas.get(j).getCommentsNum());
+					rVO.setSearchCondition("commentsReplyNum");
+					List<ReplyVO> rdatas= replyService.selectAll(rVO);
 
-					if (!boardService.delete(bVO)) {
-						totalFlag = true;
+					for(int k=0; k < rdatas.size(); k++) {
+						pVO.setCommonNum(rdatas.get(k).getReplyNum());
+
+						prohibitService.delete(pVO);
 					}
 
-					wVO.setSearchCondition("boardWarn");
-					wVO.setMemberID(bVO.getMemberID());
+					pVO.setCommonNum(cdatas.get(j).getCommentsNum());
+
+					prohibitService.delete(pVO);
+				}
+
+				bVO.setBoardNum(boardNum);
+
+				bVO.setSearchCondition("boardNum");
+
+				if (boardService.delete(bVO)) {
+					rcVO.setCommonNum(bVO.getBoardNum());
+
+					pVO.setCommonNum(bVO.getBoardNum());
+
+					recommendService.delete(rcVO);
+
+					prohibitService.delete(pVO);
+
+					wVO.setMemberID(phbdatas.get(i).getMemberID());
 
 					boolean flag = warnService.insert(wVO);
 
@@ -164,8 +205,13 @@ public class AdminController {
 						System.out.println("adminController deleteProhibitList 경고누적 실패");
 					}
 				}
+				else {
+					System.out.println("total: 안됨");
+					totalFlag = true;
+				}
 			}
 		}
+
 		if (totalFlag) {
 			model.addAttribute("title", "일부 신고글 삭제 실패!");
 			model.addAttribute("text", "다시 시도해주세요");
@@ -175,7 +221,7 @@ public class AdminController {
 			model.addAttribute("title", "신고글 삭제 성공!");
 			model.addAttribute("icon", "success");
 		}
-		
+
 		model.addAttribute("url", "prohibitListPage.do");
 
 		return "SweetAlert2.jsp";
@@ -203,7 +249,7 @@ public class AdminController {
 		List<MemberProfileVO> phmdatas = memberProfileService.selectAll(mpVO);
 
 		boolean totalFlag = false;
-		
+
 		for(int i = 0; i < phmdatas.size(); i++) {
 			for (String profileNum : profileNums) {
 				if(phmdatas.get(i).getProfileNum() == Integer.parseInt(profileNum)) {
@@ -237,33 +283,38 @@ public class AdminController {
 			model.addAttribute("title", "프로필 리셋 성공!");
 			model.addAttribute("icon", "success");
 		}
-		
+
 		model.addAttribute("url", "prohibitMemberListPage.do");
 
 		return "SweetAlert2.jsp";
 	}
 
 	@RequestMapping(value = "/updateMemberRole.do", method = RequestMethod.POST)
-	public String updateMemberRole(@RequestParam("mid") List<String> mids, MemberVO mVO, Model model) {
+	public String updateMemberRole(@RequestParam("mid") List<String> mids, MemberVO mVO, WarnVO wVO, Model model) {
 		System.out.println("로그: AdminController: updateMemberRole() ");
 
 		boolean flag = false;
-		
+
 		for(String mid : mids) {
 			mVO.setSearchCondition("duplicateID");
 			mVO.setMemberID(mid);
 
 			mVO = memberService.selectOne(mVO);
+			System.out.println("mVO.getRole= "+ mVO.getRole());
 
 			if(mVO.getRole() == 2 || mVO.getRole() == 9) {
-				mVO.setSearchCondition("downgradeUser");
+				mVO.setSearchCondition("downGradeUser");
 			}
 			else if(mVO.getRole() == 3) {
 				mVO.setSearchCondition("upgradeAdmin");
 			}
 			flag = memberService.update(mVO);
+
+			wVO.setMemberID(mid);
+
+			warnService.delete(wVO);
 		}
-		
+
 		if (flag) {
 			model.addAttribute("title", "등급 변경 성공!");
 			model.addAttribute("icon", "success");
@@ -273,9 +324,9 @@ public class AdminController {
 			model.addAttribute("text", "다시 시도해주세요");
 			model.addAttribute("icon", "warning");
 		}
-		
+
 		model.addAttribute("url", "adminPage.do");
-		
+
 		return "SweetAlert2.jsp";
 	}
 

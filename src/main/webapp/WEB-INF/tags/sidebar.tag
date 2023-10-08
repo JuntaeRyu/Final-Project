@@ -20,7 +20,12 @@
 												</h3>
 												<ul class="meta">
 													<li class="icon fa-clock">${post.boardDate}</li>
-													<li class="icon fa-comments">${post.boardCommentsCnt}</li>
+													<c:if test="${post.boardCommentsCnt == 0}">
+														<li class="icon fa-comments">${post.boardCommentsCnt}</li>
+													</c:if>
+													<c:if test="${post.boardCommentsCnt != 0}">
+														<li class="icon solid fa-comments">${post.boardCommentsCnt}</li>
+													</c:if>
 												</ul>
 											</article>
 										</li>

@@ -42,11 +42,14 @@ public class MatchingController {
 	private BoardService boardService;
 
 	@RequestMapping(value = "/matchingPage.do")
-	public String matchingPage(MemberProfileVO mpVO, Random random, Model model) {
+	public String matchingPage(MemberProfileVO mpVO, Random random, Model model, HttpSession session) {
 		System.out.println("로그: Matching: matchingPage() ");
-
+		
+		mpVO.setMemberID(" ");
 		mpVO.setSearchCondition("totalMemberProfile");
-
+		if(session.getAttribute("memberID") != null) {
+		mpVO.setMemberID((String)session.getAttribute("memberID"));
+		}
 		List<MemberProfileVO> mpdatas = memberProfileService.selectAll(mpVO);
 
 		model.addAttribute("mpdatas", mpdatas);
@@ -176,17 +179,19 @@ public class MatchingController {
 		System.out.println("로그: Matching: deleteMatching() ");
 
 		boolean flag = matchingService.delete(mcVO);
+		
+		String type = mcVO.getSearchCondition();
 
 		if(flag) {
-			model.addAttribute("title", "매칭 거절!");
-			model.addAttribute("text", "매칭이 거절되었습니다");
+			model.addAttribute("title", "매칭 " + type);
+			model.addAttribute("text", "매칭이 " + type + "되었습니다");
 			model.addAttribute("icon", "success");
 			model.addAttribute("url", "ownMatchPage.do");
 			
 			return "SweetAlert2.jsp";
 		}
 		else {
-			model.addAttribute("title", "매칭신청 수락 실패..");
+			model.addAttribute("title", "매칭" + type + " 실패..");
 			model.addAttribute("text", "다시한번 확인해주세요.." );
 			model.addAttribute("icon", "warning" );
 

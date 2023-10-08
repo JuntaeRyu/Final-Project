@@ -67,7 +67,7 @@ input {
 											<input type="hidden" name="category" value="0">
                                         </c:if>
 										<input type="text" name="title" placeholder="제목" value="${bdata.title}" required>
-										<textarea name="content" id="editor" required>${bdata.content}</textarea>
+										<textarea name="content" id="editor">${bdata.content}</textarea>
 										<input id="editBtn" type="submit" value="수정하기" />
 									</form>
 								</section>
@@ -84,7 +84,7 @@ input {
 
 	<!-- Scripts -->
 	<script type="text/javascript">
-	$("#editBtn").click(function (event){
+	$("form").submit(function (event){
 		event.preventDefault();
 		
 		Swal.fire({
@@ -95,7 +95,7 @@ input {
 			cancelButtonText: '취소'
 		}).then((result) => {
 			if (result.isConfirmed) {
-				$(this).closest('form').submit();
+				$(this).submit();
 			}
 		});
 	});

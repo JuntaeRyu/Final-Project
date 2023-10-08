@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -18,8 +19,8 @@ public class ReplyDAO2 implements InterfaceReplyDAO{
 	private final String sql_SELECTALL = "SELECT R.REPLYNUM, R.REPLY, R.COMMENTSNUM, R.MEMBERID, TO_CHAR(R.REPLYDATE, 'YYYY-MM-DD') AS REPLYDATE, (SELECT COUNT(CASE WHEN COMMONNUM=REPLYNUM THEN 1 END ) FROM PROHIBIT) AS PROHIBITCNT, M.NICKNAME FROM REPLY R LEFT JOIN MEMBER M ON R.MEMBERID=M.MEMBERID ORDER BY R.REPLYNUM ASC";
 	// 선택된 댓글의 대댓글 전체출력
 	private final String sql_SELECTALL_COMMENTSNUM = "SELECT R.REPLYNUM, R.REPLY, R.COMMENTSNUM, R.MEMBERID, TO_CHAR(R.REPLYDATE, 'YYYY-MM-DD') AS REPLYDATE, (SELECT COUNT(CASE WHEN COMMONNUM=REPLYNUM THEN 1 END ) FROM PROHIBIT) AS PROHIBITCNT, M.NICKNAME FROM REPLY R LEFT JOIN MEMBER M ON R.MEMBERID=M.MEMBERID WHERE COMMENTSNUM=?";
-	//	// 대댓글 선택 출력
-	//	private final String sql_SELECTONE = "SELECT R.REPLYNUM, R.REPLY, R.COMMENTSNUM, R.MEMBERID, R.PROHIBITCNT, TO_CHAR(R.REPLYDATE, 'YYYY-MM-DD') AS REPLYDATE, M.NICKNAME FROM REPLY R LEFT JOIN MEMBER M ON R.MEMBERID=M.MEMBERID WHERE R.REPLYNUM=?";
+	// 대댓글 선택 출력
+	private final String sql_SELECTONE = "SELECT R.REPLYNUM, R.REPLY, R.COMMENTSNUM, R.MEMBERID, R.PROHIBITCNT, TO_CHAR(R.REPLYDATE, 'YYYY-MM-DD') AS REPLYDATE, M.NICKNAME FROM REPLY R LEFT JOIN MEMBER M ON R.MEMBERID=M.MEMBERID WHERE R.REPLYNUM=?";
 	// 대댓글 수정
 	private final String sql_UPDATE_REPLY = "UPDATE REPLY SET REPLY=? WHERE REPLYNUM=?";
 	// 대댓글 신고횟수 갱신
@@ -69,17 +70,17 @@ public class ReplyDAO2 implements InterfaceReplyDAO{
 	////////////////////// selectOne ////////////////////////////////////////////////////
 	public ReplyVO selectOne(ReplyVO rVO) { // 하나의 객체 정보 검색
 
-		//		try { // 의도치 않은 프로그램종료 예방
-		//			// 쿼리문 수정할 정보 저장
-		//			Object[] args = { rVO.getReplyNum() };
-		//	
-		//			// 쿼리문 수정 및 실행 후 결과 리턴
-		//			return jdbcTemplate.queryForObject(sql_SELECTONE, args, new ReplyRowMapper());
-		//		}
-		//		catch(EmptyResultDataAccessException e) {
-		//			System.out.println("해결~");
-		return null;
-		//		}
+		try { // 의도치 않은 프로그램종료 예방
+			// 쿼리문 수정할 정보 저장
+			Object[] args = { rVO.getReplyNum() };
+
+			// 쿼리문 수정 및 실행 후 결과 리턴
+			return jdbcTemplate.queryForObject(sql_SELECTONE, args, new ReplyRowMapper());
+		}
+		catch(EmptyResultDataAccessException e) {
+			System.out.println("해결~");
+			return null;
+		}
 	}
 
 	////////////////////// update ////////////////////////////////////////////////////

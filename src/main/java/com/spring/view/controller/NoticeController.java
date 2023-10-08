@@ -17,6 +17,8 @@ import com.spring.biz.board.BoardVO;
 import com.spring.biz.comments.CommentsService;
 import com.spring.biz.comments.CommentsVO;
 import com.spring.biz.page.PageVO;
+import com.spring.biz.prohibit.ProhibitService;
+import com.spring.biz.prohibit.ProhibitVO;
 import com.spring.biz.recommend.RecommendService;
 import com.spring.biz.recommend.RecommendVO;
 import com.spring.biz.reply.ReplyService;
@@ -36,6 +38,9 @@ public class NoticeController {
 
 	@Autowired
 	private RecommendService recommendService;
+
+	@Autowired
+	private ProhibitService prohibitService;
 
 	@RequestMapping(value = "/noticeListPage.do")
 	public String notcieListPage(BoardVO  bVO, PageVO pageVO, Model model) {
@@ -72,13 +77,13 @@ public class NoticeController {
 		pageVO.setCurrentPageBoards(pageVO.getCurrentPageBoards());
 
 		model.addAttribute("pagedata", pageVO);
-		
+
 		// forward 객체를 설정하여 noticeListPage.jsp로 포워딩합니다.
 		return "noticeListPage.jsp";
 	}
 
 	@RequestMapping(value = "/noticeDetailPage.do")
-	public String noticeDetailPage(BoardVO bVO, CommentsVO cVO, RecommendVO rcVO, ReplyVO rVO, HttpSession session, HttpServletRequest request) {
+	public String noticeDetailPage(BoardVO bVO, CommentsVO cVO, RecommendVO rcVO, ReplyVO rVO, ProhibitVO pVO, HttpSession session, HttpServletRequest request) {
 		System.out.println("로그: Notice: noticeDetailPage() ");
 
 		rcVO.setMemberID((String)session.getAttribute("memberID"));
@@ -102,6 +107,8 @@ public class NoticeController {
 
 		List<ReplyVO> replies = new ArrayList<ReplyVO>();
 
+		bVO = boardService.selectOne(bVO);
+
 		for(int i = 0; i < cdatas.size(); i++) {
 			if(bVO.getBoardNum() == cdatas.get(i).getBoardNum()) {
 				comments.add(cdatas.get(i));
@@ -113,15 +120,47 @@ public class NoticeController {
 				}
 			}
 		}
-		
-		bVO = boardService.selectOne(bVO);
+
+		for(int i = 0; i < comments.size(); i++) {
+			comments.get(i).setCheck(0);
+
+			pVO = new ProhibitVO();
+
+			pVO.setMemberID((String)session.getAttribute("memberID"));
+			pVO.setCommonNum(comments.get(i).getCommentsNum());
+
+			pVO = prohibitService.selectOne(pVO);
+
+			if(pVO != null) {
+				if(pVO.getCommonNum() == comments.get(i).getCommentsNum()) {
+					comments.get(i).setCheck(1);
+				}
+			}
+		}
+
+		for(int i = 0; i < replies.size(); i++) {
+			replies.get(i).setCheck(0);
+
+			pVO = new ProhibitVO();
+
+			pVO.setMemberID((String)session.getAttribute("memberID"));
+			pVO.setCommonNum(replies.get(i).getReplyNum());
+
+			pVO = prohibitService.selectOne(pVO);
+
+			if(pVO != null) {
+				if(pVO.getCommonNum() == replies.get(i).getReplyNum()) {
+					replies.get(i).setCheck(1);
+				}
+			}
+		}
 
 		// 게시글 데이터가 조회되었을 경우, 게시글 정보를 JSP 페이지에서 사용할 수 있도록 request에 저장합니다.
 		if(bVO != null) {
 			request.setAttribute("bdata", bVO);
 			request.setAttribute("cdatas", comments);
 			request.setAttribute("rdatas", replies);
-			
+
 			//////////////사이드바 - 해당게시물 작성자의 또다른 글 3개 ///////////////////
 			bVO.setSearchCondition("writerBoard");
 
@@ -141,7 +180,7 @@ public class NoticeController {
 
 			request.setAttribute("topbdata", bVO);
 			/////////////////////////////////////////////////////////////////
-			
+
 			return "noticeDetailPage.jsp";
 		}
 		else {
@@ -164,7 +203,7 @@ public class NoticeController {
 
 			return "goback.jsp";
 		}
-		
+
 		return "redirect:insertNoticePage.jsp";
 	}
 
@@ -172,6 +211,14 @@ public class NoticeController {
 	public String insertNotice(BoardVO bVO, HttpSession session, Model model) {
 		System.out.println("로그: Notice: insertNotice() ");
 
+		if (bVO.getContent() == null || bVO.getContent().isEmpty() || bVO.getContent().isBlank()) {
+			model.addAttribute("title", "공지사항 작성실패!" );
+			model.addAttribute("text", "공지사항 내용이 없습니다!" );
+			model.addAttribute("icon", "warning" );
+
+			return "goback.jsp";
+		}
+		
 		bVO.setMemberID((String)session.getAttribute("memberID"));
 
 		boolean flag = boardService.insert(bVO);
@@ -180,7 +227,7 @@ public class NoticeController {
 			model.addAttribute("title", "공지사항 작성 성공!");
 			model.addAttribute("icon", "success");
 			model.addAttribute("url", "noticeListPage.do");
-			
+
 			return "SweetAlert2.jsp";
 		} else {
 			model.addAttribute("title", "공지사항작성실패.." );
@@ -202,7 +249,7 @@ public class NoticeController {
 
 			return "goback.jsp";
 		}
-		
+
 		bVO = boardService.selectOne(bVO);
 
 		if (bVO != null) {
@@ -224,6 +271,14 @@ public class NoticeController {
 	public String updateNotice(BoardVO bVO, Model model) {
 		System.out.println("로그: Notice: updateNotice() ");
 
+		if (bVO.getContent() == null || bVO.getContent().isEmpty() || bVO.getContent().isBlank()) {
+			model.addAttribute("title", "공지사항 수정실패!" );
+			model.addAttribute("text", "내용이 없습니다!" );
+			model.addAttribute("icon", "warning" );
+
+			return "goback.jsp";
+		}
+		
 		bVO.setSearchCondition("updateBoard");
 
 		boolean flag = boardService.update(bVO);
@@ -232,7 +287,7 @@ public class NoticeController {
 			model.addAttribute("title", "공지사항 수정 성공!");
 			model.addAttribute("icon", "success");
 			model.addAttribute("url", "noticeDetailPage.do?boardNum="+bVO.getBoardNum());
-			
+
 			return "SweetAlert2.jsp";
 		} else {
 			model.addAttribute("title", "공지사항 수정 실패..");
@@ -244,8 +299,31 @@ public class NoticeController {
 	}
 
 	@RequestMapping(value = "/deleteNotice.do", method = RequestMethod.POST)
-	public String deleteNotice(BoardVO bVO, Model model) {
+	public String deleteNotice(BoardVO bVO, RecommendVO rcVO, ProhibitVO pVO,CommentsVO cVO,ReplyVO rVO, Model model) {
 		System.out.println("로그: Notice: deleteNotice() ");
+
+		bVO.setSearchCondition("boardNum");
+		rcVO.setSearchCondition("commonNum");
+		pVO.setSearchCondition("commonNum");
+
+		cVO.setBoardNum(bVO.getBoardNum());
+		List<CommentsVO> cdatas = commentsService.selectAll(cVO);
+		for(int i=0;i<cdatas.size();i++) {
+
+			rVO.setCommentsNum(cdatas.get(i).getCommentsNum());
+			rVO.setSearchCondition("commentsReplyNum");
+			List<ReplyVO> rdatas= replyService.selectAll(rVO);
+
+			for(int j=0; j < rdatas.size(); j++) {
+				pVO.setCommonNum(rdatas.get(j).getReplyNum());
+
+				prohibitService.delete(pVO);
+			}
+
+			pVO.setCommonNum(cdatas.get(i).getCommentsNum());
+
+			prohibitService.delete(pVO);
+		}
 
 		boolean flag = boardService.delete(bVO);
 
@@ -253,7 +331,15 @@ public class NoticeController {
 			model.addAttribute("title", "공지사항 삭제 성공!");
 			model.addAttribute("icon", "success");
 			model.addAttribute("url", "noticeListPage.do");
-			
+
+			rcVO.setCommonNum(bVO.getBoardNum());
+
+			pVO.setCommonNum(bVO.getBoardNum());
+
+			recommendService.delete(rcVO);
+
+			prohibitService.delete(pVO);
+
 			return "SweetAlert2.jsp";
 		}
 		else {

@@ -306,8 +306,6 @@ public class BoardController {
 	public String insertBoardPage(HttpSession session, Model model) {
 		System.out.println("로그: Board: insertBoardPage() ");
 
-
-
 		if(session.getAttribute("memberID") == null || (Integer)session.getAttribute("role") == 9) {
 			model.addAttribute("title", "잘못된 접근입니다.");
 			model.addAttribute("text", "다시 한번 확인해주세요.");
@@ -319,11 +317,19 @@ public class BoardController {
 		return "insertBoardPage.jsp";
 	}
 
-	@RequestMapping(value = "/insertBaord.do", method = RequestMethod.POST)
+	@RequestMapping(value = "/insertBoard.do", method = RequestMethod.POST)
 	public String insertBoard(BoardVO bVO, HttpSession session, Model model) {
 		System.out.println("로그: Board: insertBoard() ");
 
-		if(bVO.getBoardImg()!=null) {
+		if (bVO.getContent() == null || bVO.getContent().isEmpty() || bVO.getContent().isBlank()) {
+			model.addAttribute("title", "게시글 작성실패!" );
+			model.addAttribute("text", "게시글 내용이 없습니다!" );
+			model.addAttribute("icon", "warning" );
+
+			return "goback.jsp";
+		}
+		
+		if(bVO.getBoardImg() != null) {
 
 			String imgUrl=bVO.getBoardImg();
 
@@ -331,6 +337,7 @@ public class BoardController {
 
 			// 첫 번째 쉼표(,)까지의 부분을 잘라냄
 			int indexOfComma = imgUrl.indexOf(",");
+			
 			bVO.setBoardImg(imgUrl.substring(indexOfComma + 1));
 		}
 
@@ -377,6 +384,14 @@ public class BoardController {
 	public String updateBoard(BoardVO bVO, Model model) {
 		System.out.println("로그: Board: updateBoard() ");
 
+		if (bVO.getContent() == null || bVO.getContent().isEmpty() || bVO.getContent().isBlank()) {
+			model.addAttribute("title", "게시글 수정 실패!" );
+			model.addAttribute("text", "내용이 없습니다!" );
+			model.addAttribute("icon", "warning" );
+
+			return "goback.jsp";
+		}
+		
 		bVO.setSearchCondition("updateBoard");
 
 		boolean flag = boardService.update(bVO);
@@ -398,10 +413,31 @@ public class BoardController {
 	}
 
 	@RequestMapping(value = "/deleteBoard.do", method = RequestMethod.POST)
-	public String deleteBoard(BoardVO bVO, Model model) {
+	public String deleteBoard(BoardVO bVO, RecommendVO rcVO, ProhibitVO pVO,CommentsVO cVO,ReplyVO rVO, HttpSession session, Model model) {
 		System.out.println("로그: Board: deleteBoard() ");
 
 		bVO.setSearchCondition("boardNum");
+		rcVO.setSearchCondition("commonNum");
+		pVO.setSearchCondition("commonNum");
+		
+		cVO.setBoardNum(bVO.getBoardNum());
+		List<CommentsVO> cdatas = commentsService.selectAll(cVO);
+		for(int i=0;i<cdatas.size();i++) {
+			
+			rVO.setCommentsNum(cdatas.get(i).getCommentsNum());
+			rVO.setSearchCondition("commentsReplyNum");
+			List<ReplyVO> rdatas= replyService.selectAll(rVO);
+			
+			for(int j=0; j < rdatas.size(); j++) {
+				pVO.setCommonNum(rdatas.get(j).getReplyNum());
+				
+				prohibitService.delete(pVO);
+			}
+			
+			pVO.setCommonNum(cdatas.get(i).getCommentsNum());
+			
+			prohibitService.delete(pVO);
+		}
 
 		boolean flag = boardService.delete(bVO);
 
@@ -409,6 +445,15 @@ public class BoardController {
 			model.addAttribute("title", "게시글 삭제 성공!");
 			model.addAttribute("icon", "success");
 			model.addAttribute("url", "boardListPage.do");
+			
+			rcVO.setCommonNum(bVO.getBoardNum());
+			
+			pVO.setCommonNum(bVO.getBoardNum());
+			
+			recommendService.delete(rcVO);
+			
+			prohibitService.delete(pVO);
+			
 
 			return "SweetAlert2.jsp";
 		}

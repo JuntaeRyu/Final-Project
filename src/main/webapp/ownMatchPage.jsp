@@ -321,6 +321,7 @@ ul.pagination li a {
 														</form>
 														<form action="deleteMatching.do" method="POST">
 															<input type="hidden" name="matchingNum" value="${receiverdata.matchingNum}">
+															<input type="hidden" name="SearchCondition"	value="거절">
 															<input id="refuseBtn" type="submit" class="Abtn" style="background-color: #FA5858;" value="거절">
 														</form>
 
@@ -333,10 +334,9 @@ ul.pagination li a {
 															<input type="submit" class="Abtn" value="채팅방가기">
 														</form>
 														<form action="deleteMatching.do" method="POST">
-															<input type="hidden" name="matchingNum"
-																value="${receiverdata.matchingNum}"> <input id="receiverDeleteBtn"
-																type="submit" class="Abtn"
-																style="background-color: #FA5858;" value="삭제">
+															<input type="hidden" name="matchingNum" value="${receiverdata.matchingNum}">
+															<input type="hidden" name="SearchCondition"	value="삭제">
+															<input id="receiverDeleteBtn" type="submit" class="Abtn" style="background-color: #FA5858;" value="삭제">
 														</form>
 													</div>
 												</c:if>
@@ -395,6 +395,7 @@ ul.pagination li a {
 														<a class="Abtn" style="background-color: #6E6E6E;">대기중</a>
 														<form action="deleteMatching.do" method="POST" style="text-align: center; display: grid; justify-content: center;">
 															<input type="hidden" name="matchingNum" value="${senderdata.matchingNum}">
+															<input type="hidden" name="SearchCondition"	value="취소">
 															<input id="cancelBtn" type="submit" class="Abtn" style="background-color: #FA5858;" value="취소">
 														</form>
 													</div>
@@ -404,11 +405,9 @@ ul.pagination li a {
 														<input type="submit" class="Abtn" value="채팅방가기">
 													</form>
 													<form action="deleteMatching.do" method="post" style="text-align: center; display: grid; justify-content: center;">
-														<input type="hidden" name="matchingNum"
-															value="${senderdata.matchingNum}"> <input
-															id="senderDeleteBtn"
-															type="submit" class="Abtn"
-															style="background-color: #FA5858;" value="삭제">
+														<input type="hidden" name="matchingNum"	value="${senderdata.matchingNum}">
+														<input type="hidden" name="SearchCondition"	value="삭제">
+														<input id="senderDeleteBtn"	type="submit" class="Abtn" style="background-color: #FA5858;" value="삭제">
 													</form>
 												</c:if>
 											</div>

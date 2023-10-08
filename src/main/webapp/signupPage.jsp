@@ -207,10 +207,19 @@ button {
             url: 'signupPhoneCheck.do?phoneNum=' + phoneNum,
             type: 'POST',
             success: function(randomNumber){
-				phoneCheckNum = randomNumber
-				console.log('phoneCheckNum [' + phoneCheckNum + ']');
-				var phoneNumVerificationInput = document.getElementById('phoneNumVerificationInput');
-				phoneNumVerificationInput.removeAttribute('disabled');
+            	if (randomNumber === '1') {
+            		swal.fire({
+               			title: '전화번호 중복!',
+               			html: '이미 해당 번호의 계정이 있습니다<br>다른 번호를 사용해주세요',
+               			icon: 'warning',
+               			confirmButtonText: '확인'
+               		});
+            	} else {
+					phoneCheckNum = randomNumber
+					console.log('phoneCheckNum [' + phoneCheckNum + ']');
+					var phoneNumVerificationInput = document.getElementById('phoneNumVerificationInput');
+					phoneNumVerificationInput.removeAttribute('disabled');
+            	}
             },
             error: function(error){
             	swal.fire({

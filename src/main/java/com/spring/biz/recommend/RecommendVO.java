@@ -5,6 +5,8 @@ public class RecommendVO {
     private String memberID; // 추천한 회원의 아이디 (Member ID)를 저장하는 멤버 변수
     private int commonNum; // 게시글의 PK (게시글의 고유 번호)를 저장하는 멤버 변수
 
+    private String searchCondition;
+    
 	// 추천 번호를 반환하는 메서드
 	public int getRecommendNum() {
 		return recommendNum;
@@ -34,4 +36,16 @@ public class RecommendVO {
 	public void setCommonNum(int commonNum) {
 		this.commonNum = commonNum;
 	}
+
+	public String getSearchCondition() {
+		return searchCondition;
+	}
+
+	public void setSearchCondition(String searchCondition) {
+		this.searchCondition = searchCondition;
+	}
+	
+	
+	
+	
 }

@@ -19,6 +19,8 @@ public class RecommendDAO2 implements InterfaceRecommendDAO{
 	private final String sql_SELECTONE = "SELECT RECOMMENDNUM,MEMBERID,COMMONNUM FROM RECOMMEND WHERE MEMBERID=? AND COMMONNUM=?";
 //	 추천 취소(삭제)
 	private final String sql_DELETE = "DELETE FROM RECOMMEND WHERE RECOMMENDNUM=?";
+	// 게시물 또는 댓글 대댓글 삭제로인한 추천수 삭제
+	private final String sql_DELETE_COMMONNUM = "DELETE FROM RECOMMEND WHERE COMMONNUM=?";
 
 	// JDBC(자바 데이터베이스 커넥트) 도구
 	@Autowired
@@ -76,7 +78,17 @@ public class RecommendDAO2 implements InterfaceRecommendDAO{
 	public boolean delete(RecommendVO rcVO) {
 
 		// 쿼리문 수정 및 실행 후 결과를 저장
-		int result = jdbcTemplate.update(sql_DELETE, rcVO.getRecommendNum());
+		
+		int result = 0;
+		if(rcVO.getSearchCondition()== null) {
+			
+		}else if(rcVO.getSearchCondition().equals("recommendCancel")) {
+			
+			jdbcTemplate.update(sql_DELETE, rcVO.getRecommendNum());
+		}else if(rcVO.getSearchCondition().equals("commonNum")) {
+			
+			jdbcTemplate.update(sql_DELETE_COMMONNUM, rcVO.getCommonNum());
+		}
 
 		// 성공 리턴
 		if (result <=0) {

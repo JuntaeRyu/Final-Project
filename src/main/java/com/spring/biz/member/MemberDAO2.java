@@ -208,7 +208,7 @@ public class MemberDAO2 implements InterfaceMemberDAO{
 		else if(mVO.getSearchCondition().equals("upgradeAdmin")) {
 			result = jdbcTemplate.update(sql_UPDATE_ADMIN, mVO.getMemberID());
 		}
-		else if(mVO.getSearchCondition().equals("downgradeUser")) {
+		else if(mVO.getSearchCondition().equals("downGradeUser")) {
 			result = jdbcTemplate.update(sql_UPDATE_USER, mVO.getMemberID());
 		}
 		else if(mVO.getSearchCondition().equals("stopID")) {

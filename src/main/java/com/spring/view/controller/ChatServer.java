@@ -59,7 +59,7 @@ public class ChatServer {
 
 				if (s != session) { // 현재 접속자가 아닌 나머지 사람들
 					try {
-						s.getBasicRemote().sendText("2#" + user + ":" + txt);
+						s.getBasicRemote().sendText("2#" + user + "#" + txt);
 					} catch (IOException e) {
 						e.printStackTrace();
 					}

@@ -45,17 +45,18 @@
 						<div class="content">
 							<article class="box page-content">
 								<section id="insertBoardBox">
-									<form action="insertBaord.do" method="POST">
+									<form action="insertBoard.do" method="POST">
 										<h1>카테고리 선택</h1>
 										<div style="text-align: left;">
 											<input type="radio" id="info" name="category" value="1" checked> <label for="info">정보</label> <input type="radio" id="chat" name="category" value="2"> <label for="chat">잡담</label>
 										</div>
 										<input style="width: 100%; padding-right: 10px;" type="text" name="title" placeholder="제목" required>
+										<div style="text-align:left">※이미지는 게시글 작성 후 수정할 수 없습니다</div>
 										<lr-config
 					    					ctx-name="boardImg"
 					    					pubkey="da833dfe1dc16760f1e6"
 					    					max-local-file-size-bytes="10000000"
-					    					multiple-max="10"
+					    					multiple-max="1"
 					    					img-only="true" ></lr-config>
 										<lr-file-uploader-minimal
 					   						css-src="https://cdn.jsdelivr.net/npm/@uploadcare/blocks@0.25.0/web/lr-file-uploader-minimal.min.css"
@@ -114,7 +115,7 @@
 	
 	<script>
 	console.log("1");
-	$("#completeBtn").click(function (event){
+	$("form").submit(function (event){
 		event.preventDefault();
 		console.log("3");
 		
@@ -127,7 +128,7 @@
 		}).then((result) => {
 			if (result.isConfirmed) {
 				console.log("4");
-				$(this).closest('form').submit();
+				$(this).submit();
 			}
 		});
 	});

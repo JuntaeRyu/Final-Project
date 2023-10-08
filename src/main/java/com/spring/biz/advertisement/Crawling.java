@@ -33,18 +33,10 @@ public class Crawling {
 			e.printStackTrace();
 		}
 
-		// 2. 페이지 스크랩핑 완료 확인
-//		System.out.println(doc); // 확인 완료
-
 		// 3. 페이지 코드 분석 <- 이건 크롬에서 F12를 통해 하는게 유리함 (1차 가공)
 		Elements elemsImg = doc.select("div.thumbnail > a > img"); // 상품 이미지
 		Elements elemsTitle = doc.select("strong > a"); // 상품명
 		Elements elemsPay = doc.select("li.price"); // 상품가격
-
-		// 1차 가공 완료 확인
-//		System.out.println(elemsImg);
-//		System.out.println(elemsTitle);
-//		System.out.println(elemsPay);
 
 		// 4. 긁어와서 1차가공한 정보를 각각 분류
 		// a) 각각 분류
@@ -93,11 +85,6 @@ public class Crawling {
 			strTitle = strTitle.substring(0, indexTitle);
 			strPay = strPay.substring(0, indexPay - 1);
 
-			// 완성된 정보 출력
-//			System.out.println("상품이미지: " + strImg);
-//			System.out.println("상품명: " + strTitle);
-//			System.out.println("가격: " + strPay);
-
 			AdvertisementVO adata = new AdvertisementVO();
 
 			adata.setSite(2);
@@ -108,8 +95,7 @@ public class Crawling {
 
 			adatas.add(adata);
 
-		} // while
-//		System.out.println(adatas.size());
+		}
 		// 목록 반환
 		return adatas;
 	}

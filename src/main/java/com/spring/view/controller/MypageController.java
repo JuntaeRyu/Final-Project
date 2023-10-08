@@ -24,6 +24,14 @@ import com.spring.biz.member.MemberService;
 import com.spring.biz.member.MemberVO;
 import com.spring.biz.memberProfile.MemberProfileService;
 import com.spring.biz.memberProfile.MemberProfileVO;
+import com.spring.biz.prohibit.ProhibitService;
+import com.spring.biz.prohibit.ProhibitVO;
+import com.spring.biz.recommend.RecommendService;
+import com.spring.biz.recommend.RecommendVO;
+import com.spring.biz.reply.ReplyService;
+import com.spring.biz.reply.ReplyVO;
+import com.spring.biz.warn.WarnService;
+import com.spring.biz.warn.WarnVO;
 
 @Controller
 public class MypageController {
@@ -43,8 +51,20 @@ public class MypageController {
 	@Autowired
 	private MatchingService matchingService;
 
+	@Autowired
+	private WarnService warnService;
+	
+	@Autowired
+	private ReplyService replyService;
+
+	@Autowired
+	private RecommendService recommendService;
+
+	@Autowired
+	private ProhibitService prohibitService;
+
 	@RequestMapping(value = "/mypage.do")
-	public String mypage(MemberVO mVO, MemberProfileVO mpVO, HttpSession session, Model model) {
+	public String mypage(MemberVO mVO, MemberProfileVO mpVO,WarnVO wVO, HttpSession session, Model model) {
 		System.out.println("로그: Mypage: mypage()");
 
 		if((Integer)session.getAttribute("role") != 3) {
@@ -65,9 +85,14 @@ public class MypageController {
 
 		mpVO = memberProfileService.selectOne(mpVO);
 
+		wVO.setMemberID((String)session.getAttribute("memberID"));
+
+		List<WarnVO> wdatas = warnService.selectAll(wVO);
+
 		if(mVO != null & mpVO != null) {
 			model.addAttribute("mdata", mVO);
 			model.addAttribute("mpdata", mpVO);
+			model.addAttribute("wdatas", wdatas);
 
 			return "mypage.jsp";
 		}
@@ -141,34 +166,58 @@ public class MypageController {
 	}
 
 	@RequestMapping(value = "/deleteOwnBoardList.do", method = RequestMethod.POST)
-	public String deleteOwnBoardList(@RequestParam("number") List<String> boardNums, BoardVO bVO, CommentsVO cVO, 
+	public String deleteOwnBoardList(@RequestParam("number") List<Integer> boardNums, BoardVO bVO, CommentsVO cVO,RecommendVO rcVO,ProhibitVO pVO,ReplyVO rVO, 
 			HttpSession session, Model model) {
 		System.out.println("로그: Mypage: deleteOwnBoard() ");
 
 		System.out.println("boardNums: " + boardNums);
-
-		bVO.setMemberID((String)session.getAttribute("memberID"));
-		bVO.setSearchCondition("ownBoard");
-
-		List<BoardVO> bdatas = boardService.selectAll(bVO);
 		
+		rcVO.setSearchCondition("commonNum");
+		pVO.setSearchCondition("commonNum");
+
 		boolean flag = false;
 
-		for(int i = 0; i < bdatas.size(); i++) {
-			for (String boardNum : boardNums) {
-				if(bdatas.get(i).getBoardNum() == Integer.parseInt(boardNum)) {
-
-					bVO = bdatas.get(i);
-
-					bVO.setSearchCondition("boardNum");
-
-					if (!boardService.delete(bVO)) {
-						flag = true;
-					}
+		for (Integer boardNum : boardNums) {
+			
+			cVO.setBoardNum(boardNum);
+			List<CommentsVO> cdatas = commentsService.selectAll(cVO);
+			for(int i=0;i<cdatas.size();i++) {
+				
+				rVO.setCommentsNum(cdatas.get(i).getCommentsNum());
+				rVO.setSearchCondition("commentsReplyNum");
+				List<ReplyVO> rdatas= replyService.selectAll(rVO);
+				
+				for(int j=0; j < rdatas.size(); j++) {
+					pVO.setCommonNum(rdatas.get(j).getReplyNum());
+					
+					prohibitService.delete(pVO);
 				}
+				
+				pVO.setCommonNum(cdatas.get(i).getCommentsNum());
+				
+				prohibitService.delete(pVO);
+			}
+
+			bVO.setBoardNum(boardNum);
+
+			bVO.setSearchCondition("boardNum");
+
+			if (boardService.delete(bVO)) {
+				
+				rcVO.setCommonNum(bVO.getBoardNum());
+				
+				pVO.setCommonNum(bVO.getBoardNum());
+				
+				recommendService.delete(rcVO);
+				
+				prohibitService.delete(pVO);
+				
+			}
+			else {
+				flag = true;
 			}
 		}
-		
+
 		if (flag) {
 			model.addAttribute("title", "삭제 오류!");
 			model.addAttribute("text", "일부 글들이 삭제되지 않았습니다");
@@ -178,7 +227,7 @@ public class MypageController {
 			model.addAttribute("title", "삭제 성공!");
 			model.addAttribute("icon", "success");
 		}
-		
+
 		model.addAttribute("url", "ownBoardListPage.do");
 
 		return "SweetAlert2.jsp";
@@ -216,7 +265,7 @@ public class MypageController {
 
 		model.addAttribute("mpdata", mpVO);
 		model.addAttribute("mdata", mVO);
-		
+
 		return "updateProfilePage.jsp";
 	}
 
@@ -258,7 +307,7 @@ public class MypageController {
 			model.addAttribute("title", "프로필 이미지 변경 성공!");
 			model.addAttribute("icon", "success");
 			model.addAttribute("url", "updateProfilePage.do");
-			
+
 			return "SweetAlert2.jsp";
 		}
 		else {
@@ -285,7 +334,7 @@ public class MypageController {
 			model.addAttribute("title", "짧은 소개글 변경 성공!");
 			model.addAttribute("icon", "success");
 			model.addAttribute("url", "updateProfilePage.do");
-			
+
 			return "SweetAlert2.jsp";
 		}
 		else {
@@ -312,7 +361,7 @@ public class MypageController {
 			model.addAttribute("title", "소개글 수정 성공!");
 			model.addAttribute("icon", "success");
 			model.addAttribute("url", "updateProfilePage.do");
-			
+
 			return "SweetAlert2.jsp";
 		}
 		else {
@@ -335,7 +384,7 @@ public class MypageController {
 
 			return "goback.jsp";
 		}
-		
+
 		mVO.setMemberID((String)session.getAttribute("memberID"));
 		mVO.setSearchCondition("duplicateID");
 
@@ -359,12 +408,12 @@ public class MypageController {
 			session.removeAttribute("memberID");
 			session.removeAttribute("nickName");
 			session.removeAttribute("role");
-			
+
 			model.addAttribute("title", "비밀번호 변경 성공!");
 			model.addAttribute("text", "다시 로그인 해주십시오");
 			model.addAttribute("icon", "success");
 			model.addAttribute("url", "main.do");
-			
+
 			return "SweetAlert2.jsp";
 		} 
 		else {
@@ -388,7 +437,7 @@ public class MypageController {
 			model.addAttribute("title", "닉네임 변경 성공!");
 			model.addAttribute("icon", "success");
 			model.addAttribute("url", "updateInfoPage.do");
-			
+
 			return "SweetAlert2.jsp";
 		}
 		else {
@@ -412,7 +461,7 @@ public class MypageController {
 			model.addAttribute("title", "이메일 변경 성공!");
 			model.addAttribute("icon", "success");
 			model.addAttribute("url", "updateInfoPage.do");
-			
+
 			return "SweetAlert2.jsp";
 		}
 		else {
@@ -436,7 +485,7 @@ public class MypageController {
 			model.addAttribute("title", "주소변경 성공!");
 			model.addAttribute("icon", "success");
 			model.addAttribute("url", "updateInfoPage.do");
-			
+
 			return "SweetAlert2.jsp";
 		}
 		else {
@@ -460,12 +509,12 @@ public class MypageController {
 			session.removeAttribute("memberID");
 			session.removeAttribute("nickName");
 			session.removeAttribute("role");
-			
+
 			model.addAttribute("title", "회원탈퇴 성공!");
 			model.addAttribute("text", "아쉽지만, 다음 방문을 기대하겠습니다");
 			model.addAttribute("icon", "success");
 			model.addAttribute("url", "main.do");
-			
+
 			return "SweetAlert2.jsp";
 		}
 		else {

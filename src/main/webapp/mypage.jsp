@@ -228,6 +228,16 @@ textarea.fixed-width {
 								</section>
 								<section id="mypageinfo" style="padding: 20px 20px 20px 20px;">
 									<h3> 누적경고 횟수 : ${mdata.warnCnt}</h3>
+									<section class="info">
+									<c:forEach var="wdata" items="${wdatas}">
+										<c:if test="${wdata.warnType eq 1}">
+											<h1 style="margin-bottom: 0;">경고 사유: 부적절한 게시글 신고로 인한 경고 / ${wdata.warnDate}</h1>
+										</c:if>
+										<c:if test="${wdata.warnType eq 2}">
+											<h1 style="margin-bottom: 0;">경고 사유: 부적절한 프로필 신고로 인한 경고 / ${wdata.warnDate} </h1>
+										</c:if>
+									</c:forEach>
+									</section>
 								</section>
 
 								<section id="mypageprofile">
