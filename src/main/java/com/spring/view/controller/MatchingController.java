@@ -71,6 +71,8 @@ public class MatchingController {
 		
 		mpVO = memberProfileService.selectOne(mpVO);
 
+		if(mpVO != null) {
+			
 		rcVO.setMemberID((String)session.getAttribute("memberID"));
 		rcVO.setCommonNum(mpVO.getProfileNum());
 //		rcVO.setCommonNum(Integer.parseInt(request.getParameter("profileNum")));
@@ -117,6 +119,14 @@ public class MatchingController {
 		model.addAttribute("mpdata", mpVO);
 
 		return "profileDetailPage.jsp";
+		}
+		else {
+			request.setAttribute("title", "잘못된 접근입니다.");
+			request.setAttribute("text", "다시 한번 확인해주세요.");
+			request.setAttribute("icon", "warning");
+
+			return "goback.jsp";
+		}
 	}
 
 	@RequestMapping(value = "/applyMatching.do")

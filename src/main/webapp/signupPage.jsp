@@ -110,7 +110,7 @@ button {
 										<p id="memberEmailMessage">이메일은 필수입력이 아닙니다.</p>
 										<h1><i class="icon solid fa-star" title="필수입력" style="color: #ff6c00;"></i> 성별</h1>
 										<div style="text-align: left; margin-left: 20px;">
-											<input type="radio" id="male" name="gender" value="1">
+											<input type="radio" id="male" name="gender" value="1" checked>
 											<label for="male">남자</label>
 											<input type="radio" id="female" name="gender" value="2">
 											<label for="female">여자</label>
@@ -232,7 +232,7 @@ button {
          });
     }
 	
-	$('#signupBtn').click(function (event) {
+	$('form').submit(function (event) {
 		event.preventDefault();
 		
 	    // 인증번호 확인 로직 추가
@@ -248,7 +248,7 @@ button {
 				cancelButtonText: '취소'
 			}).then((result) => {
 				if (result.isConfirmed) {
-					$(this).closest('form').submit();
+					$(this).submit();
 				}
 			});
 	    } else {

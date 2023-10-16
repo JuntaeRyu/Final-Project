@@ -75,6 +75,8 @@ public class Crawling {
 			strTitle = strTitle.substring(indexTitle + 1);
 			strPay = strPay.substring(indexPay + 1);
 
+			System.out.println("1차 가공 이후 데이터: "+strImg+", "+strTitle+", "+strPay);
+			
 			// 2차 가공용 범위 지정 (뒤에 지우기)
 			indexImg = strImg.indexOf(" ");
 			indexTitle = strTitle.indexOf("<");
@@ -87,6 +89,9 @@ public class Crawling {
 
 			AdvertisementVO adata = new AdvertisementVO();
 
+			System.out.println("2차 가공 이후 데이터: "+strImg+", "+strTitle+", "+strPay);
+			System.out.println();
+			
 			adata.setSite(2);
 			adata.setSiteUrl(url);
 			adata.setItemImg(strImg);

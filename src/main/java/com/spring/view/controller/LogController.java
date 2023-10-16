@@ -44,7 +44,7 @@ public class LogController {
 
 			if(mVO.getRole() == 9) {
 				model.addAttribute("title", mVO.getNickName() + "님은<br>이용이 정지된 회원입니다.");
-				model.addAttribute("text", "정지 풀리는 날: "+mVO.getSuspensionMember());
+				model.addAttribute("text", "정지 유효기간: "+mVO.getSuspensionMember());
 				model.addAttribute("icon", "error");
 				
 				return "goback.jsp";

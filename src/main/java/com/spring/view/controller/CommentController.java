@@ -131,7 +131,7 @@ public class CommentController {
 	}
 
 	@RequestMapping(value = "/insertReply.do", method = RequestMethod.POST)
-	public String insertReply(CommentsVO cVO, ReplyVO rVO, HttpSession session, HttpServletRequest request, Model model) {
+	public String insertReply(BoardVO bVO, CommentsVO cVO, ReplyVO rVO, HttpSession session, HttpServletRequest request, Model model) {
 		System.out.println("로그: Comment: insertReply() ");
 
 		rVO.setMemberID((String)session.getAttribute("memberID"));
@@ -139,9 +139,19 @@ public class CommentController {
 		boolean flag = replyService.insert(rVO);
 		
 		if (flag) {
-			model.addAttribute("title", "대댓글 작성 성공!");
-			model.addAttribute("icon", "success");
-			model.addAttribute("url", "boardDetailPage.do?boardNum="+cVO.getBoardNum());
+			
+			bVO = boardService.selectOne(bVO);
+			
+			if(bVO.getCategory() == 0) {
+				model.addAttribute("title", "대댓글 작성 성공!");
+				model.addAttribute("icon", "success");
+				model.addAttribute("url", "noticeDetailPage.do?boardNum=" + cVO.getBoardNum());
+			}
+			else {
+				model.addAttribute("title", "대댓글 작성 성공!");
+				model.addAttribute("icon", "success");
+				model.addAttribute("url", "boardDetailPage.do?boardNum="+cVO.getBoardNum());
+			}
 			
 			return "SweetAlert2.jsp";
 		} 

@@ -7,15 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import net.nurigo.sdk.NurigoApp;
-import net.nurigo.sdk.message.model.Message;
-import net.nurigo.sdk.message.request.SingleMessageSendingRequest;
-import net.nurigo.sdk.message.response.SingleMessageSentResponse;
-import net.nurigo.sdk.message.service.DefaultMessageService;
 
 @Controller
 public class EmailController {
@@ -24,12 +19,12 @@ public class EmailController {
 	private JavaMailSender mailSender;
 
 	@RequestMapping(value = "/signupSuccess.do")
-	public String signupSuccess(HttpServletRequest request) {
+	public String signupSuccess(HttpServletRequest request, Model model) {
 		System.out.println("로그: EmailController: signupSuccess() ");
 
 		String title = "[헬스해듀오] 더 나은 몸과 마음을 위한 당신만의 여정";
-		String receiver = (String)request.getAttribute("email");
-		String name = (String)request.getAttribute("name");
+		String receiver = (String)request.getParameter("email");
+		String name = (String)request.getParameter("name");
 		String content = "<h2>" + name + "님의 회원가입을 진심으로 축하드립니다~!!</h2><br>"
 				+ "헬스해듀오 관리자입니다. 헬스해듀오로 발걸음해주셔서 정말 감사합니다.<br>"
 				+ "앞으로 더 나은 헬스해듀오가 되겠습니다~^^";
@@ -50,9 +45,13 @@ public class EmailController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
-		// 회원가입 성공 후 메인 페이지로 이동
-		return "redirect:main.do";
+		
+		model.addAttribute("title", "회원가입 성공!");
+		model.addAttribute("text", "로그인을 해주세요");
+		model.addAttribute("icon", "success");
+		model.addAttribute("url", "main.do");
+		
+		return "SweetAlert2.jsp";
 	}
 
 	@RequestMapping(value = "/findIDEmailCheck.do", method = RequestMethod.POST)
